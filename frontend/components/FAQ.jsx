@@ -30,7 +30,7 @@ const FAQ = () => {
   ];
 
   return (
-    <div id="faq" className="relative py-20 bg-gray-900 overflow-hidden">
+    <div id="about" className="relative py-20 bg-gray-900 overflow-hidden">
       {/* Terminal dot matrix background */}
       <div className="absolute inset-0 opacity-10">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">

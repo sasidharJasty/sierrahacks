@@ -13,19 +13,31 @@ const Hero = () => {
   const [showBackground, setShowBackground] = useState(false);
   const [showGlowEffect, setShowGlowEffect] = useState(false);
   const [showScrollIndicator, setShowScrollIndicator] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
 
+  // Detect mobile device
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
   // Terminal boot sequence
   useEffect(() => {
+    // Shorter boot sequence on mobile for better UX
     const bootSequence = [
-      { message: "Initializing kernel...", delay: 300 },
-      { message: "Loading system modules... ", delay: 400 },
-      { message: "Mounting filesystem... ", delay: 500 },
-      { message: "Starting SierraOS v2.5.0...", delay: 600 },
-      { message: "Establishing secure connection... [OK]", delay: 700 },
-      { message: "Retrieving hackathon data... [COMPLETE]", delay: 800 },
-      { message: "Welcome to SierraHacks Terminal", delay: 900 },
+      { message: "Initializing kernel...", delay: isMobile ? 200 : 300 },
+      { message: "Loading system modules... ", delay: isMobile ? 250 : 400 },
+      { message: "Starting SierraOS v2.5.0...", delay: isMobile ? 300 : 600 },
+      { message: "Retrieving hackathon data... [COMPLETE]", delay: isMobile ? 400 : 800 },
+      { message: "Welcome to SierraHacks Terminal", delay: isMobile ? 450 : 900 },
     ];
 
     let timer = 0;
@@ -48,13 +60,13 @@ const Hero = () => {
                 setTimeout(() => setShowScrollIndicator(true), 500);
               }, 500);
             }, 300);
-          }, 500);
+          }, isMobile ? 300 : 500); // Faster boot completion on mobile
         }
       }, timer);
     });
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [isMobile]);
 
   // Terminal effects
   useEffect(() => {
@@ -187,24 +199,24 @@ const Hero = () => {
             </div>
             <div className="text-blue-100">
               <div className="grid grid-cols-12 gap-2 mb-1">
-                <span className="col-span-2 text-green-400">Date:</span>
-                <span className="col-span-10">May 17-19, 2025</span>
+                <span className="col-span-3 sm:col-span-2 text-green-400">Date:</span>
+                <span className="col-span-9 sm:col-span-10">May 17-19, 2025</span>
               </div>
               <div className="grid grid-cols-12 gap-2 mb-1">
-                <span className="col-span-2 text-green-400">Location:</span>
-                <span className="col-span-10">
+                <span className="col-span-3 sm:col-span-2 text-green-400">Location:</span>
+                <span className="col-span-9 sm:col-span-10">
                   Sierra Nevada Mountains Conference Center
                 </span>
               </div>
               <div className="grid grid-cols-12 gap-2 mb-1">
-                <span className="col-span-2 text-green-400">Theme:</span>
-                <span className="col-span-10">
+                <span className="col-span-3 sm:col-span-2 text-green-400">Theme:</span>
+                <span className="col-span-9 sm:col-span-10">
                   Where code meets the mountains
                 </span>
               </div>
               <div className="grid grid-cols-12 gap-2">
-                <span className="col-span-2 text-green-400">Website:</span>
-                <span className="col-span-10 text-blue-300 underline">
+                <span className="col-span-3 sm:col-span-2 text-green-400">Website:</span>
+                <span className="col-span-9 sm:col-span-10 text-blue-300 underline">
                   sierrahacks.com
                 </span>
               </div>
@@ -215,21 +227,22 @@ const Hero = () => {
       case "stats":
         return (
           <div className="mt-2 mb-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               {[
-                { value: "500+", label: "Hackers" },
-                { value: "48", label: "Hours" },
-                { value: "24", label: "Workshops" },
-                { value: "$10K", label: "in Prizes" },
+                { value: "500+", label: "Hackers", icon: "👩‍💻" },
+                { value: "48", label: "Hours", icon: "⏱️" },
+                { value: "24", label: "Workshops", icon: "🧠" },
+                { value: "$10K", label: "in Prizes", icon: "🏆" },
               ].map((stat, i) => (
                 <div
                   key={i}
-                  className="bg-blue-900/10 p-3 rounded border border-blue-500/20"
+                  className="bg-blue-900/10 p-3 rounded border border-blue-500/20 flex flex-col items-center"
                 >
-                  <div className="text-2xl font-bold text-white mb-1">
+                  <div className="text-lg mb-1">{stat.icon}</div>
+                  <div className="text-xl font-bold text-green-400 mb-1">
                     {stat.value}
                   </div>
-                  <div className="text-blue-300 text-sm font-mono">
+                  <div className="text-blue-300 text-xs font-mono">
                     {stat.label}
                   </div>
                 </div>
@@ -351,29 +364,29 @@ const Hero = () => {
         )}
       </AnimatePresence>
 
-      {/* Terminal dot matrix background */}
-      <div className="absolute inset-0 z-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]"></div>
+      {/* Terminal dot matrix background - reduced opacity on mobile */}
+      <div className="absolute inset-0 z-0 opacity-5 md:opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]"></div>
 
-      {/* Terminal-like scanlines overlay */}
-      <div className="absolute inset-0 z-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxkZWZzPgogICAgPHBhdHRlcm4gaWQ9InNjYW5saW5lcyIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMiIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDAsIDAsIDApIj4KICAgICAgPGxpbmUgeDE9IjAiIHkxPSIwIiB4Mj0iMTAwJSIgeTI9IjAiIHN0eWxlPSJzdHJva2U6IHJnYmEoMjU1LDI1NSwyNTUsMC4wNSk7IHN0cm9rZS13aWR0aDogMXB4OyIgLz4KICAgIDwvcGF0dGVyblRyYW5zZm9ybT4KICA8L2RlZnM+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNzY2FubGluZXMpIiAvPgo8L3N2Zz4=')]"></div>
+      {/* Terminal-like scanlines overlay - reduced on mobile */}
+      <div className="absolute inset-0 z-0 opacity-5 md:opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxkZWZzPgogICAgPHBhdHRlcm4gaWQ9InNjYW5saW5lcyIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMiIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDAsIDAsIDApIj4KICAgICAgPGxpbmUgeDE9IjAiIHkxPSIwIiB4Mj0iMTAwJSIgeTI9IjAiIHN0eWxlPSJzdHJva2U6IHJnYmEoMjU1LDI1NSwyNTUsMC4wNSk7IHN0cm9rZS13aWR0aDogMXB4OyIgLz4KICAgIDwvcGF0dGVyblRyYW5zZm9ybT4KICA8L2RlZnM+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNzY2FubGluZXMpIiAvPgo8L3N2Zz4=')]"></div>
 
-      {/* Terminal-styled gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-gray-900/90 to-gray-900/95 z-0"></div>
+      {/* Terminal-styled gradient overlay - optimized for mobile */}
+      <div className="absolute inset-0 bg-gradient-to-br from-blue-900/90 via-gray-900/95 to-gray-900/95 md:from-blue-900/80 md:via-gray-900/90 md:to-gray-900/95 z-0"></div>
 
-      {/* Terminal dot matrix background */}
+      {/* Terminal dot matrix background - fewer particles on mobile */}
       <motion.div
         className="absolute inset-0 z-0"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.1 }}
-        transition={{ duration: 2 }}
+        animate={{ opacity: 0.07 }}
+        transition={{ duration: 1.5 }}
       >
-        <div className="absolute inset-0 backdrop-blur-[100px]">
+        <div className="absolute inset-0 backdrop-blur-[50px] md:backdrop-blur-[100px]">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern
                 id="terminal-grid"
-                width="20"
-                height="20"
+                width="30"
+                height="30"
                 patternUnits="userSpaceOnUse"
               >
                 <circle cx="3" cy="3" r="1" fill="rgba(56, 189, 248, 0.3)" />
@@ -384,11 +397,11 @@ const Hero = () => {
         </div>
       </motion.div>
 
-      {/* Animated particles */}
+      {/* Animated particles - fewer on mobile */}
       <AnimatePresence>
         {showBackground && (
           <>
-            {[...Array(15)].map((_, i) => (
+            {[...Array(isMobile ? 5 : 15)].map((_, i) => (
               <motion.div
                 key={i}
                 className="absolute rounded-full bg-blue-400"
@@ -420,19 +433,19 @@ const Hero = () => {
         )}
       </AnimatePresence>
 
-      {/* Terminal glow effect */}
+      {/* Terminal glow effect - subtle on mobile */}
       <AnimatePresence>
         {showGlowEffect && (
           <motion.div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] max-w-4xl h-[70vh] rounded-full z-0"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-[90%] max-w-4xl h-[60vh] md:h-[70vh] rounded-full z-0"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 1.5 }}
             style={{
               background:
-                "radial-gradient(circle, rgba(56,189,248,0.08) 0%, rgba(29,78,216,0.03) 50%, rgba(0,0,0,0) 70%)",
-              filter: "blur(20px)",
+                "radial-gradient(circle, rgba(56,189,248,0.05) 0%, rgba(29,78,216,0.02) 50%, rgba(0,0,0,0) 70%)",
+              filter: "blur(15px)",
             }}
           />
         )}
@@ -450,38 +463,73 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Terminal window frame */}
-      <div className="container mx-auto h-[90%] flex items-center justify-center px-4 z-10 relative">
+      {/* Mobile Quick Action Buttons - visible at top on small screens */}
+      <div className="absolute top-16 right-4 z-30 flex flex-col gap-2 md:hidden">
+        <motion.button
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1.5, duration: 0.3 }}
+          className="bg-blue-600/40 hover:bg-blue-600/60 text-white text-xs px-3 py-2 rounded-full border border-blue-400/30 flex items-center shadow-lg shadow-blue-900/20"
+          onClick={() => {
+            setInputValue("register");
+            handleCommandSubmit({ preventDefault: () => {} });
+          }}
+        >
+          <span className="mr-1.5">Register</span>
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </motion.button>
+
+        <motion.button
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1.6, duration: 0.3 }}
+          className="bg-blue-600/20 hover:bg-blue-600/40 text-blue-100 text-xs px-3 py-2 rounded-full border border-blue-400/20 flex items-center shadow-lg shadow-blue-900/10"
+          onClick={() => {
+            setInputValue("help");
+            handleCommandSubmit({ preventDefault: () => {} });
+          }}
+        >
+          <span className="mr-1.5">Help</span>
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </motion.button>
+      </div>
+
+      {/* Terminal window frame - simplified for mobile */}
+      <div className="container mx-auto h-full sm:h-[90%] flex items-center justify-center px-2 sm:px-4 z-10 relative pt-14 sm:pt-0">
         <div className="w-full max-w-4xl relative z-10">
           {/* Terminal window frame border */}
           <div className="absolute inset-0 border border-blue-500/20 rounded-lg pointer-events-none shadow-[inset_0_0_30px_rgba(56,189,248,0.1)]"></div>
 
-          {/* Terminal window header bar */}
-          <div className="h-10 border-b border-blue-500/20 bg-gray-900/60 backdrop-blur-sm flex items-center px-4 rounded-t-lg">
+          {/* Terminal window header bar - smaller on mobile */}
+          <div className="h-8 sm:h-10 border-b border-blue-500/20 bg-gray-900/60 backdrop-blur-sm flex items-center px-3 sm:px-4 rounded-t-lg">
             {/* Terminal controls */}
             <div className="flex space-x-2">
-              <div className="w-3 h-3 rounded-full bg-red-400/70 relative group cursor-pointer">
-                <span className="absolute opacity-0 group-hover:opacity-100 text-xs text-white -top-5 whitespace-nowrap font-mono">
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-red-400/70 relative group">
+                <span className="absolute opacity-0 group-hover:opacity-100 text-[10px] text-white -top-5 whitespace-nowrap font-mono hidden sm:block">
                   kill -9
                 </span>
               </div>
-              <div className="w-3 h-3 rounded-full bg-yellow-400/70 relative group cursor-pointer">
-                <span className="absolute opacity-0 group-hover:opacity-100 text-xs text-white -top-5 whitespace-nowrap font-mono">
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-yellow-400/70 relative group">
+                <span className="absolute opacity-0 group-hover:opacity-100 text-[10px] text-white -top-5 whitespace-nowrap font-mono hidden sm:block">
                   kill -STOP
                 </span>
               </div>
-              <div className="w-3 h-3 rounded-full bg-green-400/70 relative group cursor-pointer">
-                <span className="absolute opacity-0 group-hover:opacity-100 text-xs text-white -top-5 whitespace-nowrap font-mono">
+              <div className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-green-400/70 relative group">
+                <span className="absolute opacity-0 group-hover:opacity-100 text-[10px] text-white -top-5 whitespace-nowrap font-mono hidden sm:block">
                   ./execute
                 </span>
               </div>
             </div>
 
-            {/* Terminal title */}
+            {/* Terminal title - simplified for mobile */}
             <div className="flex-1 text-center flex items-center justify-center">
-              <div className="flex items-center bg-blue-900/20 px-2 py-0.5 rounded text-xs font-mono space-x-1.5">
+              <div className="flex items-center bg-blue-900/20 px-1.5 py-0.5 rounded text-[10px] sm:text-xs font-mono space-x-1">
                 <svg
-                  className="w-3 h-3 text-green-400"
+                  className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-green-400"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="none"
@@ -501,18 +549,18 @@ const Hero = () => {
                   <line x1="4" y1="22" x2="14" y2="22" />
                 </svg>
                 <span className="text-green-400">ssh://</span>
-                <span className="text-blue-300/50">hacker@sierrahacks:~</span>
-                <span className="text-gray-400 ml-1 bg-blue-900/30 px-1 py-0.5 rounded text-[10px]">
+                <span className="text-blue-300/50">hacker@sierrahacks</span>
+                <span className="text-gray-400 ml-1 bg-blue-900/30 px-1 py-0.5 rounded text-[8px] sm:text-[10px] hidden xs:inline-block">
                   CONNECTED
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Terminal content */}
+          {/* Terminal content - adjusted height for mobile */}
           <div
             ref={terminalRef}
-            className="h-[calc(100vh-14rem)] md:h-[calc(92vh-12rem)] overflow-y-auto bg-gray-900/70 backdrop-blur-sm p-4 font-mono text-sm text-blue-100 border-x border-blue-500/20"
+            className="h-[calc(100vh-12rem)] sm:h-[calc(100vh-14rem)] md:h-[calc(92vh-12rem)] overflow-y-auto bg-gray-900/70 backdrop-blur-sm p-3 sm:p-4 font-mono text-xs sm:text-sm text-blue-100 border-x border-blue-500/20"
           >
             {/* Boot sequence - visible until terminal is booted */}
             {!terminalBooted && (
@@ -525,7 +573,7 @@ const Hero = () => {
                 <div className="inline-flex text-green-400">
                   ${" "}
                   <div
-                    className={`w-2 ml-1 h-4 bg-green-400 ${
+                    className={`w-1.5 sm:w-2 ml-1 h-3.5 sm:h-4 bg-green-400 ${
                       cursorVisible ? "opacity-100" : "opacity-0"
                     }`}
                   ></div>
@@ -533,7 +581,7 @@ const Hero = () => {
               </div>
             )}
 
-            {/* Terminal welcome splash - only shown after boot */}
+            {/* Terminal welcome splash - mobile optimized */}
             {terminalBooted && commandHistory.length === 0 && (
               <>
                 <motion.div
@@ -542,7 +590,16 @@ const Hero = () => {
                   transition={{ duration: 1 }}
                   className="text-center mb-4 mt-2"
                 >
-                  {/* ASCII art logo - hidden on small screens to save space */}
+                  {/* Logo - mobile friendly version */}
+                  <div className="md:hidden text-xl font-bold text-blue-400 flex justify-center items-center">
+                    <svg className="w-5 h-5 mr-1.5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm1-2a3 3 0 00-3 3v6a3 3 0 003 3h12a3 3 0 003-3V5a3 3 0 00-3-3H4z" clipRule="evenodd" />
+                      <path d="M4 8h1v2H4V8zm3 0h1v2H7V8zm3 0h1v2h-1V8zm3 0h1v2h-1V8z" />
+                    </svg>
+                    Sierra<span className="text-blue-300">Hacks</span>
+                  </div>
+
+                  {/* ASCII art logo - hidden on small screens */}
                   <pre className="hidden md:inline-block text-blue-400 text-xs sm:text-sm md:text-base leading-tight text-left">
                     {`  ____  _                      _   _            _        
  / ___|(_) ___ _ __ _ __ __ _| | | | __ _  ___| | _____ 
@@ -551,30 +608,26 @@ const Hero = () => {
  |____/|_|\\___|_|  |_|  \\__,_|_| |_|\\__,_|\\___|_|\\_\\___/
                                                         `}
                   </pre>
-                  
-                  {/* Mobile-friendly logo version */}
-                  <div className="md:hidden text-2xl font-bold text-blue-400">
-                    SierraHacks
-                  </div>
-                  
-                  <div className="text-lg sm:text-xl mt-2 md:mt-4 bg-gradient-to-r from-blue-300 via-blue-200 to-blue-400 bg-clip-text text-transparent font-bold">
+
+                  <div className="text-base sm:text-lg sm:mt-2 md:mt-4 bg-gradient-to-r from-blue-300 via-blue-200 to-blue-400 bg-clip-text text-transparent font-bold">
                     Build. Break. Breakthrough.
                   </div>
-                  <div className="bg-clip-text text-transparent bg-gradient-to-r from-green-300 to-blue-400 mt-1 md:mt-2 text-sm md:text-base">
-                    May 17-19, 2025 | Sierra Nevada
+                  <div className="bg-clip-text text-transparent bg-gradient-to-r from-green-300 to-blue-400 mt-1 text-xs sm:text-sm">
+                    May 17-19, 2025
                   </div>
                 </motion.div>
 
+                {/* Mobile optimized info card */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 0.5, duration: 1 }}
-                  className="mb-4 max-w-2xl mx-auto"
+                  transition={{ delay: 0.5, duration: 0.8 }}
+                  className="mb-3 max-w-2xl mx-auto"
                 >
                   <div className="flex flex-col border border-blue-500/30 rounded-lg overflow-hidden shadow-lg">
-                    <div className="bg-blue-900/20 p-2 border-b border-blue-500/20 flex items-center">
+                    <div className="bg-blue-900/20 p-1.5 sm:p-2 border-b border-blue-500/20 flex items-center">
                       <svg
-                        className="w-4 h-4 text-blue-400 mr-2"
+                        className="w-3.5 h-3.5 text-blue-400 mr-1.5"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"
@@ -586,140 +639,121 @@ const Hero = () => {
                           d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                       </svg>
-                      <span className="text-blue-300 text-sm">
+                      <span className="text-blue-300 text-xs">
                         Terminal Ready
                       </span>
                     </div>
-                    <div className="p-3 md:p-4 bg-gray-900/50 relative">
+                    <div className="p-3 bg-gray-900/50 relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-blue-900/5 to-gray-900/0"></div>
                       <div className="relative z-10">
-                        <p className="mb-3 text-sm md:text-base text-blue-100">
-                          Welcome to{" "}
+                        <p className="mb-2 text-xs sm:text-sm text-blue-100">
                           <span className="text-green-400 font-bold">
                             SierraHacks 2025
                           </span>
-                          ! This terminal provides access to the ultimate
-                          hackathon experience in the Sierra Nevada mountains.
+                          : The ultimate hackathon experience in the Sierra Nevada mountains.
                         </p>
 
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {["Innovate", "Collaborate", "Create", "Inspire"].map(
-                            (word, i) => (
-                              <motion.span
-                                key={i}
-                                className="bg-blue-900/30 text-blue-100 px-2 py-1 rounded text-xs md:text-sm"
-                                initial={{ opacity: 0, y: 5 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8 + i * 0.1 }}
-                              >
-                                #{word}
-                              </motion.span>
-                            )
-                          )}
+                        {/* Quick action buttons for mobile */}
+                        <div className="flex flex-wrap gap-2 mt-2 sm:mt-3">
+                          {["register", "info", "stats"].map((cmd, i) => (
+                            <motion.button
+                              key={cmd}
+                              initial={{ opacity: 0, y: 5 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.7 + i * 0.1 }}
+                              className="bg-blue-900/20 hover:bg-blue-900/30 text-blue-200 text-xs py-1.5 px-2 rounded border border-blue-500/20 transition-colors"
+                              onClick={() => {
+                                setInputValue(cmd);
+                                handleCommandSubmit({ preventDefault: () => {} });
+                              }}
+                            >
+                              <span className="text-green-400 mr-1">$</span>
+                              {cmd}
+                            </motion.button>
+                          ))}
                         </div>
 
-                        <div className="mb-3 text-sm">
-                          <span className="text-green-400 mr-1">$</span>
-                          <span className="text-blue-300">Type</span>
-                          <code className="bg-blue-900/30 px-2 py-0.5 rounded mx-1 text-yellow-200">
+                        <div className="mt-2 text-xs text-blue-200/70">
+                          <span className="text-green-400">$</span>
+                          <span className="ml-1">Type</span>
+                          <code className="bg-blue-900/30 px-1.5 py-0.5 rounded mx-1 text-yellow-200">
                             help
                           </code>
-                          <span className="text-blue-300">
-                            to see available commands
-                          </span>
-                        </div>
-
-                        <div className="flex justify-center  sm:justify-start mt-3 md:mt-5">
-                          <motion.button
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 1, duration: 0.3 }}
-                            className="border mr-8 border-blue-500/40 rounded px-3 py-2 text-sm bg-blue-600/20 hover:bg-blue-600/30 cursor-pointer transition-all flex items-center"
-                            onClick={() => {
-                              setInputValue("register");
-                              handleCommandSubmit({ preventDefault: () => {} });
-                            }}
-                          >
-                            <span className="text-green-400 mr-1.5">$</span>
-                            <code className="text-blue-100">register</code>
-                            <svg
-                              className="ml-2 w-4 h-4 text-blue-300"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                              />
-                            </svg>
-                          </motion.button>
-                          <motion.button
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            transition={{ delay: 1, duration: 0.3 }}
-                            className="border border-blue-500/40 rounded px-3 py-2 text-sm bg-blue-600/20 hover:bg-blue-600/30 cursor-pointer transition-all flex items-center"
-                            onClick={() => {
-                              setInputValue("help");
-                              handleCommandSubmit({ preventDefault: () => {} });
-                            }}
-                          >
-                            <span className="text-green-400 mr-1.5">$</span>
-                            <code className="text-blue-100">help</code>
-                            <svg
-                              className="ml-2 w-4 h-4 text-blue-300"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                              />
-                            </svg>
-                          </motion.button>
+                          <span>for more commands</span>
                         </div>
                       </div>
                     </div>
                   </div>
                 </motion.div>
-                
-                
-                
+
+                {/* Stats - Mobile optimized */}
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ delay: 1.5, duration: 1 }}
-                  className="flex justify-center mt-1 md:mt-2"
+                  transition={{ delay: 0.8, duration: 0.8 }}
+                  className="mb-3 grid grid-cols-2 gap-2 max-w-4xl mx-auto"
                 >
-                  <div 
-                    className="inline-flex items-center py-1.5 px-4 bg-blue-500/10 text-blue-300 text-xs md:text-sm font-mono rounded-full tracking-wide border border-blue-500/30 hover:bg-blue-500/20 transition-colors cursor-pointer"
-                    onClick={() => {
-                      setInputValue("help");
-                      handleCommandSubmit({ preventDefault: () => {} });
-                    }}
-                  >
-                    <span className="text-green-400 mr-2">$</span>
-                    Start your adventure
-                  </div>
+                  {[
+                    { value: "500+", label: "Hackers", icon: "👩‍💻" },
+                    { value: "48", label: "Hours", icon: "⏱️" },
+                    { value: "24", label: "Workshops", icon: "🧠" },
+                    { value: "$10K", label: "in Prizes", icon: "🏆" },
+                  ].map((stat, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 1 + i * 0.1 }}
+                      className="flex p-2 border border-blue-500/20 rounded-lg bg-blue-900/10 backdrop-blur-sm items-center"
+                    >
+                      <div className="text-xl mr-2">{stat.icon}</div>
+                      <div>
+                        <div className="text-base font-bold text-green-400">{stat.value}</div>
+                        <div className="text-blue-300 text-[10px]">{stat.label}</div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </motion.div>
+
+                {/* Quick input field for mobile */}
+                <motion.form
+                  onSubmit={handleCommandSubmit}
+                  className="flex items-center mt-3 px-1 py-2 rounded-full border border-blue-500/30 bg-blue-900/20 mb-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.2 }}
+                >
+                  <span className="text-green-400 font-bold mx-2">$</span>
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    className="flex-grow bg-transparent border-none outline-none text-blue-100 font-mono text-xs"
+                    placeholder="Type a command..."
+                    autoComplete="off"
+                    spellCheck="false"
+                  />
+                  <button
+                    type="submit"
+                    className="px-2 py-1 bg-blue-800/30 hover:bg-blue-800/50 rounded-full mr-1 transition-colors"
+                  >
+                    <svg className="w-3.5 h-3.5 text-blue-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 5l7 7-7 7" />
+                    </svg>
+                  </button>
+                </motion.form>
               </>
             )}
 
-            {/* Command history */}
+            {/* Command history - optimized for mobile */}
             {commandHistory.map((cmd, i) => (
               <div key={i} className="mb-3">
                 <div className="flex items-center">
-                  <span className="text-green-400 font-bold mr-2">
-                    hacker@sierrahacks:~$
-                  </span>
+                  <span className="text-green-400 font-bold mr-1.5 sm:mr-2">$</span>
                   <span className="text-blue-100">{cmd.input}</span>
                 </div>
-                <div className="pl-4 mt-1">
+                <div className="pl-3 sm:pl-4 mt-1">
                   {typeof cmd.output === "string" ? (
                     <div
                       className={
@@ -738,11 +772,9 @@ const Hero = () => {
             ))}
 
             {/* Current command input - visible after boot */}
-            {terminalBooted && (
+            {terminalBooted && commandHistory.length > 0 && (
               <form onSubmit={handleCommandSubmit} className="flex items-center">
-                <span className="text-green-400 font-bold mr-2">
-                  hacker@sierrahacks:~$
-                </span>
+                <span className="text-green-400 font-bold mr-1.5 sm:mr-2">$</span>
                 <input
                   ref={inputRef}
                   type="text"
@@ -753,7 +785,7 @@ const Hero = () => {
                   spellCheck="false"
                 />
                 <span
-                  className={`h-5 w-2.5 bg-blue-400 ml-1 ${
+                  className={`h-4 sm:h-5 w-2 sm:w-2.5 bg-blue-400 ml-1 ${
                     cursorVisible ? "opacity-100" : "opacity-0"
                   }`}
                 ></span>
@@ -761,103 +793,84 @@ const Hero = () => {
             )}
           </div>
 
-          {/* Terminal window footer/status bar */}
-          <div className="h-6 border-t border-blue-500/20 bg-gray-900/50 backdrop-blur-sm flex items-center text-xs font-mono px-3 rounded-b-lg text-blue-300/50">
+          {/* Terminal window footer/status bar - simplified for mobile */}
+          <div className="h-5 sm:h-6 border-t border-blue-500/20 bg-gray-900/50 backdrop-blur-sm flex items-center text-[10px] sm:text-xs font-mono px-2 sm:px-3 rounded-b-lg text-blue-300/50">
             <div className="flex items-center">
               <svg
-                className="w-3 h-3 text-green-500 mr-1.5"
+                className="w-2.5 h-2.5 text-green-500 mr-1"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
                 <circle cx="12" cy="12" r="10" />
-                <path d="M12 8v4l3 3" />
               </svg>
-              Uptime: {formatUptime(terminalUptime)}
-            </div>
-            <div className="hidden sm:flex ml-4 items-center">
-              <svg
-                className="w-3 h-3 text-blue-400 mr-1.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                />
-              </svg>
-              CPU: {Math.floor(Math.random() * 5) + 10}% | MEM:{" "}
-              {(Math.random() * 128).toFixed(0)}MB
+              <span className="hidden xs:inline mr-1">Uptime:</span>
+              {formatUptime(terminalUptime)}
             </div>
             <div className="flex-1 text-right">
-              <span className="bg-blue-900/20 px-2 py-0.5 rounded">
-                <span className="text-green-400">●</span> 
-                <span className="hidden xs:inline">SierraOS</span> v2.5.0
+              <span className="bg-blue-900/20 px-1.5 py-0.5 rounded text-[9px] sm:text-[10px]">
+                <span className="text-green-400">●</span>
+                <span className="hidden xs:inline">Sierra</span>OS v2.5
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      
-
-      {/* Keyboard shortcuts help - bottom right */}
-      <div className="absolute bottom-4 right-4 z-10">
-        <div className="text-xs text-blue-300/50 font-mono hidden lg:block">
-          <div className="mb-1 flex items-center">
-            <div className="bg-blue-900/30 px-1.5 py-0.5 rounded border border-blue-500/20 mr-2">
-              ↑
-            </div>
-            <span>Command history</span>
-          </div>
-          <div className="flex items-center">
-            <div className="bg-blue-900/30 px-1.5 py-0.5 rounded border border-blue-500/20 mr-2">
-              Tab
-            </div>
-            <span>Autocomplete</span>
-          </div>
-        </div>
+      {/* Mobile action buttons at bottom */}
+      <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 z-20 flex justify-center gap-2 md:hidden">
+        <motion.button
+          className="bg-blue-600/30 text-blue-100 border border-blue-500/30 px-2.5 py-1.5 rounded-full text-xs font-mono flex items-center shadow-lg shadow-blue-900/10"
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.3 }}
+          onClick={scrollToNextSection}
+        >
+          <span className="mr-1.5">Explore</span>
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+          </svg>
+        </motion.button>
       </div>
 
-      {/* Scroll indicator - appears after terminal boot */}
+      {/* Enhanced mobile scroll indicator */}
       <AnimatePresence>
         {showScrollIndicator && (
-          <motion.div 
-            className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-50 cursor-pointer"
+          <motion.div
+            className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-50 cursor-pointer"
             initial={{ opacity: 0, y: -10 }}
-            animate={{ 
-              opacity: [0.5, 0.8, 0.5], 
-              y: [0, 7, 0] 
+            animate={{
+              opacity: [0.5, 0.8, 0.5],
+              y: [0, 5, 0],
             }}
             exit={{ opacity: 0, y: 10 }}
-            transition={{ 
-              duration: 2, 
+            transition={{
+              duration: 1.5,
               repeat: Infinity,
-              repeatType: "loop"
+              repeatType: "loop",
             }}
             onClick={scrollToNextSection}
           >
-            <div className="flex flex-col items-center gap-1">
-              <div className="text-xs text-blue-300/80 font-mono tracking-wide">
-                Scroll to explore
+            <div className="flex flex-col items-center">
+              <div className="text-[10px] sm:text-xs text-blue-300/80 font-mono tracking-wide mb-1">
+                Scroll Down
               </div>
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="h-5 w-5 text-blue-400" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M19 14l-7 7m0 0l-7-7m7 7V3" 
-                />
-              </svg>
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-blue-900/30 border border-blue-500/20 shadow-lg shadow-blue-900/10">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-4 w-4 text-blue-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                  />
+                </svg>
+              </div>
             </div>
           </motion.div>
         )}

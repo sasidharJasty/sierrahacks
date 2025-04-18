@@ -12,7 +12,7 @@ import Members from '../components/Members';
 function App() {
   return (
     <>
-      <CustomCursor />
+
       <TerminalLayout>
         <div className="min-h-screen bg-gray-900">
           <Hero />

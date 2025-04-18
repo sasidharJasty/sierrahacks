@@ -18,6 +18,7 @@ const Navbar = () => {
       
       // Section highlighting logic
       const sections = ["home", "about", "schedule", "sponsors", "faq", "register"];
+      const link = ["#home", "#about", "#schedule", "#sponsors", "#faq", "#register"];
       
       // Find the section closest to the top of the viewport
       for (const sectionId of sections) {
@@ -70,6 +71,7 @@ const Navbar = () => {
         {/* Logo */}
         <motion.a 
           onClick={() => scrollToSection("home")}
+          href="#home"
           className="text-xl font-bold flex items-center cursor-pointer"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -89,9 +91,10 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center space-x-8">
           {navItems.map((item) => (
-            <motion.div
+            <motion.a
               key={item.id}
-              onClick={() => scrollToSection(item.id)}
+              href={`#${item.id}`}
+              
               className={`relative group cursor-pointer transition-colors duration-300 ${
                 activeSection === item.id 
                   ? "text-white font-medium" 
@@ -107,7 +110,7 @@ const Navbar = () => {
                   activeSection === item.id ? "w-full" : "w-0 group-hover:w-full"
                 }`}
               ></span>
-            </motion.div>
+            </motion.a>
           ))}
           
           <motion.div
