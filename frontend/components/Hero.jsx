@@ -48,7 +48,7 @@ const Hero = () => {
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-blue-50 via-blue-50 to-blue-100/50 dark:to-[#111828] dark:via-gray-900 dark:from-blue-900/30 z-0"></div>
 
-      <div className="container mx-auto px-4 relative z-10 text-center max-w-3xl">
+      <div className="container mx-auto px-4 -mt-20 relative z-10 text-center max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -65,9 +65,7 @@ const Hero = () => {
           </div>
           
           {/* Subtle command prompt */}
-          <div className="font-mono text-sm text-green-600 dark:text-green-400 tracking-wide opacity-80">
-            <span className="text-blue-600 dark:text-blue-300">$</span> launch SierraHacks_2025.exe
-          </div>
+         
           
           {/* Event name */}
           <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-300 dark:to-blue-100">
@@ -128,7 +126,7 @@ const Hero = () => {
 
       {/* Minimal scroll indicator */}
       <motion.div
-        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 cursor-pointer"
+        className="absolute bottom-30 left-1/2 transform -translate-x-1/2 cursor-pointer"
         onClick={() => scrollToSection("about")}
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity }}

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useTheme } from "../context/ThemeContext";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const { isDarkMode, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const location = useLocation();
+  const navigate = useNavigate();
   
   // Handle scroll effect for navbar background and section highlighting
   useEffect(() => {
@@ -18,43 +19,46 @@ const Navbar = () => {
         setIsScrolled(false);
       }
       
-      // Section highlighting logic
-      const sections = ["home", "about", "timeline", "sponsors", "faq", "criteria", "judges", "team", "register"];
-      
-      // Find the section closest to the top of the viewport
-      let found = false;
-      for (const sectionId of sections) {
-        const element = document.getElementById(sectionId);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          // When the section is in view (allowing some buffer at the top)
-          if (rect.top <= 100 && rect.bottom >= 100) {
-            setActiveSection(sectionId);
-            found = true;
-            break;
-          }
-        }
-      }
-      
-      // If no section was found in view, determine based on scroll position
-      if (!found && window.scrollY > 0) {
-        let lastVisibleSection = null;
-        let lastDistance = Infinity;
+      // Only handle section highlighting on home page
+      if (location.pathname === '/') {
+        // Section highlighting logic
+        const sections = ["home", "about", "timeline", "sponsors", "faq", "criteria", "judges", "team", "register"];
         
+        // Find the section closest to the top of the viewport
+        let found = false;
         for (const sectionId of sections) {
           const element = document.getElementById(sectionId);
           if (element) {
             const rect = element.getBoundingClientRect();
-            const distance = Math.abs(rect.top);
-            if (distance < lastDistance) {
-              lastDistance = distance;
-              lastVisibleSection = sectionId;
+            // When the section is in view (allowing some buffer at the top)
+            if (rect.top <= 100 && rect.bottom >= 100) {
+              setActiveSection(sectionId);
+              found = true;
+              break;
             }
           }
         }
         
-        if (lastVisibleSection) {
-          setActiveSection(lastVisibleSection);
+        // If no section was found in view, determine based on scroll position
+        if (!found && window.scrollY > 0) {
+          let lastVisibleSection = null;
+          let lastDistance = Infinity;
+          
+          for (const sectionId of sections) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+              const rect = element.getBoundingClientRect();
+              const distance = Math.abs(rect.top);
+              if (distance < lastDistance) {
+                lastDistance = distance;
+                lastVisibleSection = sectionId;
+              }
+            }
+          }
+          
+          if (lastVisibleSection) {
+            setActiveSection(lastVisibleSection);
+          }
         }
       }
     };
@@ -64,17 +68,17 @@ const Navbar = () => {
     handleScroll();
     
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [location.pathname]);
   
   // Navigation items with their respective sections
   const navItems = [
-    { name: "Home", id: "home", delay: 0.05 },
-    { name: "About", id: "about", delay: 0.1 },
-    { name: "Timeline", id: "timeline", delay: 0.15 },
-    { name: "Criteria", id: "criteria", delay: 0.2 },
-    { name: "Judges", id: "judges", delay: 0.25 },
-    { name: "Team", id: "team", delay: 0.3 },
-    { name: "FAQ", id: "faq", delay: 0.35 }
+    { name: "Home", id: "home", path: "/", delay: 0.05 },
+    { name: "FAQ", id: "about", path: "/", delay: 0.1 },
+    { name: "Timeline", id: "timeline", path: "/", delay: 0.15 },
+    { name: "Criteria", id: "criteria", path: "/", delay: 0.2 },
+    { name: "Judges", id: "judges", path: "/", delay: 0.25 },
+    { name: "Team", id: "team", path: "/", delay: 0.3 },
+    { name: "Sponsor", id: "sponsor", path: "/sponsor", delay: 0.4 }
   ];
   
   // Improved smooth scroll function with fallback
@@ -121,166 +125,179 @@ const Navbar = () => {
       }, 100);
     }
   };
+
+  // Handle navigation items based on path or section
+  const handleNavItem = (item, e) => {
+    e.preventDefault();
+    
+    // If it's a different page, use navigation (like sponsor)
+    if (item.path !== '/' || location.pathname !== '/') {
+      navigate(item.path);
+      return;
+    }
+
+    // Otherwise scroll to section on the same page
+    scrollToSection(item.id);
+  };
+  
+  // Determine if an item is active (either by path or section)
+  const isItemActive = (item) => {
+    if (item.path !== '/' && location.pathname === item.path) {
+      return true;
+    }
+    return location.pathname === '/' && activeSection === item.id;
+  };
   
   return (
     <nav 
-      className={`fixed top-0 left-0 w-full py-4 px-4 md:px-6 z-50 transition-all duration-300 ${
+      className={`fixed top-0  py-2 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled 
-          ? "bg-white/80 dark:bg-gray-900/80 backdrop-blur-lg border-b border-sky-200/30 dark:border-blue-900/30 shadow-lg shadow-sky-500/5 dark:shadow-blue-900/10" 
-          : "bg-transparent border-b border-sky-200/10 dark:border-blue-900/10"
+          ? "bg-gray-900/80 backdrop-blur-lg border-b border-blue-900/30 shadow-lg shadow-blue-900/10" 
+          : "bg-transparent border-b border-blue-900/10"
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        {/* Logo */}
-        <motion.a 
-          onClick={() => scrollToSection("home")}
-          href="#home"
-          className="text-xl font-bold flex items-center cursor-pointer"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
-          <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-sky-500 dark:from-blue-300 dark:to-blue-100">
-            Sierra
-          </span>
-          <span className="text-blue-600 dark:text-blue-400">Hacks</span>
-          <motion.span 
-            className="ml-1 h-2 w-2 rounded-full bg-blue-500 dark:bg-blue-400 hidden sm:block"
-            animate={{ opacity: [1, 0.5, 1] }}
-            transition={{ duration: 2, repeat: Infinity }}
-          />
-        </motion.a>
+        {/* Terminal-style Header with macOS Controls */}
+        <div className="flex items-center">
+          <div className="flex items-center space-x-2 mr-3">
+            <motion.div 
+              className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            />
+            <motion.div 
+              className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            />
+            <motion.div 
+              className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors"
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            />
+          </div>
+          
+          {/* Logo */}
+          <Link 
+            to="/"
+            className="text-xl font-bold flex items-center cursor-pointer"
+            data-cursor-text="navigate('home')"
+            data-cursor-color="#38bdf8"
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="flex items-center"
+            >
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-100">
+                Sierra
+              </span>
+              <span className="text-blue-400">Hacks</span>
+              <motion.span 
+                className="ml-1 h-2 w-2 rounded-full bg-blue-400 hidden sm:block"
+                animate={{ opacity: [1, 0.5, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <span className="text-green-400 ml-2 font-mono text-sm hidden sm:block">~</span>
+            </motion.div>
+          </Link>
+        </div>
         
         {/* Desktop Navigation */}
-        <div className="hidden lg:flex items-center space-x-6">
+        <div className="hidden md:flex items-center space-x-8">
           {navItems.map((item) => (
-            <motion.a
+            <Link
               key={item.id}
-              href={`#${item.id}`}
-              onClick={(e) => {
-                e.preventDefault();
-                scrollToSection(item.id);
-              }}
-              className={`relative group cursor-pointer transition-colors duration-300 ${
-                activeSection === item.id 
-                  ? "text-blue-800 dark:text-white font-medium" 
-                  : "text-blue-600 dark:text-blue-200 hover:text-blue-800 dark:hover:text-white"
+              to={item.path}
+              onClick={(e) => handleNavItem(item, e)}
+              className={`relative group transition-colors ${
+                isItemActive(item) 
+                  ? "text-white font-medium" 
+                  : "text-blue-200 hover:text-white"
               }`}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: item.delay, duration: 0.3 }}
+              data-cursor-text={`navigate('${item.id}')`}
+              data-cursor-color="#38bdf8"
             >
-              {item.name}
-              <span 
-                className={`absolute -bottom-1 left-0 h-[2px] bg-blue-500 dark:bg-blue-400 transition-all duration-300 ${
-                  activeSection === item.id ? "w-full" : "w-0 group-hover:w-full"
-                }`}
-              ></span>
-            </motion.a>
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: item.delay, duration: 0.3 }}
+              >
+                {item.name}
+                <span 
+                  className={`absolute -bottom-1 left-0 h-[2px] bg-blue-400 transition-all duration-300 ${
+                    isItemActive(item) ? "w-full" : "w-0 group-hover:w-full"
+                  }`}
+                ></span>
+              </motion.div>
+            </Link>
           ))}
           
-          {/* Theme Toggle Button (Desktop) */}
-          <motion.button
-            onClick={toggleTheme}
-            className="p-2 rounded-full transition-colors text-blue-700 dark:text-yellow-300 hover:bg-blue-100/50 dark:hover:bg-gray-800/50"
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
-          >
-            {isDarkMode ? (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-            ) : (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
-            )}
-          </motion.button>
-          
-          <motion.a
-            href="#register"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("register");
-            }}
-            className={`px-5 py-2 text-white rounded-md hover:shadow-lg transition-all cursor-pointer relative overflow-hidden group ${
-              activeSection === "register"
-                ? "bg-blue-700 dark:bg-blue-700 hover:shadow-blue-500/25 dark:hover:shadow-blue-500/25"
-                : "bg-gradient-to-r from-blue-600 to-blue-500 dark:from-blue-600 dark:to-blue-500 hover:shadow-blue-500/25 dark:hover:shadow-blue-500/25"
-            }`}
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.3 }}
-          >
-            <span className="relative z-10 flex items-center justify-center">
-              Register
-              <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </span>
-            <motion.span 
-              className="absolute inset-0 bg-blue-700 dark:bg-blue-700 z-0"
-              initial={{ x: "-100%" }}
-              whileHover={{ x: 0 }}
-              transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
-            />
-          </motion.a>
+          <Link
+  to={location.pathname === '/' ? '#register' : '/'}
+  onClick={(e) => {
+    if (location.pathname === '/') {
+      e.preventDefault();
+      scrollToSection("register");
+    }
+  }}
+  className="inline-flex items-center justify-center px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-md hover:shadow-lg hover:shadow-blue-500/25 transition-all relative overflow-hidden group"
+  data-cursor-text="register()"
+  data-cursor-color="#3b82f6"
+>
+  {/* Text container with proper z-index */}
+  <div className="relative z-10 flex items-center justify-center">
+    Register
+    <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+    </svg>
+  </div>
+  
+  {/* Hover animation background */}
+  <motion.div 
+    className="absolute inset-0 bg-blue-700 z-0"
+    initial={{ x: "-100%" }}
+    whileHover={{ x: 0 }}
+    transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+  />
+</Link>
         </div>
         
         {/* Mobile Menu Button */}
-        <div className="flex items-center gap-3 lg:hidden">
-          {/* Theme Toggle (Mobile) */}
-          <motion.button
-            onClick={toggleTheme}
-            className="p-2 rounded-full transition-colors text-blue-700 dark:text-yellow-300 hover:bg-blue-100/50 dark:hover:bg-gray-800/50"
-            whileTap={{ scale: 0.95 }}
-            aria-label={isDarkMode ? "Switch to light mode" : "Switch to dark mode"}
+        <motion.button 
+          className="block md:hidden text-blue-200"
+          onClick={() => setIsOpen(!isOpen)}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+          data-cursor-text="toggleMenu()"
+          data-cursor-color="#38bdf8"
+          aria-label="Toggle menu"
+        >
+          <svg 
+            viewBox="0 0 24 24" 
+            width="24" 
+            height="24" 
+            stroke="currentColor" 
+            strokeWidth="1.5" 
+            fill="none" 
+            strokeLinecap="round" 
+            strokeLinejoin="round"
+            className="transition-transform duration-300 ease-in-out"
+            style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}
           >
-            {isDarkMode ? (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
+            {isOpen ? (
+              <path d="M18 6L6 18M6 6l12 12" />
             ) : (
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-              </svg>
+              <>
+                <line x1="4" y1="12" x2="20" y2="12" />
+                <line x1="4" y1="6" x2="20" y2="6" />
+                <line x1="4" y1="18" x2="20" y2="18" />
+              </>
             )}
-          </motion.button>
-          
-          {/* Menu Toggle */}
-          <motion.button 
-            className="text-blue-700 dark:text-blue-200"
-            onClick={() => setIsOpen(!isOpen)}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            aria-label="Toggle menu"
-          >
-            <svg 
-              viewBox="0 0 24 24" 
-              width="24" 
-              height="24" 
-              stroke="currentColor" 
-              strokeWidth="1.5" 
-              fill="none" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-              className="transition-transform duration-300 ease-in-out"
-              style={{ transform: isOpen ? "rotate(90deg)" : "rotate(0deg)" }}
-            >
-              {isOpen ? (
-                <path d="M18 6L6 18M6 6l12 12" />
-              ) : (
-                <>
-                  <line x1="4" y1="12" x2="20" y2="12" />
-                  <line x1="4" y1="6" x2="20" y2="6" />
-                  <line x1="4" y1="18" x2="20" y2="18" />
-                </>
-              )}
-            </svg>
-          </motion.button>
-        </div>
+          </svg>
+        </motion.button>
       </div>
       
       {/* Mobile Menu */}
@@ -291,46 +308,59 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden absolute top-full left-0 w-full bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-t border-sky-200/30 dark:border-blue-900/30 shadow-lg shadow-sky-500/10 dark:shadow-blue-900/10 overflow-hidden"
+            className="md:hidden absolute top-full left-0 w-full bg-gray-900/95 backdrop-blur-md border-t border-blue-900/30 shadow-lg shadow-blue-900/10 overflow-hidden"
           >
             <div className="flex flex-col py-2">
               {navItems.map((item, index) => (
-                <motion.a
+                <Link
                   key={item.id}
-                  href={`#${item.id}`}
+                  to={item.path}
                   onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(item.id);
+                    if (item.path === '/' && location.pathname === '/') {
+                      e.preventDefault();
+                      scrollToSection(item.id);
+                    }
+                    setIsOpen(false);
                   }}
-                  className={`py-4 px-6 hover:text-blue-800 dark:hover:text-white transition-all cursor-pointer ${
-                    activeSection === item.id
-                      ? "text-blue-800 dark:text-white border-l-2 border-blue-500 dark:border-blue-400 bg-blue-100/40 dark:bg-blue-900/40"
-                      : "text-blue-600 dark:text-blue-200 border-l-2 border-transparent hover:border-blue-500 dark:hover:border-blue-400 hover:bg-blue-100/30 dark:hover:bg-blue-900/30"
+                  className={`py-4 px-6 hover:text-white transition-all ${
+                    isItemActive(item)
+                      ? "text-white border-l-2 border-blue-400 bg-blue-900/40"
+                      : "text-blue-200 border-l-2 border-transparent hover:border-blue-400 hover:bg-blue-900/30"
                   }`}
+                  data-cursor-text={`navigate('${item.id}')`}
+                  data-cursor-color="#38bdf8"
+                >
+                  <motion.div
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.05, duration: 0.2 }}
+                  >
+                    {isItemActive(item) && <span className="text-green-500 mr-1">$</span>}
+                    {item.name}
+                  </motion.div>
+                </Link>
+              ))}
+              <Link
+                to={location.pathname === '/' ? '#register' : '/'}
+                onClick={(e) => {
+                  if (location.pathname === '/') {
+                    e.preventDefault();
+                    scrollToSection("register");
+                  }
+                  setIsOpen(false);
+                }}
+                className="m-6 py-3 px-6 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-blue-500/25 transition-all"
+                data-cursor-text="register()"
+                data-cursor-color="#3b82f6"
+              >
+                <motion.div
                   initial={{ x: -20, opacity: 0 }}
                   animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: index * 0.05, duration: 0.2 }}
+                  transition={{ delay: 0.2, duration: 0.2 }}
                 >
-                  {item.name}
-                </motion.a>
-              ))}
-              <motion.a
-                href="#register"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToSection("register");
-                }}
-                className={`m-6 py-3 px-6 text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-blue-500/25 dark:hover:shadow-blue-500/25 transition-all cursor-pointer ${
-                  activeSection === "register"
-                    ? "bg-blue-700 dark:bg-blue-700"
-                    : "bg-gradient-to-r from-blue-600 to-blue-500 dark:from-blue-600 dark:to-blue-500"
-                }`}
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.2 }}
-              >
-                Register Now
-              </motion.a>
+                  Register Now
+                </motion.div>
+              </Link>
             </div>
           </motion.div>
         )}
