@@ -8,10 +8,12 @@ import Timeline from '../components/Timeline';
 import Criteria from '../components/Criteria';
 import Judges from '../components/Judges';
 import Members from '../components/Members';
+import { ThemeProvider } from '../context/ThemeContext';
+
 
 function App() {
   return (
-    <>
+
 
       <TerminalLayout>
         <div className="min-h-screen bg-gray-900">
@@ -29,7 +31,7 @@ function App() {
           </motion.div>
         </div>
       </TerminalLayout>
-    </>
+
   );
 }
 

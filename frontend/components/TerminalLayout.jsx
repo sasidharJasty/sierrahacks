@@ -160,54 +160,7 @@ const TerminalLayout = ({ children }) => {
       </div>
       
       {/* Terminal footer with command input */}
-      <div className="sticky bottom-0 bg-gray-800 border-t border-blue-500/30 p-3 backdrop-blur-sm bg-opacity-80 z-20">
-        <div className="container mx-auto">
-          <div className="flex items-center">
-            <div className="mr-2 text-green-400 font-mono">$</div>
-            <input
-              id="terminal-input"
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Type 'help' for commands..."
-              className="flex-grow bg-transparent border-none outline-none font-mono text-blue-100"
-              autoComplete="off"
-            />
-          </div>
-          
-          {/* Command history popup - visible when there are commands */}
-          <AnimatePresence>
-            {commandHistory.length > 0 && (
-              <motion.div 
-                className="absolute bottom-full mb-2 left-0 right-0 max-h-60 overflow-y-auto bg-gray-900/90 rounded-t-lg border border-blue-500/30"
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: 'auto', opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="p-2 font-mono text-sm">
-                  {commandHistory.map((item, index) => (
-                    <div key={index} className="mb-2 last:mb-0">
-                      <div>
-                        <span className="text-green-400">$</span> <span className="text-blue-200">{item.cmd}</span>
-                      </div>
-                      {item.output && (
-                        <div className="pl-4 text-blue-300/80 text-xs mt-1">
-                          {typeof item.output === 'string' 
-                            ? item.output 
-                            : item.output
-                          }
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
+      
     </div>
   );
 };
