@@ -4,28 +4,36 @@ import { motion } from "framer-motion";
 const FAQ = () => {
   const faqItems = [
     {
-      question: "What is SierraHacks?",
-      answer: "SierraHacks is a 48-hour hackathon bringing together 500+ innovators to build creative solutions in the heart of the Sierra Nevada mountains. It combines coding, nature, and creativity for a unique hacking experience."
+      question: "Do I need coding experience to participate?",
+      answer: "No, you don't need prior coding experience. We welcome participants of all skill levels. Teams are encouraged to have a mix of skills, and there will be mentors available to help you throughout the event."
     },
     {
-      question: "Who can participate?",
-      answer: "Anyone 18+ years old can participate, from students to professionals. All skill levels are welcome - whether you're a beginner or experienced developer."
+      question: "What should I bring to the hackathon?",
+      answer: "You should bring your laptop, charger, any hardware you plan to use for your project, and personal items you'll need for a 13-hour event. We'll provide food, drinks, and a comfortable hacking environment."
     },
     {
-      question: "Do I need a team?",
-      answer: "Teams of up to 4 people are recommended, but you can also participate solo. We'll have team formation activities if you're looking to join forces with other hackers."
+      question: "How are teams formed?",
+      answer: "You can form your own team of 2-4 members before the event or join a team during the team formation session at the beginning of the hackathon. We'll help match participants looking for teammates based on skills and interests."
     },
     {
-      question: "What should I bring?",
-      answer: "Laptop, charger, comfortable clothes, toiletries, and your creativity! We provide meals, snacks, and a hacking space with reliable WiFi."
+      question: "Will there be food and drinks?",
+      answer: "Yes! We'll provide breakfast, lunch, dinner, and snacks throughout the event. If you have dietary restrictions, please let us know when you register so we can accommodate your needs."
     },
     {
-      question: "Is there a cost to attend?",
-      answer: "SierraHacks is completely free for all participants. We provide meals, snacks, workspace, and swag with the help of our sponsors."
+      question: "Can I start working on my project before the hackathon?",
+      answer: "No, all coding and design work must start during the hackathon. You can brainstorm ideas and plan your approach before the event, but implementation should begin when the hacking officially starts."
     },
     {
-      question: "Will there be prizes?",
-      answer: "Yes! We have $10,000+ in prizes across multiple categories including Best Overall, Best UI/UX, Best Use of AI, and more."
+      question: "Do I need to submit anything before the hackathon?",
+      answer: "Just your registration. You don't need to submit your idea or any materials before the event. Project submissions will be done through Devpost during the hackathon."
+    },   
+    {
+      question: "What resources will be available during the event?",
+      answer: "We'll provide Wi-Fi, power outlets and mentors who can help with technical challenges. We'll also have workshops and tech talks throughout the day to help you learn new skills."
+    },
+    {
+      question: "How does the judging process work?",
+      answer: "Teams will present their projects to a panel of judges who will evaluate them based on innovation, technical implementation, impact, presentation, and collaboration. Winners will be announced at the closing ceremony."
     }
   ];
 

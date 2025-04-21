@@ -22,7 +22,7 @@ const Navbar = () => {
       // Only handle section highlighting on home page
       if (location.pathname === '/') {
         // Section highlighting logic
-        const sections = ["home", "about", "timeline", "sponsors", "faq", "criteria", "judges", "team", "register"];
+        const sections = ["home", "about", "timeline", "sponsors", "faq", "criteria", "team", "register"];
         
         // Find the section closest to the top of the viewport
         let found = false;
@@ -76,7 +76,6 @@ const Navbar = () => {
     { name: "FAQ", id: "about", path: "/", delay: 0.1 },
     { name: "Timeline", id: "timeline", path: "/", delay: 0.15 },
     { name: "Criteria", id: "criteria", path: "/", delay: 0.2 },
-    { name: "Judges", id: "judges", path: "/", delay: 0.25 },
     { name: "Team", id: "team", path: "/", delay: 0.3 },
     { name: "Sponsor", id: "sponsor", path: "/sponsor", delay: 0.4 }
   ];
@@ -249,12 +248,14 @@ const Navbar = () => {
   data-cursor-color="#3b82f6"
 >
   {/* Text container with proper z-index */}
+  <a href = "https://tally.so/r/wkzQWZ">
   <div className="relative z-10 flex items-center justify-center">
     Register
     <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
     </svg>
   </div>
+  </a>
   
   {/* Hover animation background */}
   <motion.div 
@@ -343,7 +344,7 @@ const Navbar = () => {
                 </Link>
               ))}
               <Link
-                to={location.pathname === '/' ? '#register' : '/'}
+                to={location.pathname === '/' ? '#google' : '/'}
                 onClick={(e) => {
                   if (location.pathname === '/') {
                     e.preventDefault();

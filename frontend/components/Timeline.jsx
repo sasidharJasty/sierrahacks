@@ -4,49 +4,59 @@ import { motion } from "framer-motion";
 const Timeline = () => {
   const timelineData = [
     {
-      date: "May 17, 16:00",
-      title: "Registration Opens",
-      description: "Check in and receive your welcome packet with swag"
+      date: "7:00 AM - 8:00 AM",
+      title: "Venue Setup",
+      description: "Preparation of the hackathon venue."
     },
     {
-      date: "May 17, 18:00",
-      title: "Opening Ceremony",
-      description: "Welcome address, sponsor introductions, and hackathon rules"
+      date: "8:00 AM - 8:30 AM",
+      title: "Check-In & Breakfast",
+      description: "Registration and morning refreshments."
     },
     {
-      date: "May 17, 19:00",
+      date: "8:30 AM - 9:00 AM",
+      title: "Opening Ceremony & Team Formation",
+      description: "Welcome address and team organization."
+    },
+    {
+      date: "9:00 AM - 12:00 PM",
       title: "Hacking Begins",
-      description: "Start building your projects!"
+      description: "Start of the coding and project development."
     },
     {
-      date: "May 17, 20:00",
-      title: "Team Formation & Dinner",
-      description: "Find teammates and enjoy dinner together"
+      date: "12:00 PM - 1:00 PM",
+      title: "Lunch & Networking",
+      description: "Mid-day break with food and socializing."
     },
     {
-      date: "May 18, 08:00",
-      title: "Breakfast",
-      description: "Fuel up for a day of coding"
+      date: "1:00 PM - 6:00 PM",
+      title: "Hacking Continues",
+      description: "Continued work on projects and mentoring sessions."
     },
     {
-      date: "May 18, 10:00",
-      title: "Workshops Begin",
-      description: "Choose from multiple tech workshops throughout the day"
+      date: "6:00 PM - 6:30 PM",
+      title: "Devpost Submissions Due & Code Freeze",
+      description: "Final submissions on Devpost platform."
     },
     {
-      date: "May 19, 11:00",
-      title: "Submission Deadline",
-      description: "All projects must be submitted by this time"
+      date: "6:30 PM - 7:00 PM",
+      title: "Dinner & Networking",
+      description: "Evening meal and project discussions."
     },
     {
-      date: "May 19, 13:00",
-      title: "Expo & Demos",
-      description: "Showcase your projects to judges and attendees"
+      date: "7:00 PM - 8:00 PM",
+      title: "Project Presentations & Demos",
+      description: "Teams present their projects to judges and audience."
     },
     {
-      date: "May 19, 17:00",
-      title: "Awards Ceremony",
-      description: "Winners announced and prizes distributed"
+      date: "8:00 PM - 8:30 PM",
+      title: "Judging & Deliberation",
+      description: "Judges evaluate projects based on criteria."
+    },
+    {
+      date: "8:30 PM - 9:00 PM",
+      title: "Closing Ceremony & Awards",
+      description: "Announcement of winners and prize distribution."
     }
   ];
 
@@ -73,7 +83,7 @@ const Timeline = () => {
           className="mb-12 text-center"
         >
           <h2 className="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-4 font-mono">
-            Timeline<span className="text-blue-600 dark:text-blue-500 animate-pulse">_</span>
+            Timeline, May 17th<span className="text-blue-600 dark:text-blue-500 animate-pulse">_</span>
           </h2>
           <p className="text-blue-800/80 dark:text-blue-200/80 max-w-2xl mx-auto font-mono">
             <span className="text-green-600 dark:text-green-400">$</span> cat schedule.log | sort -t
@@ -130,7 +140,7 @@ const Timeline = () => {
               </div>
 
               <div className="mt-6 text-blue-600/70 dark:text-blue-300/70 text-sm">
-                <span className="text-green-600 dark:text-green-400">$</span> Event times subject to minor adjustments. Check the event dashboard for real-time updates.
+                <span className="text-green-600 dark:text-green-400">$</span> Event times subject to minor adjustments. Check further emails for real-time updates.
               </div>
             </div>
           </div>

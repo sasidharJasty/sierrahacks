@@ -277,7 +277,7 @@ const SponsorPage = () => {
         </svg>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 mt-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -776,10 +776,10 @@ const SponsorPage = () => {
                         PHONE:
                       </span>
                       <a
-                        href="tel:+15551234567"
+                        href="tel:+9253658630"
                         className="ml-2 text-green-600 dark:text-green-400 hover:underline"
                       >
-                        (555) 123-4567
+                        (925) 365-8630
                       </a>
                     </div>
                   </div>
@@ -788,6 +788,7 @@ const SponsorPage = () => {
             </div>
           </motion.div>
         </motion.div>
+      {/* Terminal grid background */}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -4,40 +4,40 @@ import { motion } from "framer-motion";
 const Members = () => {
   const teamMembers = [
     {
-      name: "Jordan Ellis",
-      role: "Lead Organizer",
+      name: "Varshith Gude",
+      role: "Organizer",
       bio: "Passionate about building tech communities and making hackathons accessible to everyone.",
-      image: "https://randomuser.me/api/portraits/men/41.jpg"
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     {
-      name: "Taylor Kim",
-      role: "Technical Director",
+      name: "Sasidhar Jasty",
+      role: "Organizer",
       bio: "Full-stack developer focused on creating seamless hackathon experiences.",
-      image: "https://randomuser.me/api/portraits/women/12.jpg"
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     {
-      name: "Alex Rivera",
-      role: "Sponsorship Lead",
+      name: "Prajwal Nagendra",
+      role: "Organizer",
       bio: "Connecting innovative companies with the next generation of tech talent.",
-      image: "https://randomuser.me/api/portraits/men/22.jpg"
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     {
-      name: "Morgan Chen",
-      role: "Experience Designer",
+      name: "Pranav Malgunde",
+      role: "Organizer",
       bio: "Creating memorable moments for hackers through thoughtful event design.",
-      image: "https://randomuser.me/api/portraits/women/33.jpg"
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     {
-      name: "Jesse Washington",
-      role: "Operations Manager",
+      name: "Jayanth Bandaru",
+      role: "Organizer",
       bio: "Ensuring everything runs smoothly from registration to award ceremony.",
-      image: "https://randomuser.me/api/portraits/men/85.jpg"
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     {
-      name: "Robin Patel",
-      role: "Marketing Lead",
+      name: "Kausthubh Anand",
+      role: "Organizer",
       bio: "Spreading the word about SierraHacks to attract diverse participants.",
-      image: "https://randomuser.me/api/portraits/women/67.jpg"
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     }
   ];
 

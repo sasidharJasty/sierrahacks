@@ -4,14 +4,14 @@ import { motion } from "framer-motion";
 const Criteria = () => {
   const criteria = [
     {
-      name: "Innovation",
-      description: "How original and novel is the project? Does it solve a real problem in a new way?",
-      weight: 30,
+      name: "Innovation & Creativity",
+      description: "Uniqueness and originality of the project. How different is it from existing solutions?",
+      weight: 25,
       icon: "💡"
     },
     {
-      name: "Technical Complexity",
-      description: "How technically impressive is the project? Is the code well-structured and efficient?",
+      name: "Technical Implementation",
+      description: "Complexity and efficiency of the solution. How well was it executed from a technical perspective?",
       weight: 25,
       icon: "⚙️"
     },
@@ -22,8 +22,8 @@ const Criteria = () => {
       icon: "🎨"
     },
     {
-      name: "Completion",
-      description: "How finished is the project? Does it work end-to-end? Is it functional?",
+      name: "Relavence & Impact",
+      description: "How well it addresses the given problem and its potential real-world impact.",
       weight: 15,
       icon: "✅"
     },

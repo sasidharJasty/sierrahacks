@@ -56,7 +56,7 @@ const Hero = () => {
           className="space-y-8"
         >
           {/* Logo icon */}
-          <div className="mx-auto w-16 h-16 bg-blue-500/20 dark:bg-blue-500/10 border-blue-500/30 dark:border-blue-500/20 shadow-blue-500/10 dark:shadow-blue-500/5 backdrop-blur-sm rounded-lg flex items-center justify-center border shadow-lg">
+          <div className="mx-auto w-16 h-16 bg-blue-500/20 dark:bg-blue-500/10 border-blue-500/30 dark:border-blue-500/20 shadow-blue-500/10 dark:shadow-blue-500/5 backdrop-blur-sm rounded-lg flex items-center justify-center border shadow-lg mt-25">
             <img src={logo} />
           </div>
           
@@ -70,32 +70,33 @@ const Hero = () => {
           
           {/* Date and location */}
           <h2 className="text-xl md:text-2xl text-blue-700 dark:text-blue-200 font-light">
-            May 17-19, 2025 • Sierra Nevada Mountains
+            May 17, 2025 • Sierra High School
           </h2>
           
           {/* Brief description */}
           <p className="text-lg md:text-xl text-blue-800/90 dark:text-blue-100/80 max-w-2xl mx-auto">
-            A weekend of innovation and code in the mountains<span className="text-blue-600 dark:text-blue-500 animate-pulse ml-1">_</span>
+          A 13-hour coding marathon where innovation meets collaboration!<span className="text-blue-600 dark:text-blue-500 animate-pulse ml-1">_</span>
           </p>
           
           {/* Key stats */}
           <div className="flex justify-center gap-10 lg:gap-16">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">500+</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">175+</div>
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Hackers</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">48</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">13</div>
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Hours</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">$10K</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">$10K in</div>
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Prizes</div>
             </div>
           </div>
           
           {/* CTA buttons */}
           <div className="flex flex-col sm:flex-row justify-center gap-4 pt-4">
+            <a href = "https://tally.so/r/wkzQWZ" target="_blank" rel="noopener noreferrer">
             <motion.button
               onClick={() => scrollToSection("register")}
               className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600/90 dark:hover:bg-blue-700 text-white px-8 py-3 rounded-md font-semibold transition-colors group flex items-center justify-center shadow-lg shadow-blue-500/30 dark:shadow-blue-900/20"
@@ -107,30 +108,36 @@ const Hero = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
               </svg>
             </motion.button>
+            </a>
             
+            <a href = "https://hcb.hackclub.com/donations/start/codecatalyst">
             <motion.button
               onClick={() => scrollToSection("about")}
               className="bg-transparent hover:bg-blue-500/10 text-blue-700 dark:text-blue-200 px-8 py-3 rounded-md font-semibold transition-colors border border-blue-500/30 dark:border-blue-400/20"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
-              Learn More
+              Donate Now
             </motion.button>
+            </a>
           </div>
         </motion.div>
       </div>
 
-      {/* Minimal scroll indicator */}
+      {/* 
+      <div class ="mt-10">
       <motion.div
-        className="absolute bottom-30 left-1/2 transform -translate-x-1/2 cursor-pointer"
+        className="absolute bottom-30 left-1/2 transform -translate-x-1/2 cursor-pointer "
         onClick={() => scrollToSection("about")}
         animate={{ y: [0, 8, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <svg className="w-6 h-6 text-blue-600/70 dark:text-blue-400/70" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg className="w-6 h-6 text-blue-600/70 dark:text-blue-400/70 " fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
         </svg>
       </motion.div>
+    </div>
+    Minimal scroll indicator */}
     </div>
   );
 };
