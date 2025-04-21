@@ -112,7 +112,7 @@ const FAQ = () => {
               >
                 <div className="flex items-center text-sm">
                   <span className="text-green-600 dark:text-green-400 mr-2">$</span>
-                  <span>Still have questions? Contact us at <span className="text-blue-600 dark:text-blue-300 underline">team@sierrahacks.com</span></span>
+                  <span>Still have questions? Contact us at <span className="text-blue-600 dark:text-blue-300 underline">support@sierrahacks.com</span></span>
                 </div>
               </motion.div>
             </div>
