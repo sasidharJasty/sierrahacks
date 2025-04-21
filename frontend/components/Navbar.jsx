@@ -163,7 +163,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link 
             to="/"
-            className="text-xl font-bold flex items-center cursor-pointer"
+            className="text-xl ml-10 md:ml-0 font-bold flex items-center cursor-pointer"
             data-cursor-text="navigate('home')"
             data-cursor-color="#38bdf8"
           >

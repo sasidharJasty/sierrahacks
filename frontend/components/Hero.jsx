@@ -107,7 +107,7 @@ const Hero = () => {
             <a href="https://hcb.hackclub.com/donations/start/codecatalyst">
               <motion.button
                 onClick={() => scrollToSection("about")}
-                className="bg-transparent hover:bg-blue-500/10 text-blue-700 dark:text-blue-200 px-8 py-3 rounded-md font-semibold transition-colors border border-blue-500/30 dark:border-blue-400/20"
+                className="bg-transparent hover:bg-blue-500/10 text-blue-700 dark:text-blue-200 px-8 py-3 rounded-md font-semibold min-w-full md:min-w-fit transition-colors border border-blue-500/30 dark:border-blue-400/20"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
