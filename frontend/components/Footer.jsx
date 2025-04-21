@@ -13,7 +13,7 @@ const Footer = () => {
               </span>
               <span className="text-blue-600 dark:text-blue-400">Hacks</span>
             </Link>
-            <p className="mt-2 text-sm text-blue-700/70 dark:text-blue-300/70">
+            <p className="mt-2 text-center md:text-left text-sm text-blue-700/70 dark:text-blue-300/70">
             A 13-hour coding marathon where innovation meets collaboration!
             </p>
           </div>
