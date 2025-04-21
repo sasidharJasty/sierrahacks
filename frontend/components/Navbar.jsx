@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
+import logo from "../public/logo.png";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -153,7 +153,7 @@ const Navbar = () => {
       className={`fixed top-0  py-2 left-0 w-full z-50 transition-all duration-300 ${
         isScrolled 
           ? "bg-gray-900/80 backdrop-blur-lg border-b border-blue-900/30 shadow-lg shadow-blue-900/10" 
-          : "bg-transparent border-b border-blue-900/10"
+          : "dark:bg-transparent bg-gray-900/80 border-b border-blue-900/10"
       }`}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -190,6 +190,8 @@ const Navbar = () => {
               transition={{ duration: 0.5 }}
               className="flex items-center"
             >
+              <img src={logo} className="h-15">
+              </img>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-100">
                 Sierra
               </span>
