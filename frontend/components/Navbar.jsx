@@ -158,23 +158,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Terminal-style Header with macOS Controls */}
         <div className="flex items-center">
-          <div className="flex items-center space-x-2 mr-3">
-            <motion.div 
-              className="w-3 h-3 rounded-full bg-red-500 hover:bg-red-400 transition-colors"
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-            />
-            <motion.div 
-              className="w-3 h-3 rounded-full bg-yellow-500 hover:bg-yellow-400 transition-colors"
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-            />
-            <motion.div 
-              className="w-3 h-3 rounded-full bg-green-500 hover:bg-green-400 transition-colors"
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-            />
-          </div>
+          
           
           {/* Logo */}
           <Link 
