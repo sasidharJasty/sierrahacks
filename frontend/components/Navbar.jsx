@@ -269,7 +269,7 @@ const Navbar = () => {
         
         {/* Mobile Menu Button */}
         <motion.button 
-          className="block md:hidden text-blue-200"
+          className="block md:hidden text-blue-200 mr-10"
           onClick={() => setIsOpen(!isOpen)}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

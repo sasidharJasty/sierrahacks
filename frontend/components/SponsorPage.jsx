@@ -1,5 +1,20 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import emailjs from '@emailjs/browser';
+
+emailjs.init({
+  publicKey: 'q0VSXMXvZvvNhMZR4',
+  blockHeadless: true,
+  blockList: {
+    list: ['foo@emailjs.com', 'bar@emailjs.com'],
+    watchVariable: 'email',
+  },
+  limitRate: {
+    id: 'sponsorship-form',
+    throttle: 1000, // 1 request per second
+  },
+});
+
 
 const SponsorPage = () => {
   // Contact form state
@@ -164,70 +179,45 @@ const SponsorPage = () => {
   const handleDetailedSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-
-    const emailBody = `
-      Sponsorship Tier Interest: ${selectedTier.name} (${selectedTier.price})
-      
-      Contact Information:
-      Name: ${detailedFormData.firstName} ${detailedFormData.lastName}
-      Job Title: ${detailedFormData.jobTitle}
-      Email: ${detailedFormData.email}
-      Phone: ${detailedFormData.phone}
-      
-      Company Information:
-      Company Name: ${detailedFormData.company}
-      Website: ${detailedFormData.website}
-      Industry: ${detailedFormData.industry}
-      Company Size: ${detailedFormData.employeeCount} employees
-      Mailing Address: ${detailedFormData.mailingAddress}
-      
-      Sponsorship Details:
-      Interests: ${detailedFormData.interests.join(", ")}
-      Previous Sponsor: ${detailedFormData.previousSponsor}
-      How they heard about us: ${detailedFormData.hearAboutUs}
-      
-      Additional Information:
-      ${detailedFormData.additionalInfo}
-    `;
-
-    console.log("Email body to send:", emailBody);
-
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setIsPopupOpen(false);
-
-      setDetailedFormData({
-        firstName: "",
-        lastName: "",
-        jobTitle: "",
-        email: "",
-        phone: "",
-        company: "",
-        website: "",
-        industry: "",
-        employeeCount: "",
-        interests: [],
-        additionalInfo: "",
-        mailingAddress: "",
-        hearAboutUs: "",
-        previousSponsor: "no"
-      });
-
-      setFormData((prev) => ({
-        ...prev,
-        message: `I'm interested in the ${selectedTier.name} sponsorship tier.`
-      }));
-
-      document
-        .getElementById("contact-form")
-        .scrollIntoView({ behavior: "smooth" });
-
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 5000);
-    }, 1500);
+  
+    const templateParams = {
+      tier: selectedTier.name + " (" + selectedTier.price + ")",
+      firstName: detailedFormData.firstName,
+      lastName: detailedFormData.lastName,
+      email: detailedFormData.email,
+      phone: detailedFormData.phone,
+      company: detailedFormData.company,
+      jobTitle: detailedFormData.jobTitle,
+      website: detailedFormData.website,
+      industry: detailedFormData.industry,
+      employeeCount: detailedFormData.employeeCount,
+      mailingAddress: detailedFormData.mailingAddress,
+      interests: detailedFormData.interests.join(", "),
+      previousSponsor: detailedFormData.previousSponsor,
+      hearAboutUs: detailedFormData.hearAboutUs,
+      additionalInfo: detailedFormData.additionalInfo,
+    };
+  
+    emailjs.send(
+      'service_xvv7sft',       // found in EmailJS dashboard
+      'sponsorship_interest',  // your template ID
+      templateParams
+    ).then(
+      (response) => {
+        console.log("SUCCESS!", response.status, response.text);
+        setSubmitSuccess(true);
+        setIsPopupOpen(false);
+        setIsSubmitting(false);
+        // Clear form here...
+      },
+      (error) => {
+        console.error("FAILED...", error);
+        setIsSubmitting(false);
+        alert("Failed to send email. Please try again.");
+      }
+    );
   };
+  
 
   // Handle regular form submission
   const handleSubmit = (e) => {
@@ -399,6 +389,7 @@ const SponsorPage = () => {
           className="max-w-6xl mx-auto mb-16"
         >
           <div className="border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg">
+            {/* Terminal header - existing code */}
             <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-2 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
               <div className="flex space-x-2 mr-4">
                 <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
@@ -410,7 +401,7 @@ const SponsorPage = () => {
               </div>
             </div>
 
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               <div className="mb-6 font-mono text-blue-800 dark:text-blue-300">
                 <span className="text-green-600 dark:text-green-400">$</span>{" "}
                 ./compare-tiers.sh{" "}
@@ -419,123 +410,217 @@ const SponsorPage = () => {
                 </span>
               </div>
 
-              <div className="mb-6 flex flex-wrap items-center gap-4 font-mono text-sm">
-                <div className="flex items-center">
-                  <span className="text-blue-600 dark:text-blue-400 mr-2">
-                    View:
-                  </span>
-                  <span className="bg-blue-100 dark:bg-blue-800/50 px-3 py-1 rounded-md text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-700/50">
-                    Table View
-                  </span>
+              {/* Mobile/Desktop View Toggle */}
+              <div className="mb-6 flex flex-wrap items-center justify-between gap-4 font-mono text-sm">
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <span className="text-blue-600 dark:text-blue-400 mr-2 hidden sm:inline">
+                      View:
+                    </span>
+                    <div className="flex border border-blue-200 dark:border-blue-700/50 rounded-md overflow-hidden">
+                      <button className="bg-blue-100 dark:bg-blue-800/50 px-3 py-1 text-blue-700 dark:text-blue-300">
+                        Table
+                      </button>
+                      <button className="px-3 py-1 text-blue-600/70 dark:text-blue-400/70 hover:bg-blue-50 dark:hover:bg-blue-900/20">
+                        Cards
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="hidden sm:flex items-center">
+                    <span className="text-blue-600 dark:text-blue-400 mr-2">
+                      Sort:
+                    </span>
+                    <select className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700/50 rounded px-2 py-1 text-blue-700 dark:text-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500 text-xs">
+                      <option value="price">Price (High to Low)</option>
+                      <option value="perks">Perks (Most to Least)</option>
+                      <option value="name">Name (A-Z)</option>
+                    </select>
+                  </div>
                 </div>
-
-                <div className="flex items-center">
-                  <span className="text-blue-600 dark:text-blue-400 mr-2">
-                    Sort by:
-                  </span>
-                  <select className="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700/50 rounded px-2 py-1 text-blue-700 dark:text-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    <option value="price">Price (High to Low)</option>
-                    <option value="perks">Perks (Most to Least)</option>
-                    <option value="name">Name (A-Z)</option>
-                  </select>
+                
+                <div className="flex items-center space-x-2 text-xs text-blue-600/70 dark:text-blue-400/70">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className="hidden sm:inline">Swipe to view all details on mobile</span>
+                  <span className="sm:hidden">Scroll to view details</span>
                 </div>
               </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse font-mono text-sm">
-                  <thead>
-                    <tr className="bg-blue-100/70 dark:bg-blue-900/40 text-left">
-                      <th className="py-3 px-4 border-b-2 border-blue-200/70 dark:border-blue-700/50 text-blue-800 dark:text-blue-200">
-                        Tier
-                      </th>
-                      <th className="py-3 px-4 border-b-2 border-blue-200/70 dark:border-blue-700/50 text-blue-800 dark:text-blue-200">
-                        Price
-                      </th>
-                      <th className="py-3 px-4 border-b-2 border-blue-200/70 dark:border-blue-700/50 text-blue-800 dark:text-blue-200 w-full">
-                        Perks
-                      </th>
-                      <th className="py-3 px-4 border-b-2 border-blue-200/70 dark:border-blue-700/50 text-blue-800 dark:text-blue-200"></th>
-                    </tr>
-                  </thead>
+              {/* Responsive Table */}
+              <div className="overflow-x-auto -mx-4 sm:mx-0 scrollbar-thin scrollbar-thumb-blue-200 dark:scrollbar-thumb-blue-800 scrollbar-track-transparent">
+                {/* Large Screen Traditional Table */}
+                <div className="hidden md:block min-w-full">
+                  <table className="w-full border-collapse font-mono text-sm">
+                    <thead>
+                      <tr className="bg-blue-100/70 dark:bg-blue-900/40 text-left">
+                        <th className="py-3 px-4 border-b-2 border-blue-200/70 dark:border-blue-700/50 text-blue-800 dark:text-blue-200">
+                          Tier
+                        </th>
+                        <th className="py-3 px-4 border-b-2 border-blue-200/70 dark:border-blue-700/50 text-blue-800 dark:text-blue-200">
+                          Price
+                        </th>
+                        <th className="py-3 px-4 border-b-2 border-blue-200/70 dark:border-blue-700/50 text-blue-800 dark:text-blue-200 w-full">
+                          Perks
+                        </th>
+                        <th className="py-3 px-4 border-b-2 border-blue-200/70 dark:border-blue-700/50 text-blue-800 dark:text-blue-200"></th>
+                      </tr>
+                    </thead>
 
-                  <tbody>
-                    {sponsorshipTiers.map((tier, index) => (
-                      <motion.tr
-                        key={index}
-                        initial={{ opacity: 0, y: 5 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.1, duration: 0.4 }}
-                        className={`border-b border-blue-100/50 dark:border-blue-800/30 ${
-                          index % 2 === 0
-                            ? "bg-blue-50/50 dark:bg-blue-900/10"
-                            : ""
-                        } hover:bg-blue-100/50 dark:hover:bg-blue-900/20 transition-colors`}
-                      >
-                        <td className="py-4 px-4">
+                    <tbody>
+                      {sponsorshipTiers.map((tier, index) => (
+                        <motion.tr
+                          key={index}
+                          initial={{ opacity: 0, y: 5 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: index * 0.1, duration: 0.4 }}
+                          className={`border-b border-blue-100/50 dark:border-blue-800/30 ${
+                            index % 2 === 0
+                              ? "bg-blue-50/50 dark:bg-blue-900/10"
+                              : ""
+                          } hover:bg-blue-100/50 dark:hover:bg-blue-900/20 transition-colors`}
+                        >
+                          <td className="py-4 px-4">
+                            <div
+                              className={`inline-flex items-center px-2.5 py-1 rounded-full bg-gradient-to-r ${tier.color} text-white text-xs font-bold`}
+                            >
+                              {tier.name}
+                            </div>
+                          </td>
+
+                          <td className="py-4 px-4 text-blue-700 dark:text-blue-300 whitespace-nowrap">
+                            {tier.price}
+                          </td>
+
+                          <td className="py-4 px-4">
+                            <div className="grid grid-cols-2 gap-y-2 gap-x-4">
+                              {tier.perks.map((perk, perkIndex) => (
+                                <div
+                                  key={perkIndex}
+                                  className="flex items-start"
+                                >
+                                  <span className="text-green-500 dark:text-green-400 mr-2">
+                                    ✓
+                                  </span>
+                                  <span className="text-blue-700 dark:text-blue-200">
+                                    {perk}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </td>
+
+                          <td className="py-4 px-4 whitespace-nowrap">
+                            <motion.button
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              className={`bg-gradient-to-r ${tier.color} px-4 py-2 text-white rounded font-mono text-xs flex items-center space-x-2 whitespace-nowrap`}
+                              onClick={() => handleTierSelect(tier)}
+                            >
+                              <span>Select</span>
+                              <svg
+                                className="h-3 w-3"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  d="M14 5l7 7m0 0l-7 7m7-7H3"
+                                />
+                              </svg>
+                            </motion.button>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Mobile/Tablet Optimized Table View */}
+                <div className="md:hidden px-4 sm:px-0 space-y-4">
+                  {sponsorshipTiers.map((tier, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 5 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1, duration: 0.4 }}
+                      className={`border border-blue-100/50 dark:border-blue-800/30 rounded-lg overflow-hidden ${
+                        index % 2 === 0
+                          ? "bg-blue-50/50 dark:bg-blue-900/10"
+                          : "bg-white/80 dark:bg-gray-900/60"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between p-4 border-b border-blue-100/40 dark:border-blue-800/20">
+                        <div className="flex items-center space-x-3">
                           <div
                             className={`inline-flex items-center px-2.5 py-1 rounded-full bg-gradient-to-r ${tier.color} text-white text-xs font-bold`}
                           >
                             {tier.name}
                           </div>
-                        </td>
-
-                        <td className="py-4 px-4 text-blue-700 dark:text-blue-300 whitespace-nowrap">
-                          {tier.price}
-                        </td>
-
-                        <td className="py-4 px-4">
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-y-2 gap-x-4">
-                            {tier.perks.map((perk, perkIndex) => (
-                              <div
-                                key={perkIndex}
-                                className="flex items-start"
-                              >
-                                <span className="text-green-500 dark:text-green-400 mr-2">
-                                  ✓
-                                </span>
-                                <span className="text-blue-700 dark:text-blue-200">
-                                  {perk}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </td>
-
-                        <td className="py-4 px-4 whitespace-nowrap">
-                          <motion.button
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className={`bg-gradient-to-r ${tier.color} px-4 py-2 text-white rounded font-mono text-xs flex items-center space-x-2 whitespace-nowrap`}
-                            onClick={() => handleTierSelect(tier)}
+                          <span className="text-blue-700 dark:text-blue-300 font-bold">
+                            {tier.price}
+                          </span>
+                        </div>
+                        
+                        <motion.button
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className={`bg-gradient-to-r ${tier.color} px-3 py-1.5 text-white rounded font-mono text-xs flex items-center space-x-1.5`}
+                          onClick={() => handleTierSelect(tier)}
+                        >
+                          <span>Select</span>
+                          <svg
+                            className="h-3 w-3"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
                           >
-                            <span>Select</span>
-                            <svg
-                              className="h-3 w-3"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth="2"
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
+                          </svg>
+                        </motion.button>
+                      </div>
+                      
+                      <div className="p-4">
+                        <div className="mb-2 text-xs text-blue-600 dark:text-blue-400 uppercase tracking-wide font-semibold">
+                          Perks
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-2 gap-x-4">
+                          {tier.perks.map((perk, perkIndex) => (
+                            <div
+                              key={perkIndex}
+                              className="flex items-start"
                             >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M14 5l7 7m0 0l-7 7m7-7H3"
-                              />
-                            </svg>
-                          </motion.button>
-                        </td>
-                      </motion.tr>
-                    ))}
-                  </tbody>
-                </table>
+                              <span className="text-green-500 dark:text-green-400 mr-2 text-lg leading-none">
+                                •
+                              </span>
+                              <span className="text-blue-700 dark:text-blue-200 text-sm">
+                                {perk}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
               </div>
 
-              <div className="mt-8 pt-4 border-t border-blue-200/50 dark:border-blue-500/20 flex items-center justify-between font-mono text-sm">
+              {/* Terminal Prompt Footer */}
+              <div className="mt-8 pt-4 border-t border-blue-200/50 dark:border-blue-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between font-mono text-sm gap-4">
                 <div className="text-blue-600/70 dark:text-blue-300/70">
                   <span className="text-green-600 dark:text-green-400">$</span>{" "}
-                  Found {sponsorshipTiers.length} tiers. Use '--help' for more
-                  options.
+                  Found {sponsorshipTiers.length} tiers. Use '--help' for more options.
                 </div>
 
                 <motion.button

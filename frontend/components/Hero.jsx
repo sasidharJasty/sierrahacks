@@ -89,8 +89,8 @@ const Hero = () => {
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Hours</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">$10K in</div>
-              <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Prizes</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">$10K</div>
+              <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">In Prizes</div>
             </div>
           </div>
           

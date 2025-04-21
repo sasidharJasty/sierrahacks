@@ -4,17 +4,18 @@ import { motion } from "framer-motion";
 const Members = () => {
   const teamMembers = [
     {
+      name: "Sasidhar Jasty",
+      role: "Organizer",
+      bio: "Full-stack developer focused on creating seamless and accessible hackathon experiences.",
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+    },
+    {
       name: "Varshith Gude",
       role: "Organizer",
       bio: "Passionate about building tech communities and making hackathons accessible to everyone.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
-    {
-      name: "Sasidhar Jasty",
-      role: "Organizer",
-      bio: "Full-stack developer focused on creating seamless hackathon experiences.",
-      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
-    },
+    
     {
       name: "Prajwal Nagendra",
       role: "Organizer",

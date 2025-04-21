@@ -54,7 +54,7 @@ const Criteria = () => {
           className="mb-12 text-center"
         >
           <h2 className="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-4 font-mono">
-            Judging Criteria<span className="text-blue-600 dark:text-blue-500 animate-pulse">_</span>
+            Criteria<span className="text-blue-600 dark:text-blue-500 animate-pulse">_</span>
           </h2>
           <p className="text-blue-800/80 dark:text-blue-200/80 max-w-2xl mx-auto font-mono">
             <span className="text-green-600 dark:text-green-400">$</span> ./evaluate-projects --criteria
