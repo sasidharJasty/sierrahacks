@@ -219,36 +219,63 @@ const Navbar = () => {
             </Link>
           ))}
           
-          <Link
-  to={location.pathname === '/' ? '#register' : '/'}
-  onClick={(e) => {
-    if (location.pathname === '/') {
-      e.preventDefault();
-      scrollToSection("register");
-    }
-  }}
-  className="inline-flex items-center justify-center px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-md hover:shadow-lg hover:shadow-blue-500/25 transition-all relative overflow-hidden group"
-  data-cursor-text="register()"
-  data-cursor-color="#3b82f6"
->
-  {/* Text container with proper z-index */}
-  <a href = "https://tally.so/r/wkzQWZ">
-  <div className="relative z-10 flex items-center justify-center">
-    Register
-    <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-    </svg>
-  </div>
-  </a>
-  
-  {/* Hover animation background */}
-  <motion.div 
-    className="absolute inset-0 bg-blue-700 z-0"
-    initial={{ x: "-100%" }}
-    whileHover={{ x: 0 }}
-    transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
-  />
-</Link>
+          {/* Donate Button */}
+          <a
+            href="https://hcb.hackclub.com/donations/start/codecatalyst"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-md hover:shadow-lg hover:shadow-purple-500/25 transition-all relative overflow-hidden group border border-purple-400/20"
+            data-cursor-text="support()"
+            data-cursor-color="#a855f7"
+          >
+            {/* Text container with proper z-index */}
+            <div className="relative z-10 flex items-center justify-center">
+              <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+              </svg>
+              <span className="font-mono">support.us</span>
+            </div>
+            
+            {/* Hover animation background */}
+            <motion.div 
+              className="absolute inset-0 bg-gradient-to-r from-indigo-700 to-purple-700 z-0"
+              initial={{ x: "-100%" }}
+              whileHover={{ x: 0 }}
+              transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+            />
+            
+            {/* Animated border glow effect */}
+            <motion.span 
+              className="absolute inset-0 rounded-md -z-10"
+              initial={{ boxShadow: "0 0 0 rgba(168, 85, 247, 0)" }}
+              whileHover={{ boxShadow: "0 0 8px rgba(168, 85, 247, 0.6)" }}
+              transition={{ duration: 0.3 }}
+            />
+          </a>
+          
+          {/* Desktop Navigation Register Button - FIXED */}
+          <a
+            href="https://tally.so/r/wkzQWZ"
+            className="inline-flex items-center justify-center px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-md hover:shadow-lg hover:shadow-blue-500/25 transition-all relative overflow-hidden group"
+            data-cursor-text="register()"
+            data-cursor-color="#3b82f6"
+          >
+            {/* Text container with proper z-index */}
+            <div className="relative z-10 flex items-center justify-center">
+              Register
+              <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </div>
+            
+            {/* Hover animation background */}
+            <motion.div 
+              className="absolute inset-0 bg-blue-700 z-0"
+              initial={{ x: "-100%" }}
+              whileHover={{ x: 0 }}
+              transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
+            />
+          </a>
         </div>
         
         {/* Mobile Menu Button */}
@@ -327,8 +354,32 @@ const Navbar = () => {
                   </motion.div>
                 </Link>
               ))}
+              {/* Add Donate Button to mobile menu */}
+              <a
+                href="https://hcb.hackclub.com/donations/start/codecatalyst"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="m-6 mb-2 py-3 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-purple-500/25 transition-all border border-purple-400/20"
+                data-cursor-text="support()"
+                data-cursor-color="#a855f7"
+                onClick={() => setIsOpen(false)}
+              >
+                <motion.div
+                  initial={{ x: -20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  transition={{ delay: 0.15, duration: 0.2 }}
+                  className="flex items-center justify-center"
+                >
+                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
+                  </svg>
+                  <span className="font-mono">support.us</span>
+                </motion.div>
+              </a>
+
+              {/* Register button follows after the Donate button */}
               <Link
-                to={location.pathname === '/' ? '#google' : '/'}
+                to={location.pathname === '/' ? '#register' : '/'}
                 onClick={(e) => {
                   if (location.pathname === '/') {
                     e.preventDefault();
@@ -336,7 +387,7 @@ const Navbar = () => {
                   }
                   setIsOpen(false);
                 }}
-                className="m-6 py-3 px-6 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-blue-500/25 transition-all"
+                className="m-6 mt-2 py-3 px-6 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-blue-500/25 transition-all"
                 data-cursor-text="register()"
                 data-cursor-color="#3b82f6"
               >
