@@ -629,28 +629,28 @@ const Hero = () => {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.05),transparent_70%)] dark:bg-[radial-gradient(circle_at_top_right,rgba(16,185,129,0.03),transparent_70%)]"></div>
       </div>
 
-      {/* Partnership section */}
+      {/* Partnership section - improved mobile responsiveness */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="absolute bottom-10 sm:bottom-16 right-8 sm:right-20 flex flex-col items-end"
+        className="absolute bottom-6 sm:bottom-16 right-4 sm:right-20 flex flex-col items-end max-w-[180px] sm:max-w-none"
       >
-        <div className="text-xs sm:text-sm text-yellow-400 font-light tracking-wide mb-2">
+        <div className="text-[10px] xs:text-xs sm:text-sm text-yellow-400 font-light tracking-wide mb-1 sm:mb-2 text-right">
           IN PARTNERSHIP WITH
         </div>
         
         <motion.div 
-          className="flex items-center justify-end bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-lg px-4 py-2 border border-blue-200/50 dark:border-blue-700/30 shadow-lg"
+          className="flex items-center justify-end bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 border border-blue-200/50 dark:border-blue-700/30 shadow-lg"
           whileHover={{ boxShadow: "0 0 15px rgba(59, 130, 246, 0.3)" }}
         >
-          <span className="text-base sm:text-lg font-semibold text-blue-800 dark:text-blue-200 mr-2">
+          <span className="text-sm sm:text-base md:text-lg font-semibold text-blue-800 dark:text-blue-200 mr-1.5 sm:mr-2">
             CODESTACK
           </span>
-          <img src={cs} alt="CodeStack Logo" className="w-8 h-8 rounded-lg" />
+          <img src={cs} alt="CodeStack Logo" className="w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg" />
         </motion.div>
         
-        <svg className="w-24 h-2 mt-1 opacity-30" viewBox="0 0 100 4" xmlns="http://www.w3.org/2000/svg">
+        <svg className="w-16 sm:w-24 h-2 mt-0.5 sm:mt-1 opacity-30" viewBox="0 0 100 4" xmlns="http://www.w3.org/2000/svg">
           <line x1="0" y1="2" x2="100" y2="2" stroke="currentColor" strokeWidth="2" strokeDasharray="1 3" className="text-blue-700 dark:text-blue-300" />
         </svg>
       </motion.div>
