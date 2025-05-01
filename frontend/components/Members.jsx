@@ -35,6 +35,12 @@ const Members = () => {
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     {
+      name: "Arjun Ramesh",
+      role: "Organizer",
+      bio: "Spreading the word about SierraHacks to attract diverse participants.",
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+    },
+    {
       name: "Kausthubh Anand",
       role: "Organizer",
       bio: "Spreading the word about SierraHacks to attract diverse participants.",
