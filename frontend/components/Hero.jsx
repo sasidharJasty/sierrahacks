@@ -1,6 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import logo from "../public/logo.png";
+import cs from "../public/codestack.jpg";
 
 const Hero = () => {
   // Scroll to section
@@ -635,7 +636,7 @@ const Hero = () => {
         transition={{ delay: 0.5, duration: 0.5 }}
         className="absolute bottom-10 sm:bottom-16 right-8 sm:right-20 flex flex-col items-end"
       >
-        <div className="text-xs sm:text-sm text-blue-700 dark:text-blue-400 font-light tracking-wide mb-2">
+        <div className="text-xs sm:text-sm text-yellow-400 font-light tracking-wide mb-2">
           IN PARTNERSHIP WITH
         </div>
         
@@ -646,9 +647,7 @@ const Hero = () => {
           <span className="text-base sm:text-lg font-semibold text-blue-800 dark:text-blue-200 mr-2">
             CODESTACK
           </span>
-          <div className="w-6 h-6 bg-yellow-500 rounded flex items-center justify-center text-white font-bold text-xs">
-            C
-          </div>
+          <img src={cs} alt="CodeStack Logo" className="w-8 h-8 rounded-lg" />
         </motion.div>
         
         <svg className="w-24 h-2 mt-1 opacity-30" viewBox="0 0 100 4" xmlns="http://www.w3.org/2000/svg">
