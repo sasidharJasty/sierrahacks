@@ -30,7 +30,7 @@ const Members = () => {
     },
     {
       name: "Prajwal Nagendra",
-      role: "Organizer",
+      role: "Outreach Manager",
       bio: "Connecting innovative companies with the next generation of tech talent.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
