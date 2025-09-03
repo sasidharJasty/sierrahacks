@@ -73,9 +73,10 @@ const Navbar = () => {
   // Navigation items with their respective sections
   const navItems = [
     { name: "Home", id: "home", path: "/", delay: 0.05 },
+    { name: "Sponsors", id: "sponsor", path: "/", delay: 0.1 },
     { name: "Timeline", id: "timeline", path: "/", delay: 0.15 },
-    { name: "FAQ", id: "about", path: "/", delay: 0.1 },
-    { name: "Criteria", id: "criteria", path: "/", delay: 0.2 },
+    { name: "FAQ", id: "about", path: "/", delay: 0.2 },
+    { name: "Criteria", id: "criteria", path: "/", delay: 0.25 },
     { name: "Team", id: "team", path: "/", delay: 0.3 },
     { name: "Sponsor", id: "sponsor", path: "/sponsor", delay: 0.4 }
   ];

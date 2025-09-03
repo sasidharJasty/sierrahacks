@@ -48,9 +48,9 @@ const Members = () => {
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     {
-      name: "Prithik Manopriya",
-      role: "Volunteer organizer",
-      bio: "Helping to ensure a smooth and enjoyable experience for all participants.",
+      name: "Prithik Karthikeyan",
+      role: "Organizer",
+      bio: "Helping to ensure a smooth and enjoyable experience for participants as a volunteer.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     }
     
