@@ -224,7 +224,7 @@ const Navbar = () => {
             href="https://hcb.hackclub.com/donations/start/codecatalyst"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 text-white rounded-md hover:shadow-lg hover:shadow-purple-500/25 transition-all relative overflow-hidden group border border-purple-400/20"
+            className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-md hover:shadow-lg hover:shadow-purple-500/25 transition-all relative overflow-hidden group border border-blue-400/20"
             data-cursor-text="support()"
             data-cursor-color="#a855f7"
           >
@@ -359,7 +359,7 @@ const Navbar = () => {
                 href="https://hcb.hackclub.com/donations/start/codecatalyst"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="m-6 mb-2 py-3 px-6 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-purple-500/25 transition-all border border-purple-400/20"
+                className="m-6 mb-2 py-3 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-purple-500/25 transition-all border border-purple-400/20"
                 data-cursor-text="support()"
                 data-cursor-color="#a855f7"
                 onClick={() => setIsOpen(false)}

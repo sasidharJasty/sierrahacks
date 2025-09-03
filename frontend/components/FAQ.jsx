@@ -1,5 +1,5 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const FAQ = () => {
   const faqItems = [
@@ -9,7 +9,7 @@ const FAQ = () => {
     },
     {
       question: "What should I bring to the hackathon?",
-      answer: "You should bring your laptop, charger, any hardware you plan to use for your project, and personal items you'll need for a 13-hour event. We'll provide food, drinks, and a comfortable hacking environment."
+      answer: "You should bring your laptop, charger, any hardware you plan to use for your project, and personal items you'll need for a 12-hour event. We'll provide food, drinks, and a comfortable hacking environment."
     },
     {
       question: "How are teams formed?",
@@ -36,6 +36,10 @@ const FAQ = () => {
       answer: "Teams will present their projects to a panel of judges who will evaluate them based on innovation, technical implementation, impact, presentation, and collaboration. Winners will be announced at the closing ceremony."
     }
   ];
+
+  // Only one item open at a time (set to null to close all)
+  const [openIndex, setOpenIndex] = useState(null);
+  const toggle = (i) => setOpenIndex((prev) => (prev === i ? null : i));
 
   return (
     <div id="about" className="relative py-20 bg-[#D9E7FD] dark:bg-gray-900 overflow-hidden">
@@ -82,7 +86,7 @@ const FAQ = () => {
               </div>
             </div>
 
-            {/* Terminal content */}
+            {/* Terminal content - changed to accordion */}
             <div className="p-4 font-mono">
               {faqItems.map((item, index) => (
                 <motion.div
@@ -90,19 +94,54 @@ const FAQ = () => {
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="mb-6"
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
+                  className="mb-2 sm:mb-4"
                 >
-                  <div className="text-green-600 dark:text-green-400 mb-1 flex items-start">
-                    <span className="mr-2">$</span>
-                    <span className="text-blue-700 dark:text-yellow-300 font-bold">{item.question}</span>
-                  </div>
-                  <div className="ml-6 pl-4 border-l text-sm dark:text-md border-blue-200/50 dark:border-blue-500/30 text-blue-800/90 dark:text-blue-100/90 leading-relaxed">
-                    {item.answer}
-                  </div>
+                  {/* Toggle button (accessible) */}
+                  <button
+                    onClick={() => toggle(index)}
+                    aria-expanded={openIndex === index}
+                    aria-controls={`faq-panel-${index}`}
+                    className="w-full text-left flex items-start justify-between gap-3 px-2 py-3 rounded-md hover:bg-blue-50/60 dark:hover:bg-white/5 transition-colors"
+                  >
+                    <div className="text-green-600 dark:text-green-400 mb-0 flex items-start">
+                      <span className="mr-2">$</span>
+                      <span className="text-blue-700 dark:text-yellow-300 font-bold">{item.question}</span>
+                    </div>
+
+                    {/* Chevron icon */}
+                    <svg
+                      className={`w-5 h-5 text-blue-600 dark:text-blue-300 mt-0.5 transition-transform ${openIndex === index ? "rotate-180" : ""}`}
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+
+                  {/* Collapsible answer */}
+                  <AnimatePresence initial={false}>
+                    {openIndex === index && (
+                      <motion.div
+                        id={`faq-panel-${index}`}
+                        key="content"
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="ml-6 pl-4 border-l text-sm dark:text-md border-blue-200/50 dark:border-blue-500/30 text-blue-800/90 dark:text-blue-100/90 leading-relaxed py-2">
+                          {item.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
               ))}
-              
+
+              {/* Footer line stays visible */}
               <motion.div 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}

@@ -6,7 +6,7 @@ const Criteria = () => {
     {
       name: "Innovation & Creativity",
       description: "Uniqueness and originality of the project. How different is it from existing solutions?",
-      weight: 25,
+      weight: 30,
       icon: "💡"
     },
     {

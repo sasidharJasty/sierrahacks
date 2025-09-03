@@ -1,9 +1,60 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import logo from "../public/logo.png";
 import cs from "../public/codestack.jpg";
 
 const Hero = () => {
+  // Sync Tailwind dark mode with site/system/user preference
+  useEffect(() => {
+    const root = document.documentElement;
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const apply = (isDark) => {
+      root.classList.toggle("dark", !!isDark);
+    };
+
+    // 1) If user explicitly chose a theme, use it; else follow system.
+    const stored = localStorage.getItem("theme"); // 'dark' | 'light' | null
+    if (stored === "dark" || stored === "light") {
+      apply(stored === "dark");
+    } else {
+      apply(media.matches);
+    }
+
+    // 2) React to OS changes if no explicit user choice
+    const onMediaChange = (e) => {
+      if (!localStorage.getItem("theme")) apply(e.matches);
+    };
+    media.addEventListener("change", onMediaChange);
+
+    // 3) React to cross-tab updates of localStorage('theme')
+    const onStorage = (e) => {
+      if (e.key === "theme") {
+        const v = e.newValue;
+        if (v === "dark" || v === "light") apply(v === "dark");
+        else apply(media.matches);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+
+    // 4) Optional: expose a helper so other UI can set theme
+    window.setSiteTheme = (mode) => {
+      // mode: 'dark' | 'light' | 'system'
+      if (mode === "dark" || "light") {
+        localStorage.setItem("theme", mode);
+        apply(mode === "dark");
+      } else {
+        localStorage.removeItem("theme");
+        apply(media.matches);
+      }
+    };
+
+    return () => {
+      media.removeEventListener("change", onMediaChange);
+      window.removeEventListener("storage", onStorage);
+    };
+  }, []);
+
   // Scroll to section
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
@@ -13,7 +64,7 @@ const Hero = () => {
   };
 
   return (
-    <div id="home" className="relative min-h-screen bg-blue-50 dark:bg-gray-900 flex items-center justify-center overflow-hidden">
+    <div id="home" className="relative min-h-screen bg-blue-50 dark:bg-blue-700 flex items-center justify-center overflow-hidden">
       {/* Enhanced dot matrix background with subtle animation */}
       <div className="absolute inset-0 opacity-10">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -31,6 +82,7 @@ const Hero = () => {
           <rect width="100%" height="100%" fill="url(#grid-gradient)" opacity="0.3" />
         </svg>
       </div>
+
 
       {/* Original circuit lines (light theme only) */}
       <div className="absolute inset-0 overflow-hidden dark:hidden">
@@ -634,13 +686,17 @@ const Hero = () => {
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5, duration: 0.5 }}
-        className="absolute bottom-6 sm:bottom-16 right-4 sm:right-20 flex flex-col items-end max-w-[180px] sm:max-w-none"
+        className="absolute bottom-4 sm:bottom-10 right-4 sm:right-20 flex flex-col items-end max-w-[180px] sm:max-w-none"
       >
         <div className="text-[10px] xs:text-xs sm:text-sm text-yellow-400 font-light tracking-wide mb-1 sm:mb-2 text-right">
           IN PARTNERSHIP WITH
         </div>
-        
-        <motion.div 
+        <div className="flex flex-row items-end space-x-2">
+        <motion.a
+          href="https://www.codestack.org" 
+          target="_blank"
+          rel="noopener noreferrer"
+
           className="flex items-center justify-end bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 border border-blue-200/50 dark:border-blue-700/30 shadow-lg"
           whileHover={{ boxShadow: "0 0 15px rgba(59, 130, 246, 0.3)" }}
         >
@@ -648,12 +704,29 @@ const Hero = () => {
             CODESTACK
           </span>
           <img src={cs} alt="CodeStack Logo" className="w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg" />
-        </motion.div>
+        </motion.a>
+
+        <motion.a
+          href="https://hcb.hackclub.com/donations/start/codecatalyst" 
+          target="_blank"
+          rel="noopener noreferrer"
+
+          className="flex items-center justify-end bg-white/70 dark:bg-gray-800/70 backdrop-blur-sm rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 border border-blue-200/50 dark:border-blue-700/30 shadow-lg ml-2"
+          whileHover={{ boxShadow: "0 0 15px rgba(59, 130, 246, 0.3)" }}
+        >
+          <span className="text-sm sm:text-base md:text-lg font-semibold text-blue-800 dark:text-blue-200 mr-1.5 sm:mr-2">
+            CODECATALYST
+          </span>
+          {/*<img src={cs} alt="CodeStack Logo" className="w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg" />*/}
+        </motion.a>
+        </div>
         
         <svg className="w-16 sm:w-24 h-2 mt-0.5 sm:mt-1 opacity-30" viewBox="0 0 100 4" xmlns="http://www.w3.org/2000/svg">
           <line x1="0" y1="2" x2="100" y2="2" stroke="currentColor" strokeWidth="2" strokeDasharray="1 3" className="text-blue-700 dark:text-blue-300" />
         </svg>
       </motion.div>
+
+   
 
       {/* Main container */}
       <div className="container mx-auto px-4 -mt-20 relative z-10 text-center max-w-3xl">
@@ -665,37 +738,37 @@ const Hero = () => {
         >
           {/* Logo icon */}
           <div className="mx-auto w-16 h-16 bg-blue-500/20 dark:bg-blue-500/10 border-blue-500/30 dark:border-blue-500/20 shadow-blue-500/10 dark:shadow-blue-500/5 backdrop-blur-sm rounded-lg flex items-center justify-center border shadow-lg mt-25">
-            <img src={logo} alt="SierraHacks logo" />
+            <img src={logo}  alt="SierraHacks logo" />
           </div>
 
           {/* Event name */}
           <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-300 dark:to-blue-100">
-            SierraHacks 2025
+            Sierra<span className="text-blue-500">Hacks</span> 2025
           </h1>
 
           {/* Date and location */}
-          <h2 className="text-xl md:text-2xl text-blue-700 dark:text-blue-200 font-light">
-            May 17, 2025 • Sierra High School
+          <h2 className="text-xl md:text-2xl text-blue-700 dark:text-white font-light">
+            Nov 15, 2025 • Sierra High School
           </h2>
 
           {/* Brief description */}
           <p className="text-lg md:text-xl text-blue-800/90 dark:text-blue-100/80 max-w-2xl mx-auto">
-            A 13-hour coding marathon where innovation meets collaboration!
+            A 12-hour coding marathon where innovation meets collaboration!
             <span className="text-blue-600 dark:text-blue-500 animate-pulse ml-1">_</span>
           </p>
 
           {/* Key stats */}
           <div className="flex justify-center gap-10 lg:gap-16">
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">175+</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-500 font-mono">175+</div>
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Hackers</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">13</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-500 font-mono">13</div>
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Hours</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-300 font-mono">$10K</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-500 font-mono">$10K</div>
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">In Prizes</div>
             </div>
           </div>

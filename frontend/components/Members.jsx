@@ -5,17 +5,29 @@ const Members = () => {
   const teamMembers = [
     {
       name: "Sasidhar Jasty",
-      role: "Organizer",
+      role: "Lead Organizer",
       bio: "Full-stack developer focused on creating seamless and accessible hackathon experiences.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     {
       name: "Varshith Gude",
-      role: "Organizer",
+      role: "Lead Organizer",
       bio: "Passionate about building tech communities and making hackathons accessible to everyone.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     
+    {
+      name: "Jayanth Bandaru",
+      role: "Marketing and Finance",
+      bio: "Driving outreach and managing finances to ensure a successful and well-funded event.",
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+    },
+    {
+      name: "Kaustubh Anand",
+      role: "Sponsor and Outreach ",
+      bio: "Building strong partnerships with sponsors to enhance the hackathon experience.",
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+    },
     {
       name: "Prajwal Nagendra",
       role: "Organizer",
@@ -24,16 +36,11 @@ const Members = () => {
     },
     {
       name: "Pranav Malgunde",
-      role: "Organizer",
+      role: "Sponsor and Event Design",
       bio: "Creating memorable moments for hackers through thoughtful event design.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
-    {
-      name: "Jayanth Bandaru",
-      role: "Organizer",
-      bio: "Ensuring everything runs smoothly from registration to award ceremony.",
-      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
-    },
+    
     {
       name: "Arjun Ramesh",
       role: "Organizer",
@@ -41,11 +48,12 @@ const Members = () => {
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     {
-      name: "Kausthubh Anand",
-      role: "Organizer",
-      bio: "Spreading the word about SierraHacks to attract diverse participants.",
+      name: "Prithik Manopriya",
+      role: "Volunteer organizer",
+      bio: "Helping to ensure a smooth and enjoyable experience for all participants.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     }
+    
   ];
 
   return (
@@ -119,22 +127,7 @@ const Members = () => {
                   </div>
 
                   {/* Fake terminal commands */}
-                  <div className="mt-4 text-xs text-blue-600/70 dark:text-blue-300/70">
-                    <div className="mb-1">
-                      <span className="text-green-600 dark:text-green-400">$</span> ls -la ./skills/
-                    </div>
-                    <div className="pl-3 mb-3">
-                      {[...Array(3)].map((_, i) => (
-                        <div key={i} className="flex justify-between">
-                          <span>skill-{i+1}.js</span>
-                          <span>-rw-r--r--</span>
-                        </div>
-                      ))}
-                    </div>
-                    <div>
-                      <span className="text-green-600 dark:text-green-400">$</span> <span className="animate-pulse">_</span>
-                    </div>
-                  </div>
+                  
                 </div>
               </div>
             </motion.div>
