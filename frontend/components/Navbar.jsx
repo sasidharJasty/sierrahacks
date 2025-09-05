@@ -256,7 +256,7 @@ const Navbar = () => {
           
           {/* Desktop Navigation Register Button - FIXED */}
           <a
-            href="https://tally.so/r/wkzQWZ"
+            href="/register"
             className="inline-flex items-center justify-center px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-md hover:shadow-lg hover:shadow-blue-500/25 transition-all relative overflow-hidden group"
             data-cursor-text="register()"
             data-cursor-color="#3b82f6"

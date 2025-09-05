@@ -6,6 +6,7 @@ import Navbar from '../components/Navbar';
 import HomePage from './pages/HomePage';
 import SponsorPage from '../components/SponsorPage';
 import Footer from '../components/Footer';
+import Register from './pages/register';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/sponsor" element={<SponsorPage />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </main>
         <Footer />
