@@ -27,6 +27,7 @@ export default function HackathonSignup() {
     tshirt: "",
     experience: "",
     teamPreference: "",
+    teamMembers: "",
     waiverFile: null,
   });
 
@@ -71,13 +72,20 @@ export default function HackathonSignup() {
     {
       key: "experience",
       question: "Any prior hackathon experience?",
-      type: "text",
+      type: "multiple",
+        options: ["0", "1","2", "3", "4", "5+"],
     },
     {
       key: "teamPreference",
-      question: "Do you have a team if so list team mates, otherwise say looking for teammates?",
-      type: "text",
+      question: "Do you have a team?",
+      type: "Multiple",
+        options: ["Yes, I have a team", "No, I need a team"],
     },
+    {
+        key: "teamMembers",
+        question: "Who is in your team? (full names, separated by commas)",
+        type: "text"
+      },
     {
       key: "waiverFile",
       question:
@@ -128,7 +136,7 @@ export default function HackathonSignup() {
 
       const formBody = new URLSearchParams(payload);
 
-      await fetch("https://script.google.com/macros/s/AKfycbwL-16iaN8YIIM83pv-XnxQ0LLZPvI1-Hf2ZbGu_BfCt4ZkRPJJy8KBynm73LMJ7-Cc/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbw9L_SN0a4rSFh5t8GE2ZIeVaBaKEQ6HYF4suLQyQWvR6ZPk1Phy4ccAy2LcloBfete/exec", {
         method: "POST",
         body: formBody,
       });
