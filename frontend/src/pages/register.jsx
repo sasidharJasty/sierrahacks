@@ -78,8 +78,8 @@ export default function HackathonSignup() {
     {
       key: "teamPreference",
       question: "Do you have a team?",
-      type: "Multiple",
-        options: ["Yes, I have a team", "No, I need a team"],
+      type: "multiple",
+      options: ["Yes, I have a team", "No, I need a team"],
     },
     {
         key: "teamMembers",
