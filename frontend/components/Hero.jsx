@@ -775,7 +775,7 @@ const Hero = () => {
 
           {/* CTA buttons */}
           <div className="w-full flex flex-col sm:flex-row justify-center items-center gap-4 pt-4 text-center">
-            <a href="https://tally.so/r/wkzQWZ" target="_blank" rel="noopener noreferrer">
+            <a href="/register" target="_blank" rel="noopener noreferrer">
               <motion.button
                 onClick={() => scrollToSection("register")}
                 className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-600/90 dark:hover:bg-blue-700 text-white px-8 py-3 rounded-md font-semibold transition-colors group flex items-center justify-center shadow-lg shadow-blue-500/30 dark:shadow-blue-900/20"

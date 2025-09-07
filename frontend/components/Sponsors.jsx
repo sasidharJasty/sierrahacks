@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 
 export default function Sponsors() {
   const sponsors = [
-    { name: "XYZ", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/.xyz_logo.svg/800px-.xyz_logo.svg.png", tier: "Platinum" },
-    { name: "Great Wolf Lodge", logo: "https://1000logos.net/wp-content/uploads/2020/08/Great-Wolf-Lodge-logo.png", tier: "Gold" },
-    { name: "Bowlero", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCFMiQhnJ0lZB1Qv7T2qJ2qRGaNJrzgGqqw&s", tier: "Silver" },
+    { name: "XYZ", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/.xyz_logo.svg/800px-.xyz_logo.svg.png", tier: "Platinum", url: "https://gen.xyz" },
+    { name: "Great Wolf Lodge", logo: "https://1000logos.net/wp-content/uploads/2020/08/Great-Wolf-Lodge-logo.png", tier: "Gold", url: "https://www.greatwolf.com" },
+    { name: "Bowlero", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCFMiQhnJ0lZB1Qv7T2qJ2qRGaNJrzgGqqw&s", tier: "Silver", url: "https://www.bowlero.com" },
     
   ];
 
@@ -88,14 +88,18 @@ export default function Sponsors() {
           {sorted.map((sponsor, index) => {
             const t = tierStyles[sponsor.tier] ?? tierStyles.Bronze;
             return (
-              <motion.div
+              <motion.a
                 key={`${sponsor.name}-${index}`}
+                href={sponsor.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`Open ${sponsor.name} website`}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05, duration: 0.4 }}
                 whileHover={{ y: -4, scale: 1.01 }}
-                className={`border ${t.border} rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg ${t.cardGlow} transition-colors ${t.colSpan}`}
+                className={`border ${t.border} rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg ${t.cardGlow} transition-colors ${t.colSpan} cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400/60`}
               >
                 {/* Tier color bar */}
                 <div className={`h-1.5 w-full bg-gradient-to-r ${t.bar}`} />
@@ -130,7 +134,7 @@ export default function Sponsors() {
                     </span>
                   </div>
                 </div>
-              </motion.div>
+              </motion.a>
             );
           })}
         </div>

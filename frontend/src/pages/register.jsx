@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function HackathonSignup() {
   const [step, setStep] = useState(0);
-  const [submitted, setSubmitted] = useState(
-    localStorage.getItem("hackathonSubmitted") === "true"
-  );
+  const [submitted, setSubmitted] = useState(false);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -31,66 +29,81 @@ export default function HackathonSignup() {
     waiverFile: null,
   });
 
+  // Add submitting/encoding flags
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isEncoding, setIsEncoding] = useState(false);
+
+  // Ref for auto-focus on text/email/number
+  const inputRef = useRef(null);
+
   // Questions with type & options
   const questions = [
-    { key: "name", question: "What’s your full name?", type: "text" },
-    { key: "email", question: "What’s your email?", type: "email" },
-    { key: "phone", question: "What’s your phone number?", type: "text" },
-    { key: "age", question: "How old are you?", type: "number" },
-    { key: "school", question: "Which school do you attend?", type: "text" },
-    { key: "grade", question: "What grade are you in?", type: "multiple", options: ["7th","8th","9th", "10th", "11th", "12th"] },
+    { key: "name", question: "What’s your full name?", type: "text", required: true },
+    { key: "email", question: "What’s your email?", type: "email", required: true },
+    { key: "phone", question: "What’s your phone number?", type: "text", required: true },
+    { key: "age", question: "How old are you? (13-18)", type: "number", required: true },
+    { key: "school", question: "Which school do you attend?", type: "text", required: true },
+    { key: "grade", question: "What grade are you in?", type: "multiple", options: ["7th","8th","9th", "10th", "11th", "12th"], required: true },
     {
       key: "gender",
       question: "What’s your gender?",
       type: "multiple",
       options: ["Male", "Female", "Non-binary", "Prefer not to say"],
+      required: true,
     },
-    { key: "city", question: "What city do you live in?", type: "text" },
-    { key: "state", question: "What state do you live in?", type: "text" },
-    { key: "parentName", question: "Parent/Guardian full name?", type: "text" },
-    { key: "parentPhone", question: "Parent/Guardian phone?", type: "text" },
-    { key: "parentEmail", question: "Parent/Guardian email?", type: "email" },
+    { key: "city", question: "What city do you live in?", type: "text", required: true },
+    { key: "state", question: "What state do you live in?", type: "text", required: true },
+    { key: "parentName", question: "Parent/Guardian full name?", type: "text", required: true },
+    { key: "parentPhone", question: "Parent/Guardian phone?", type: "text", required: true },
+    { key: "parentEmail", question: "Parent/Guardian email?", type: "email", required: true },
     {
       key: "parentRelationship",
       question: "Relationship to participant?",
       type: "text",
+      required: true,
     },
     {
       key: "diet",
       question: "Dietary preference?",
       type: "multiple",
       options: ["Veg", "Non-Veg", "Vegan"],
+      required: true,
     },
-    { key: "allergies", question: "Any allergies?", type: "text" },
-    { key: "specialNeeds", question: "Any special accommodations?", type: "text" },
+    { key: "allergies", question: "Any allergies?", type: "text", required: false },
+    { key: "specialNeeds", question: "Any special accommodations?", type: "text", required: false },
     {
       key: "tshirt",
       question: "T-Shirt Size?",
       type: "multiple",
       options: ["S", "M", "L", "XL"],
+      required: true,
     },
     {
       key: "experience",
       question: "Any prior hackathon experience?",
       type: "multiple",
-        options: ["0", "1","2", "3", "4", "5+"],
+      options: ["0", "1","2", "3", "4", "5+"],
+      required: false,
     },
     {
       key: "teamPreference",
       question: "Do you have a team?",
       type: "multiple",
       options: ["Yes, I have a team", "No, I need a team"],
+      required: true,
     },
     {
         key: "teamMembers",
-        question: "Who is in your team? (full names, separated by commas)",
-        type: "text"
+        question: "Who is in your team? (full names, separated by commas) None if no team.",
+        type: "text",
+        required: false,
       },
     {
       key: "waiverFile",
       question:
         "Please download the waiver, sign it, and upload the signed document.",
       type: "file",
+      required: true,
     },
   ];
 
@@ -103,16 +116,42 @@ export default function HackathonSignup() {
       reader.onerror = (error) => reject(error);
     });
 
-  const handleChange = (e, option = null) => {
+  // Make handleChange async to pre-encode the file on selection
+  const handleChange = async (e, option = null) => {
     const { name, value, files } = e.target || {};
+    const key = name || questions[step].key;
+
     if (option) {
-      setFormData({ ...formData, [questions[step].key]: option });
-    } else {
-      setFormData({
-        ...formData,
-        [name || questions[step].key]: files ? files[0] : value,
-      });
+      setFormData((prev) => ({ ...prev, [questions[step].key]: option }));
+      return;
     }
+
+    // If a file was selected for waiver, pre-encode it
+    if (key === "waiverFile" && files && files[0]) {
+      const file = files[0];
+      setIsEncoding(true);
+      setFormData((prev) => ({ ...prev, waiverFile: file })); // keep original for fallback
+      try {
+        const base64 = await toBase64(file);
+        setFormData((prev) => ({
+          ...prev,
+          waiverFileBase64: base64,
+          fileName: file.name,
+          fileType: file.type,
+        }));
+      } catch (err) {
+        console.error("Failed to encode file", err);
+      } finally {
+        setIsEncoding(false);
+      }
+      return;
+    }
+
+    // Default branch for text/email/number
+    setFormData((prev) => ({
+      ...prev,
+      [key]: files ? files[0] : value,
+    }));
   };
 
   const nextStep = () => {
@@ -124,15 +163,27 @@ export default function HackathonSignup() {
   };
 
   const handleSubmit = async () => {
-    try {
-      let payload = { ...formData };
+    if (isSubmitting || isEncoding) return; // avoid double submit and wait for encoding
+    setIsSubmitting(true);
 
-      if (formData.waiverFile) {
+    try {
+      // Build payload without heavy work on submit; use pre-encoded base64
+      const payload = { ...formData };
+
+      if (formData.waiverFileBase64) {
+        payload.waiverFile = formData.waiverFileBase64;
+        payload.fileName = formData.fileName;
+        payload.fileType = formData.fileType;
+      } else if (formData.waiverFile) {
+        // Fallback: encode here if not already encoded
         const base64File = await toBase64(formData.waiverFile);
         payload.waiverFile = base64File;
         payload.fileName = formData.waiverFile.name;
         payload.fileType = formData.waiverFile.type;
       }
+
+      // Remove helper fields not needed by server
+      delete payload.waiverFileBase64;
 
       const formBody = new URLSearchParams(payload);
 
@@ -141,12 +192,54 @@ export default function HackathonSignup() {
         body: formBody,
       });
 
-      localStorage.setItem("hackathonSubmitted", "true");
+
       setSubmitted(true);
     } catch (error) {
       console.error("Error submitting form", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  // Helper to focus the active input after animations complete
+  const focusActiveInput = () => {
+    if (["text", "email", "number"].includes(questions[step].type)) {
+      inputRef.current?.focus();
+    }
+  };
+
+  // Compute proceed rules based on required + value
+  const currentQ = questions[step];
+  const isFileStep = currentQ.type === "file";
+  const currentVal = formData[currentQ.key];
+  const hasValue = isFileStep
+    ? !!formData.waiverFileBase64
+    : currentVal !== undefined && currentVal !== null && String(currentVal).trim() !== "";
+  const canProceed = !isSubmitting && !isEncoding && (!currentQ.required || hasValue);
+
+  // Auto-focus text/email/number inputs on step change
+  useEffect(() => {
+    if (["text", "email", "number"].includes(currentQ.type)) {
+      // Wait for animation/mount
+      requestAnimationFrame(() => {
+        inputRef.current?.focus();
+      });
+    }
+  }, [step, currentQ.type]);
+
+  // Pressing Enter goes to next step when allowed
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key !== "Enter") return;
+      // Let default behavior happen unless we can proceed
+      if (canProceed) {
+        e.preventDefault();
+        nextStep();
+      }
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [canProceed, isSubmitting, isEncoding, step]);  
 
   if (submitted) {
     return (
@@ -244,24 +337,27 @@ export default function HackathonSignup() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -40 }}
                 transition={{ duration: 0.35 }}
+                onAnimationComplete={focusActiveInput} // ensure focus after enter/exit animations
               >
                 <div className="text-lg font-semibold mb-6 text-blue-800 dark:text-blue-100">
-                  {questions[step].question}
+                  {currentQ.question}
+                  {currentQ.required && <span className="text-red-500 ml-1">*</span>}
                 </div>
 
                 {/* Multiple choice */}
-                {questions[step].type === "multiple" && (
+                {currentQ.type === "multiple" && (
                   <div className="space-y-3">
-                    {questions[step].options.map((opt) => {
-                      const selected = formData[questions[step].key] === opt;
+                    {currentQ.options.map((opt) => {
+                      const selected = formData[currentQ.key] === opt;
                       return (
                         <button
                           key={opt}
                           onClick={() => handleChange({}, opt)}
+                          disabled={isSubmitting}
                           className={`w-full py-2 rounded-lg border transition-colors
                             ${selected
                               ? "bg-blue-600 border-blue-600 text-white shadow-lg shadow-blue-500/30"
-                              : "bg-blue-50/60 border-blue-300/40 text-blue-800 hover:bg-blue-100/60 dark:bg-gray-800 dark:text-blue-200 dark:border-blue-500/20 dark:hover:bg-gray-700"}`}
+                              : "bg-blue-50/60 border-blue-300/40 text-blue-800 hover:bg-blue-100/60 dark:bg-gray-800 dark:text-blue-200 dark:border-blue-500/20 dark:hover:bg-gray-700"} ${isSubmitting ? "opacity-60 cursor-not-allowed" : ""}`}
                         >
                           {opt}
                         </button>
@@ -271,21 +367,30 @@ export default function HackathonSignup() {
                 )}
 
                 {/* Text/email/number */}
-                {["text", "email", "number"].includes(questions[step].type) && (
+                {["text", "email", "number"].includes(currentQ.type) && (
                   <input
-                    type={questions[step].type}
-                    name={questions[step].key}
-                    value={formData[questions[step].key]}
+                    ref={inputRef}
+                    autoFocus
+                    type={currentQ.type}
+                    name={currentQ.key}
+                    value={formData[currentQ.key]}
                     onChange={handleChange}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && canProceed) {
+                        e.preventDefault();
+                        nextStep(); // next input will focus automatically
+                      }
+                    }}
+                    disabled={isSubmitting}
                     className="w-full px-4 py-2 rounded-lg bg-white/80 border border-blue-300/40 text-blue-900 placeholder-blue-400
                                focus:outline-none focus:ring-2 focus:ring-blue-500/60
-                               dark:bg-gray-800 dark:text-blue-100 dark:placeholder-blue-300/70 dark:border-blue-500/20"
+                               dark:bg-gray-800 dark:text-blue-100 dark:placeholder-blue-300/70 dark:border-blue-500/20 disabled:opacity-60"
                     placeholder="Type your answer…"
                   />
                 )}
 
                 {/* File */}
-                {questions[step].type === "file" && (
+                {currentQ.type === "file" && (
                   <div className="space-y-4">
                     <a
                       href="/waiver.pdf"
@@ -299,37 +404,60 @@ export default function HackathonSignup() {
                       name="waiverFile"
                       accept=".pdf,.jpg,.png"
                       onChange={handleChange}
-                      className="w-full text-sm text-blue-800 dark:text-blue-200 file:mr-4 file:py-2 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 dark:file:bg-blue-600 dark:hover:file:bg-blue-700"
+                      disabled={isSubmitting}
+                      className="w-full text-sm text-blue-800 dark:text-blue-200 file:mr-4 file:py-2 file:px-3 file:rounded-md file:border-0 file:bg-blue-600 file:text-white hover:file:bg-blue-700 dark:file:bg-blue-600 dark:hover:file:bg-blue-700 disabled:opacity-60"
                     />
+                    {isEncoding && (
+                      <div className="text-xs text-blue-600 dark:text-blue-300">Encoding file…</div>
+                    )}
                   </div>
                 )}
 
                 {/* Controls */}
-                <div className="mt-6 flex items-center justify-between">
+                <div className="mt-6 flex items-center gap-3">
                   <button
                     onClick={() => setStep((s) => Math.max(0, s - 1))}
-                    disabled={step === 0}
+                    disabled={step === 0 || isSubmitting}
                     className="px-4 py-2 rounded-lg border border-blue-300/40 text-blue-700 hover:bg-blue-50/60 disabled:opacity-50
                                dark:text-blue-200 dark:border-blue-500/20 dark:hover:bg-white/5"
                   >
                     ← Back
                   </button>
 
+                  {!currentQ.required && (
+                    <button
+                      onClick={nextStep}
+                      disabled={isSubmitting || isEncoding}
+                      className="px-4 py-2 rounded-lg border border-transparent text-blue-700 hover:bg-blue-50/60 disabled:opacity-50
+                                 dark:text-blue-200 dark:hover:bg-white/5"
+                    >
+                      Skip
+                    </button>
+                  )}
+
                   <button
                     onClick={nextStep}
-                    disabled={
-                      questions[step].type !== "file" &&
-                      !formData[questions[step].key]
-                    }
-                    className="bg-blue-600 px-6 py-2 rounded-lg text-white hover:bg-blue-700 disabled:bg-blue-600/50
-                               shadow-lg shadow-blue-500/30 dark:shadow-blue-900/20"
+                    disabled={!canProceed}
+                    className="ml-auto bg-blue-600 px-6 py-2 rounded-lg text-white hover:bg-blue-700 disabled:bg-blue-600/50
+                               shadow-lg shadow-blue-500/30 dark:shadow-blue-900/20 disabled:cursor-not-allowed flex items-center gap-2"
+                    aria-busy={isSubmitting}
                   >
-                    {step === questions.length - 1 ? "Submit" : "Next →"}
+                    {isSubmitting && (
+                      <svg className="animate-spin h-4 w-4 text-white" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4A4 4 0 008 12H4z"></path>
+                      </svg>
+                    )}
+                    {step === questions.length - 1 ? (isSubmitting ? "Submitting…" : "Submit") : (isSubmitting ? "Working…" : "Next →")}
                   </button>
                 </div>
-
+                <div className="flex justify-between">
+                <div className="mt-4 text-sm text-blue-600/80 dark:text-blue-300/70 text-left">
+                  <span className="text-red-500">*</span> = required
+                </div>
                 <div className="mt-4 text-sm text-blue-600/80 dark:text-blue-300/70 text-right">
                   {step + 1} / {questions.length}
+                </div>
                 </div>
               </motion.div>
             </AnimatePresence>
