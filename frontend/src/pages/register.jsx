@@ -98,13 +98,7 @@ export default function HackathonSignup() {
         type: "text",
         required: false,
       },
-    {
-      key: "waiverFile",
-      question:
-        "Please download the waiver, sign it, and upload the signed document.",
-      type: "file",
-      required: true,
-    },
+    
   ];
 
   // Convert file to Base64

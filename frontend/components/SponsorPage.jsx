@@ -315,7 +315,7 @@ const SponsorPage = () => {
 
               <div className="space-y-4 text-blue-800/90 dark:text-blue-200/90">
                 <p>
-                  SierraHacks brings together 500+ talented developers,
+                  SierraHacks brings together 175+ talented developers,
                   designers, and innovators for a weekend of creativity and
                   problem-solving. By sponsoring, you'll:
                 </p>
@@ -365,17 +365,7 @@ const SponsorPage = () => {
                   </motion.li>
                 </ul>
 
-                <div className="bg-blue-100/50 dark:bg-blue-900/20 border-l-4 border-blue-500 dark:border-blue-400 p-4 rounded">
-                  <p className="text-blue-700 dark:text-blue-300">
-                    "SierraHacks gave us unprecedented access to talented
-                    developers who were eager to work with our APIs. We hired
-                    three interns directly from the event!"
-                    <br />
-                    <span className="text-blue-600 dark:text-blue-400 italic">
-                      — Previous Sponsor
-                    </span>
-                  </p>
-                </div>
+                
               </div>
             </div>
           </div>
