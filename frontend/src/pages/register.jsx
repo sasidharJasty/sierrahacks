@@ -181,7 +181,7 @@ export default function HackathonSignup() {
 
       const formBody = new URLSearchParams(payload);
 
-      await fetch("https://script.google.com/macros/s/AKfycbw9L_SN0a4rSFh5t8GE2ZIeVaBaKEQ6HYF4suLQyQWvR6ZPk1Phy4ccAy2LcloBfete/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbwJbMCxlizZS4A2OYykYJB8FtMipL_S_HgzJI2PitIuspa_7kHudS2h7ygRQm9t2wbF/exec", {
         method: "POST",
         body: formBody,
       });
