@@ -238,44 +238,65 @@ export default function HackathonSignup() {
   if (submitted) {
     return (
       <div className="relative min-h-screen py-20 bg-[#D9E7FD] dark:bg-gray-900 overflow-hidden">
-        {/* Dot-matrix background */}
-        <div className="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
-          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="terminal-dots-register-success" width="20" height="20" patternUnits="userSpaceOnUse">
-                <circle cx="2" cy="2" r="1" fill="rgba(30, 64, 175, 0.5)" className="dark:fill-[rgba(56,189,248,0.5)]" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#terminal-dots-register-success)" />
-          </svg>
-        </div>
+      {/* Dot-matrix background */}
+      <div className="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
+        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="terminal-dots-register-success" width="20" height="20" patternUnits="userSpaceOnUse">
+          <circle cx="2" cy="2" r="1" fill="rgba(30, 64, 175, 0.5)" className="dark:fill-[rgba(56,189,248,0.5)]" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#terminal-dots-register-success)" />
+        </svg>
+      </div>
 
-        <div className="container mx-auto px-6 relative z-10">
-          <div className="max-w-2xl mx-auto border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg">
-            <div className="h-1.5 bg-gradient-to-r from-blue-400/70 to-sky-400/70" />
-            <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-2 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
-              <div className="flex space-x-2 mr-4">
-                <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-400/70"></div>
-                <div className="w-3 h-3 rounded-full bg-green-400/70"></div>
-              </div>
-              <div className="flex-1 text-center font-mono text-xs text-blue-500/70 dark:text-blue-300/70">
-                register.sh — done
-              </div>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4 }}
-              className="p-8 text-center font-mono"
-            >
-              <div className="text-2xl font-bold text-blue-700 dark:text-blue-200">
-                🎉 Thanks for signing up! See you at the hackathon 🚀
-              </div>
-            </motion.div>
+      <div className="container mx-auto px-6 relative z-10">
+        <div className="max-w-2xl mx-auto border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg">
+        <div className="h-1.5 bg-gradient-to-r from-blue-400/70 to-sky-400/70" />
+        <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-2 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
+          <div className="flex space-x-2 mr-4">
+          <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
+          <div className="w-3 h-3 rounded-full bg-yellow-400/70"></div>
+          <div className="w-3 h-3 rounded-full bg-green-400/70"></div>
+          </div>
+          <div className="flex-1 text-center font-mono text-xs text-blue-500/70 dark:text-blue-300/70">
+          register.sh — done
           </div>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="p-8 text-center font-mono"
+        >
+          <div className="text-2xl font-bold text-blue-700 dark:text-blue-200 mb-4">
+          🎉 Thanks for signing up! See you at the hackathon 🚀
+          </div>
+          <div className="mt-6 text-lg text-blue-800 dark:text-blue-100">
+          If you haven't already, please join our&nbsp;
+          <a
+            href="https://discord.gg/N2xpe7Z3wx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200"
+          >
+            Discord
+          </a>
+          &nbsp;and&nbsp;
+          <a
+            href="https://sierra-hacks.devpost.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline hover:text-blue-800 dark:text-blue-300 dark:hover:text-blue-200"
+          >
+            Devpost
+          </a>
+          &nbsp;to stay updated and submit your project!
+          </div>
+        </motion.div>
+        </div>
+      </div>
       </div>
     );
   }

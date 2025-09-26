@@ -131,7 +131,7 @@ const Hero = () => {
       </div>
 
       {/* Animated green circuit lines (dark theme only) */}
-      <div className="hidden dark:block absolute inset-0 overflow-hidden">
+      <div className="block absolute inset-0 overflow-hidden">
         <svg className="absolute w-full h-full opacity-90" viewBox="0 0 1000 1000" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <linearGradient id="circuit-gradient-1" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="1000" y2="0">
