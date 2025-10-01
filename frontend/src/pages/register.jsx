@@ -1,7 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import {useNavigate} from 'react-router-dom';
+
 
 export default function HackathonSignup() {
+  window.location.href = "https://tally.so/r/3XZxOO";
+  /*const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
 
@@ -238,7 +242,7 @@ export default function HackathonSignup() {
   if (submitted) {
     return (
       <div className="relative min-h-screen py-20 bg-[#D9E7FD] dark:bg-gray-900 overflow-hidden">
-      {/* Dot-matrix background */}
+
       <div className="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <defs>
@@ -300,10 +304,10 @@ export default function HackathonSignup() {
       </div>
     );
   }
-
-  return (
+*/
+  /*return (
     <div className="relative min-h-screen py-20 bg-[#D9E7FD] dark:bg-gray-900 overflow-hidden">
-      {/* Terminal dot matrix background (match Sponsors) */}
+     
       <div className="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -316,7 +320,7 @@ export default function HackathonSignup() {
       </div>
 
       <div className="container mx-auto px-6 relative z-10">
-        {/* Section header to align with site */}
+
         <div className="mb-8 text-center">
           <h2 className="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-2 font-mono">
             Register<span className="text-blue-600 dark:text-blue-500 animate-pulse">_</span>
@@ -326,12 +330,11 @@ export default function HackathonSignup() {
           </p>
         </div>
 
-        {/* Terminal-style card */}
+
         <div className="max-w-2xl mx-auto border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg shadow-blue-500/10 dark:shadow-blue-900/20">
-          {/* Tier-like accent bar */}
+          
           <div className="h-1.5 w-full bg-gradient-to-r from-blue-400/70 to-sky-400/70" />
 
-          {/* Terminal header */}
           <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-2 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
             <div className="flex space-x-2 mr-4">
               <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
@@ -343,7 +346,6 @@ export default function HackathonSignup() {
             </div>
           </div>
 
-          {/* Content */}
           <div className="p-6 font-mono">
             <AnimatePresence mode="wait">
               <motion.div
@@ -359,7 +361,6 @@ export default function HackathonSignup() {
                   {currentQ.required && <span className="text-red-500 ml-1">*</span>}
                 </div>
 
-                {/* Multiple choice */}
                 {currentQ.type === "multiple" && (
                   <div className="space-y-3">
                     {currentQ.options.map((opt) => {
@@ -381,7 +382,6 @@ export default function HackathonSignup() {
                   </div>
                 )}
 
-                {/* Text/email/number */}
                 {["text", "email", "number"].includes(currentQ.type) && (
                   <input
                     ref={inputRef}
@@ -404,7 +404,6 @@ export default function HackathonSignup() {
                   />
                 )}
 
-                {/* File */}
                 {currentQ.type === "file" && (
                   <div className="space-y-4">
                     <a
@@ -428,7 +427,6 @@ export default function HackathonSignup() {
                   </div>
                 )}
 
-                {/* Controls */}
                 <div className="mt-6 flex items-center gap-3">
                   <button
                     onClick={() => setStep((s) => Math.max(0, s - 1))}
@@ -480,5 +478,5 @@ export default function HackathonSignup() {
         </div>
       </div>
     </div>
-  );
+  );*/
 }
