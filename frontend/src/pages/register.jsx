@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import {useNavigate} from 'react-router-dom';
-
+import React from "react";
 
 export default function HackathonSignup() {
-  window.location.href = "https://tally.so/r/3XZxOO";
+  // External registration handled by Tally; redirect immediately
+  if (typeof window !== 'undefined') window.location.href = "https://tally.so/r/3XZxOO";
   /*const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);

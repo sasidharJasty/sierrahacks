@@ -1,17 +1,82 @@
 import React from "react";
 import { motion } from "framer-motion";
+import shs from "../public/shs.png";
+import cs from "../public/codestack.jpg";
 
 export default function Sponsors() {
   const sponsors = [
-    { name: "XYZ", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/.xyz_logo.svg/800px-.xyz_logo.svg.png", tier: "Platinum", url: "https://gen.xyz" },
-    { name: "Great Wolf Lodge", logo: "https://1000logos.net/wp-content/uploads/2020/08/Great-Wolf-Lodge-logo.png", tier: "Gold", url: "https://www.greatwolf.com" },
-    { name: "Bowlero", logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCFMiQhnJ0lZB1Qv7T2qJ2qRGaNJrzgGqqw&s", tier: "Silver", url: "https://www.bowlero.com" },
+    {
+      name: "Sierra High School",
+      logo: shs,
+      tier: "Platinum",
+      url: "https://sierrahigh.mantecausd.net/",
+      className: "invert dark:invert-0",
+    },
+    {
+      name: "Hack Club",
+      logo: "https://assets.hackclub.com/hcb-light.png",
+      tier: "Fisical", // changed to a 2-wide tier
+      url: "https://hackclub.com",
+      className: "invert dark:invert-0",
+    },
+    {
+      name: "CodeStack",
+      logo: cs,
+      tier: "Educational",
+      url: "https://www.codestack.org/",
+    },
     
+    {
+      name: "XYZ",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/.xyz_logo.svg/800px-.xyz_logo.svg.png",
+      tier: "Gold",
+      url: "https://gen.xyz",
+    },
+    {
+      name: "Great Wolf Lodge",
+      logo: "https://1000logos.net/wp-content/uploads/2020/08/Great-Wolf-Lodge-logo.png",
+      tier: "Gold",
+      url: "https://www.greatwolf.com",
+    },
+    {
+      name: "Bowlero",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCFMiQhnJ0lZB1Qv7T2qJ2qRGaNJrzgGqqw&s",
+      tier: "Silver",
+      url: "https://www.bowlero.com",
+    },
+    {
+      name: "Costco",
+      logo: "https://1000logos.net/wp-content/uploads/2021/04/Costco-logo.png",
+      tier: "Bronze",
+      url: "https://www.costco.com",
+    }
   ];
 
-  const tierRank = { Platinum: 0, Gold: 1, Silver: 2, Bronze: 3 };
+  const tierRank = { Fisical: 1, Platinum: 0, Gold: 2, Silver: 3, Bronze: 4 };
 
   const tierStyles = {
+    Educational: {
+      colSpan: "md:col-span-1 lg:col-span-1",
+      cardGlow: "shadow-green-500/30 dark:shadow-green-500/20",
+      border: "border-green-400/60 dark:border-green-400/50",
+      headerBg: "bg-gradient-to-r from-green-100/90 to-slate-100/80 dark:from-gray-800/80 dark:to-green-900/40",
+      bar: "from-green-400/70 to-emerald-400/70",
+      badge: "bg-green-100/70 dark:bg-green-900/30 text-green-800 dark:text-green-100 border-green-300/60 dark:border-green-500/40",
+      logoWrap: "w-36 h-36 sm:w-40 sm:h-40 bg-white/90 dark:bg-gray-900/40",
+      ring: "ring-2 ring-green-400/60 dark:ring-green-400/40",
+      name: "text-green-900 dark:text-green-100",
+    },
+    Fisical: {
+      colSpan: "md:col-span-1 lg:col-span-1",
+      cardGlow: "shadow-green-500/30 dark:shadow-green-500/20",
+      border: "border-green-400/60 dark:border-green-400/50",
+      headerBg: "bg-gradient-to-r from-green-100/90 to-slate-100/80 dark:from-gray-800/80 dark:to-green-900/40",
+      bar: "from-green-400/70 to-emerald-400/70",
+      badge: "bg-green-100/70 dark:bg-green-900/30 text-green-800 dark:text-green-100 border-green-300/60 dark:border-green-500/40",
+      logoWrap: "w-36 h-36 sm:w-40 sm:h-40 bg-white/90 dark:bg-gray-900/40",
+      ring: "ring-2 ring-green-400/60 dark:ring-green-400/40",
+      name: "text-green-900 dark:text-green-100",
+    },
     Platinum: {
       colSpan: "md:col-span-2 lg:col-span-2",
       cardGlow: "shadow-blue-500/30 dark:shadow-blue-500/20",
@@ -99,7 +164,8 @@ export default function Sponsors() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05, duration: 0.4 }}
                 whileHover={{ y: -4, scale: 1.01 }}
-                className={`border ${t.border} rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg ${t.cardGlow} transition-colors ${t.colSpan} cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400/60`}
+                // append sponsor.className so each sponsor can have custom classes
+                className={`border ${t.border} rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg ${t.cardGlow} transition-colors ${t.colSpan} cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400/60 `}
               >
                 {/* Tier color bar */}
                 <div className={`h-1.5 w-full bg-gradient-to-r ${t.bar}`} />
@@ -122,7 +188,7 @@ export default function Sponsors() {
                     <img
                       src={sponsor.logo}
                       alt={sponsor.name}
-                      className="max-w-[85%] max-h-[85%] object-contain"
+                      className={`max-w-[85%] max-h-[85%] object-contain ${sponsor.className ?? ""}`}
                     />
                   </div>
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import logo from "../public/logo.png";
+// logo is served from the public directory; reference by absolute URL path
+const logo = '/logo.png';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -73,12 +74,15 @@ const Navbar = () => {
   // Navigation items with their respective sections
   const navItems = [
     { name: "Home", id: "home", path: "/", delay: 0.05 },
-    { name: "Sponsors", id: "sponsor", path: "/", delay: 0.1 },
+    // 'sponsors' is an in-page section on the home route
+    { name: "Sponsors", id: "sponsors", path: "/", delay: 0.1 },
     { name: "Timeline", id: "timeline", path: "/", delay: 0.15 },
     { name: "FAQ", id: "about", path: "/", delay: 0.2 },
     { name: "Criteria", id: "criteria", path: "/", delay: 0.25 },
     { name: "Team", id: "team", path: "/", delay: 0.3 },
-    { name: "Sponsor", id: "sponsor", path: "/sponsor", delay: 0.4 }
+    { name: "Portal", id: "portal", path: "/portal", delay: 0.35 },
+    // separate page for sponsor inquiries
+    { name: "Sponsor", id: "sponsor-page", path: "/sponsor", delay: 0.4 }
   ];
   
   // Improved smooth scroll function with fallback
@@ -164,7 +168,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link 
             to="/"
-            className="text-xl ml-10 md:ml-0 font-bold flex items-center cursor-pointer"
+            className="text-xl ml-10 md:ml-0  font-bold flex items-center cursor-pointer"
             data-cursor-text="navigate('home')"
             data-cursor-color="#38bdf8"
           >
@@ -174,7 +178,7 @@ const Navbar = () => {
               transition={{ duration: 0.5 }}
               className="flex items-center"
             >
-              <img src={logo} className="h-15">
+              <img src={logo} className="h-15 mr-2">
               </img>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-100">
                 Sierra

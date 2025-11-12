@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import logo from "../public/logo.png";
 import cs from "../public/codestack.jpg";
+import { RxArrowBottomRight } from "react-icons/rx";
+
 
 const Hero = () => {
   // Sync Tailwind dark mode with site/system/user preference
@@ -40,7 +42,7 @@ const Hero = () => {
     // 4) Optional: expose a helper so other UI can set theme
     window.setSiteTheme = (mode) => {
       // mode: 'dark' | 'light' | 'system'
-      if (mode === "dark" || "light") {
+      if (mode === "dark" || mode === "light") {
         localStorage.setItem("theme", mode);
         apply(mode === "dark");
       } else {
@@ -747,11 +749,20 @@ const Hero = () => {
           </h1>
 
           {/* Date and location */}
-          <h2 className="text-xl md:text-2xl text-blue-700 dark:text-white font-light">
-            Nov 15, 2025 • Sierra High School
-          </h2>
+                <h2 className="text-xl md:text-2xl text-blue-700 dark:text-white font-light flex justify-center items-center space-x-2 text-center">
+                <span>Nov 15, 2025 •</span>
+                <a
+                  href="https://www.google.com/maps/place/Sierra+High+School/@37.7925198,-121.2458948,1539m/data=!3m2!1e3!4b1!4m6!3m5!1s0x809040691efd4429:0xbaa4e817e5d16dcf!8m2!3d37.7925198!4d-121.2433199!16s%2Fm%2F04cw651?entry=ttu&g_ep=EgoyMDI1MTEwNS4wIKXMDSoASAFQAw%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline inline-flex items-center space-x-1"
+                >
+                  <RxArrowBottomRight />
+                  <span>Sierra High School</span>
+                </a>
+                </h2>
 
-          {/* Brief description */}
+                {/* Brief description */}
           <p className="text-lg md:text-xl text-blue-800/90 dark:text-blue-100/80 max-w-2xl mx-auto">
             A 12-hour coding marathon where innovation meets collaboration!
             <span className="text-blue-600 dark:text-blue-500 animate-pulse ml-1">_</span>

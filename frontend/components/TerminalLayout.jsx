@@ -3,9 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const TerminalLayout = ({ children }) => {
   const [activeSection, setActiveSection] = useState("home");
-  const [commandHistory, setCommandHistory] = useState([]);
-  const [inputValue, setInputValue] = useState("");
-  const [historyIndex, setHistoryIndex] = useState(-1);
+  // previous command/input state removed (unused in current layout)
 
   const sections = [
     { id: "home", label: "Home" },
@@ -16,72 +14,9 @@ const TerminalLayout = ({ children }) => {
     { id: "team", label: "Team" }
   ];
 
-  const handleCommand = (cmd) => {
-    // Add command to history
-    setCommandHistory(prev => [...prev, { cmd, output: processCommand(cmd) }]);
-    setInputValue("");
-    setHistoryIndex(-1);
-  };
+  // command handling removed to simplify the layout and avoid unused vars
 
-  const processCommand = (cmd) => {
-    const command = cmd.toLowerCase().trim();
-    
-    if (command === "clear" || command === "cls") {
-      setCommandHistory([]);
-      return null;
-    }
-    
-    if (command === "help") {
-      return (
-        <div className="text-blue-200 mt-2 mb-4">
-          <div className="font-bold mb-2">Available commands:</div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <div><span className="text-green-400">home</span> - Go to homepage</div>
-            <div><span className="text-green-400">faq</span> - View FAQ section</div>
-            <div><span className="text-green-400">timeline</span> - See event schedule</div>
-            <div><span className="text-green-400">criteria</span> - View judging criteria</div>
-            <div><span className="text-green-400">judges</span> - Meet our judges</div>
-            <div><span className="text-green-400">team</span> - See the organizing team</div>
-            <div><span className="text-green-400">clear</span> - Clear command history</div>
-            <div><span className="text-green-400">help</span> - Show this help menu</div>
-          </div>
-        </div>
-      );
-    }
-    
-    if (sections.some(section => section.id === command)) {
-      setActiveSection(command);
-      return `Navigating to ${command}...`;
-    }
-    
-    return `Command not found: ${command}. Type 'help' for available commands.`;
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (inputValue.trim()) {
-        handleCommand(inputValue);
-      }
-    } else if (e.key === "ArrowUp") {
-      e.preventDefault();
-      if (commandHistory.length > 0) {
-        const newIndex = historyIndex < commandHistory.length - 1 ? historyIndex + 1 : historyIndex;
-        setHistoryIndex(newIndex);
-        setInputValue(commandHistory[commandHistory.length - 1 - newIndex]?.cmd || "");
-      }
-    } else if (e.key === "ArrowDown") {
-      e.preventDefault();
-      if (historyIndex > 0) {
-        const newIndex = historyIndex - 1;
-        setHistoryIndex(newIndex);
-        setInputValue(commandHistory[commandHistory.length - 1 - newIndex]?.cmd || "");
-      } else if (historyIndex === 0) {
-        setHistoryIndex(-1);
-        setInputValue("");
-      }
-    }
-  };
+  // keyboard handling for terminal input was removed (unused) to satisfy lint
 
   // Global key handler
   useEffect(() => {

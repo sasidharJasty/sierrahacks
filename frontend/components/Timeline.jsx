@@ -4,24 +4,29 @@ import { motion } from "framer-motion";
 const Timeline = () => {
   const timelineData = [
     {
-      date: "7:00 AM - 8:00 AM",
-      title: "Venue Setup",
-      description: "Preparation of the hackathon venue."
-    },
-    {
-      date: "8:00 AM - 8:30 AM",
+      date: "7:30 AM - 8:15 AM",
       title: "Check-In & Breakfast",
       description: "Registration and morning refreshments."
     },
     {
-      date: "8:30 AM - 9:00 AM",
+      date: "8:15 AM - 8:45 AM",
       title: "Opening Ceremony & Team Formation",
       description: "Welcome address and team organization."
     },
     {
+      date: "8:45 AM - 9:00 AM",
+      title: "Team Formation",
+      description: "Forming teams for the hackathon."
+    },
+    {
       date: "9:00 AM - 12:00 PM",
-      title: "Hacking Begins",
-      description: "Start of the coding and project development."
+      title: "Hacking Time",
+      description: "Forming teams for the hackathon."
+    },
+    {
+      date: "10:00 AM - 11:00 AM",
+      title: "Beginners Workshop",
+      description: "Introductory session for first-time hackers."
     },
     {
       date: "12:00 PM - 1:00 PM",
@@ -34,27 +39,27 @@ const Timeline = () => {
       description: "Continued work on projects and mentoring sessions."
     },
     {
-      date: "6:00 PM - 6:30 PM",
+      date: "2:00 PM - 3:00 PM",
+      title: "Machine Learning Workshop",
+      description: "Hands-on session on machine learning basics."
+    },
+    {
+      date: "6:00 PM",
       title: "Devpost Submissions Due & Code Freeze",
       description: "Final submissions on Devpost platform."
     },
     {
-      date: "6:30 PM - 7:00 PM",
+      date: "6:00 PM - 6:30 PM",
       title: "Dinner & Networking",
       description: "Evening meal and project discussions."
     },
     {
-      date: "7:00 PM - 8:00 PM",
+      date: "6:30 PM - 7:30 PM",
       title: "Project Presentations & Demos",
       description: "Teams present their projects to judges and audience."
     },
     {
-      date: "8:00 PM - 8:30 PM",
-      title: "Judging & Deliberation",
-      description: "Judges evaluate projects based on criteria."
-    },
-    {
-      date: "8:30 PM - 9:00 PM",
+      date: "7:30 PM - 8:00 PM",
       title: "Closing Ceremony & Awards",
       description: "Announcement of winners and prize distribution."
     }

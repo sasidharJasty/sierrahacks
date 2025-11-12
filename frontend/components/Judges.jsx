@@ -105,9 +105,9 @@ const Judges = () => {
               <div className="relative h-48 flex items-center justify-center p-3 border-b border-blue-200/50 dark:border-blue-500/20">
                 <div className="absolute inset-0 flex items-center justify-center overflow-hidden">
                   <div className="text-[8px] text-blue-500/10 font-mono whitespace-pre leading-tight">
-                    {Array(20).fill(0).map((_, i) => (
-                      <div key={i}>
-                        {Array(40).fill(0).map((_, j) => (
+                    {Array(20).fill(0).map((_, rowIdx) => (
+                      <div key={rowIdx}>
+                        {Array(40).fill(0).map(() => (
                           Math.random() > 0.5 ? "1" : "0"
                         )).join(" ")}
                       </div>
