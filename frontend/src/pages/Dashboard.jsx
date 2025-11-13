@@ -4,7 +4,7 @@ import { useAuth } from '../context/authContextBase'
 import QRCode from 'react-qr-code'
 import { useNavigate } from 'react-router-dom'
 import { useTheme } from '../../context/themeContextBase'
-import { FiUser, FiHome, FiMail, FiPhone, FiCalendar, FiDownload, FiCopy } from 'react-icons/fi'
+import { FiUser, FiHome, FiMail, FiPhone, FiCalendar, FiDownload, FiCopy, FiCheckCircle } from 'react-icons/fi'
 import { FaDrumstickBite, FaLeaf } from 'react-icons/fa'
 import DietSwitch from '../../components/DietSwitch'
 import Card from '../../components/Card'
@@ -36,6 +36,12 @@ const FALLBACK_PROFILE_COLUMNS = [
   'website_workshop',
   'python_workshop',
   'ai_ml_workshop'
+]
+
+const WORKSHOP_OPTIONS = [
+  { key: 'website_workshop', label: 'Website workshop' },
+  { key: 'python_workshop', label: 'Python workshop' },
+  { key: 'ai_ml_workshop', label: 'AI / ML workshop' }
 ]
 
 const Dashboard = () => {
@@ -309,18 +315,23 @@ const Dashboard = () => {
             <div className="md:col-span-2">
               <div className="text-sm text-blue-700 dark:text-blue-200">Workshops</div>
               <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
-                <label className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 bg-white text-gray-900 dark:bg-gray-800 dark:text-blue-100">
-                  <input type="checkbox" checked={!!profile.website_workshop} onChange={(e) => setProfile((p) => ({ ...p, website_workshop: e.target.checked }))} />
-                  <span>Website workshop</span>
-                </label>
-                <label className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 bg-white text-gray-900 dark:bg-gray-800 dark:text-blue-100">
-                  <input type="checkbox" checked={!!profile.python_workshop} onChange={(e) => setProfile((p) => ({ ...p, python_workshop: e.target.checked }))} />
-                  <span>Python workshop</span>
-                </label>
-                <label className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 bg-white text-gray-900 dark:bg-gray-800 dark:text-blue-100">
-                  <input type="checkbox" checked={!!profile.ai_ml_workshop} onChange={(e) => setProfile((p) => ({ ...p, ai_ml_workshop: e.target.checked }))} />
-                  <span>AI / ML workshop</span>
-                </label>
+                {WORKSHOP_OPTIONS.map(({ key, label }) => {
+                  const active = !!profile[key]
+                  return (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() => setProfile((prev) => ({ ...prev, [key]: !prev[key] }))}
+                      className={`flex items-center justify-between gap-3 rounded-xl px-3 py-3 text-left transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${active ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg' : 'border border-gray-200 bg-white text-gray-800 hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-blue-100'}`}
+                      aria-pressed={active}
+                    >
+                      <span>{label}</span>
+                      <span className={`flex h-7 w-7 items-center justify-center rounded-full border transition ${active ? 'border-white bg-white text-blue-600' : 'border-gray-300 text-gray-400 dark:border-gray-600 dark:text-blue-200'}`}>
+                        <FiCheckCircle className="h-4 w-4" />
+                      </span>
+                    </button>
+                  )
+                })}
               </div>
             </div>
 

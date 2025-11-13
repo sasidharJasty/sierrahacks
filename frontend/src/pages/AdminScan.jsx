@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Scanner, useDevices } from '@yudiel/react-qr-scanner'
 import { useNavigate } from 'react-router-dom'
-import { FiSearch } from 'react-icons/fi'
+import { FiSearch, FiCheckCircle } from 'react-icons/fi'
 import supabase from '../lib/supabaseClient'
 import { useAuth } from '../context/authContextBase'
 import DietSwitch from '../../components/DietSwitch'
@@ -15,6 +15,18 @@ const STATUS_SCANNED = 'QR scanned'
 const STATUS_FETCHING = 'Fetching profile...'
 const STATUS_SAVING = 'Saving check-in...'
 const STATUS_ERROR = 'Error'
+
+const MEAL_OPTIONS = [
+  { key: 'breakfast_received', label: 'Breakfast' },
+  { key: 'lunch_received', label: 'Lunch' },
+  { key: 'dinner_received', label: 'Dinner' }
+]
+
+const WORKSHOP_OPTIONS = [
+  { key: 'website_workshop', label: 'Website workshop' },
+  { key: 'python_workshop', label: 'Python workshop' },
+  { key: 'ai_ml_workshop', label: 'AI / ML workshop' }
+]
 
 const AdminScan = () => {
   const resumeTimeoutRef = useRef(null)
@@ -491,47 +503,50 @@ const AdminScan = () => {
                   )}
                 </div>
 
-                <div className="mt-3 grid grid-cols-1 gap-2">
-                  <label
-                    className={`inline-flex items-center gap-2 px-3 py-2 rounded ${profile.breakfast_received ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-blue-200'}`}
-                  >
-                    <input type="checkbox" checked={!!profile.breakfast_received} onChange={() => toggleMeal('breakfast_received')} />
-                    <span>Breakfast</span>
-                  </label>
-                  <label
-                    className={`inline-flex items-center gap-2 px-3 py-2 rounded ${profile.lunch_received ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-blue-200'}`}
-                  >
-                    <input type="checkbox" checked={!!profile.lunch_received} onChange={() => toggleMeal('lunch_received')} />
-                    <span>Lunch</span>
-                  </label>
-                  <label
-                    className={`inline-flex items-center gap-2 px-3 py-2 rounded ${profile.dinner_received ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-blue-200'}`}
-                  >
-                    <input type="checkbox" checked={!!profile.dinner_received} onChange={() => toggleMeal('dinner_received')} />
-                    <span>Dinner</span>
-                  </label>
+                <div className="mt-3">
+                  <div className="text-sm font-medium">Meal distribution</div>
+                  <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {MEAL_OPTIONS.map(({ key, label }) => {
+                      const active = !!profile[key]
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() => toggleMeal(key)}
+                          className={`flex items-center justify-between gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${active ? 'bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg' : 'border border-gray-200 bg-white text-gray-800 hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-blue-100'}`}
+                          aria-pressed={active}
+                        >
+                          <span>{label}</span>
+                          <span className={`flex h-7 w-7 items-center justify-center rounded-full border transition ${active ? 'border-white bg-white text-green-600' : 'border-gray-300 text-gray-400 dark:border-gray-600 dark:text-blue-200'}`}>
+                            <FiCheckCircle className="h-4 w-4" />
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
                 </div>
 
-                <div className="mt-3 grid grid-cols-1 gap-2">
+                <div className="mt-4">
                   <div className="text-sm font-medium">Workshops</div>
-                  <label
-                    className={`inline-flex items-center gap-2 px-3 py-2 rounded ${profile.website_workshop ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-blue-200'}`}
-                  >
-                    <input type="checkbox" checked={!!profile.website_workshop} onChange={() => toggleWorkshop('website_workshop')} />
-                    <span>Website workshop</span>
-                  </label>
-                  <label
-                    className={`inline-flex items-center gap-2 px-3 py-2 rounded ${profile.python_workshop ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-blue-200'}`}
-                  >
-                    <input type="checkbox" checked={!!profile.python_workshop} onChange={() => toggleWorkshop('python_workshop')} />
-                    <span>Python workshop</span>
-                  </label>
-                  <label
-                    className={`inline-flex items-center gap-2 px-3 py-2 rounded ${profile.ai_ml_workshop ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-blue-200'}`}
-                  >
-                    <input type="checkbox" checked={!!profile.ai_ml_workshop} onChange={() => toggleWorkshop('ai_ml_workshop')} />
-                    <span>AI / ML workshop</span>
-                  </label>
+                  <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    {WORKSHOP_OPTIONS.map(({ key, label }) => {
+                      const active = !!profile[key]
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() => toggleWorkshop(key)}
+                          className={`flex items-center justify-between gap-3 rounded-xl px-3 py-3 text-left text-sm font-medium transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${active ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg' : 'border border-gray-200 bg-white text-gray-800 hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-blue-100'}`}
+                          aria-pressed={active}
+                        >
+                          <span>{label}</span>
+                          <span className={`flex h-7 w-7 items-center justify-center rounded-full border transition ${active ? 'border-white bg-white text-blue-600' : 'border-gray-300 text-gray-400 dark:border-gray-600 dark:text-blue-200'}`}>
+                            <FiCheckCircle className="h-4 w-4" />
+                          </span>
+                        </button>
+                      )
+                    })}
+                  </div>
                 </div>
 
                 <div className="mt-4 flex gap-2">
