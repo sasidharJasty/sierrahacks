@@ -256,6 +256,11 @@ const AdminDashboard = () => {
     }
   }, [buildProjectSummaries])
 
+  const handleOpenAverages = useCallback(() => {
+    setAveragesModalOpen(true)
+    void loadJudgingSummary()
+  }, [loadJudgingSummary])
+
   const loadWorkshopMembers = useCallback(async (workshopKey) => {
     const column = WORKSHOP_COLUMNS[workshopKey]
     if (!column) return []
@@ -428,7 +433,7 @@ const AdminDashboard = () => {
               <div className="flex flex-col gap-2 sm:flex-row">
                 <button
                   type="button"
-                  onClick={() => setAveragesModalOpen(true)}
+                  onClick={handleOpenAverages}
                   className="inline-flex items-center justify-center gap-2 rounded-md border border-blue-300 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:border-blue-600 dark:text-blue-100 dark:hover:bg-blue-800"
                 >
                   View project averages
@@ -514,6 +519,8 @@ const AdminDashboard = () => {
                               <div className="mt-4 max-h-[70vh] overflow-y-auto rounded-xl border border-blue-100 bg-blue-50/40 p-3 dark:border-blue-700/40 dark:bg-gray-800/60">
                                 {judgingSummary.loading ? (
                                   <div className="p-6 text-center text-sm text-blue-700 dark:text-blue-300">Refreshing judging data…</div>
+                                ) : judgingSummary.error ? (
+                                  <div className="p-6 text-center text-sm text-red-500">{judgingSummary.error}</div>
                                 ) : projectSummaries.length === 0 ? (
                                   <div className="p-6 text-center text-sm text-blue-700 dark:text-blue-300">No judging entries recorded yet.</div>
                                 ) : (
