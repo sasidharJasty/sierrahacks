@@ -356,6 +356,10 @@ const AdminDashboard = () => {
         </div>
       </div>
 
+      <p className="mt-2 text-sm text-blue-700 dark:text-blue-300">
+        Live operational overview for the Sierra Hacks organizing team. Track attendee momentum, drill into workshops, and keep judging on schedule.
+      </p>
+
       {isAdmin === null && (
         <Card className="mt-6 p-5">
           Checking admin privileges…
@@ -376,12 +380,12 @@ const AdminDashboard = () => {
             </Card>
           )}
 
-          <div className="grid gap-4 md:grid-cols-5">
-            <Card className="flex flex-col justify-between gap-3 p-5">
+          <div className="grid gap-4 md:grid-cols-4">
+            <Card className="flex flex-col justify-between gap-2 rounded-2xl p-4 shadow-sm md:col-span-1 md:p-5 md:shadow-md bg-gradient-to-br from-white via-white to-blue-50/70 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950/50">
               <div className="flex items-center gap-3 text-sm uppercase tracking-wide text-blue-600 dark:text-blue-200">
                 <FiUsers className="h-5 w-5" /> Total attendees
               </div>
-              <div className="text-4xl font-bold">{stats.total}</div>
+              <div className="text-3xl font-bold sm:text-4xl">{stats.total}</div>
               <div className="text-xs text-blue-600 dark:text-blue-300">All profiles in Supabase</div>
             </Card>
 
@@ -389,7 +393,10 @@ const AdminDashboard = () => {
               const value = stats[key]
               const percentage = stats.total ? Math.round((value / stats.total) * 100) : 0
               return (
-                <Card key={key} className="flex flex-col justify-between gap-3 p-5">
+                <Card
+                  key={key}
+                  className="flex flex-col justify-between gap-2 rounded-2xl p-4 shadow-sm transition md:col-span-1 md:p-5 md:shadow-md hover:-translate-y-0.5 hover:shadow-lg bg-gradient-to-br from-white via-white to-blue-50/60 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950/40"
+                >
                   <div className="flex items-center gap-3 text-sm uppercase tracking-wide text-blue-600 dark:text-blue-200">
                     <FiActivity className="h-5 w-5" /> {label}
                   </div>
@@ -400,10 +407,10 @@ const AdminDashboard = () => {
                   >
                     {value}
                   </button>
-                  <div className="text-xs text-blue-600 dark:text-blue-300">{percentage}% of attendees</div>
-                  <div className="h-2 rounded-full bg-blue-100/60 dark:bg-gray-800">
+                  <div className="text-[0.7rem] uppercase tracking-wide text-blue-500 dark:text-blue-400">{percentage}% of attendees</div>
+                  <div className="h-1.5 rounded-full bg-blue-100/60 dark:bg-gray-800">
                     <div
-                      className={`h-2 rounded-full bg-gradient-to-r ${gradient}`}
+                      className={`h-1.5 rounded-full bg-gradient-to-r ${gradient}`}
                       style={{ width: `${Math.min(percentage, 100)}%` }}
                     />
                   </div>
@@ -411,31 +418,31 @@ const AdminDashboard = () => {
               )
             })}
 
-            <Card className="flex flex-col justify-between gap-3 p-5">
+            <Card className="flex flex-col justify-between gap-4 rounded-2xl border border-blue-200/60 bg-gradient-to-br from-white via-white to-blue-100/40 p-5 shadow-md dark:border-blue-800/40 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950/50 md:col-span-4 md:p-6">
               <div className="flex items-center gap-3 text-sm uppercase tracking-wide text-blue-600 dark:text-blue-200">
                 <FiStar className="h-5 w-5" /> Judging evaluations
               </div>
               <div className="text-4xl font-bold text-blue-900 dark:text-blue-50">
                 {judgingSummary.loading ? '…' : judgingSummary.total}
               </div>
-              <div className="space-y-1 text-xs text-blue-600 dark:text-blue-300">
+              <div className="space-y-2 text-xs text-blue-600 dark:text-blue-300">
                 {judgingSummary.error ? (
                   <span className="text-red-500">{judgingSummary.error}</span>
                 ) : (
-                  <>
-                    <div>
-                      Avg score:{' '}
-                      {judgingSummary.average != null
-                        ? `${judgingSummary.average.toFixed(1)} / 100`
-                        : '—'}
-                    </div>
-                    <div>
-                      Latest:{' '}
+                  <div className="flex flex-wrap gap-2">
+                    <span className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-white/80 px-3 py-1 text-[0.7rem] font-medium uppercase tracking-wider text-blue-600 shadow-sm dark:border-blue-700/50 dark:bg-gray-900/70 dark:text-blue-200">
+                      <FiStar className="h-3 w-3" /> Average {judgingSummary.average != null ? `${judgingSummary.average.toFixed(1)} / 100` : '—'}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-white/80 px-3 py-1 text-[0.7rem] font-medium uppercase tracking-wider text-blue-600 shadow-sm dark:border-blue-700/50 dark:bg-gray-900/70 dark:text-blue-200">
+                      <FiActivity className="h-3 w-3" /> Latest{' '}
                       {judgingSummary.latest
                         ? `${judgingSummary.latest.project_title} (${typeof judgingSummary.latest.total_score === 'number' ? judgingSummary.latest.total_score.toFixed(1) : '—'})`
-                        : 'No submissions yet'}
-                    </div>
-                  </>
+                        : 'Awaiting first score'}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full border border-blue-200 bg-white/80 px-3 py-1 text-[0.7rem] font-medium uppercase tracking-wider text-blue-600 shadow-sm dark:border-blue-700/50 dark:bg-gray-900/70 dark:text-blue-200">
+                      <FiRefreshCcw className="h-3 w-3" /> Synced {formattedUpdatedAt ? new Date(updatedAt).toLocaleTimeString() : '—'}
+                    </span>
+                  </div>
                 )}
               </div>
               <div className="flex flex-col gap-2 sm:flex-row">
@@ -456,11 +463,48 @@ const AdminDashboard = () => {
             </Card>
           </div>
 
-          <Card className="p-5 text-sm text-blue-700 dark:text-blue-200">
+          <Card className="rounded-2xl border border-blue-200/60 p-4 text-sm text-blue-700 shadow-sm dark:border-blue-800/40 dark:text-blue-200 md:p-5">
             <div>Workshop totals update instantly when you edit an attendee in the QR scanner or when they update their own dashboard.</div>
             {formattedUpdatedAt && (
               <div className="mt-2 text-xs text-blue-500 dark:text-blue-300">Last refreshed: {formattedUpdatedAt}</div>
             )}
+          </Card>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <Card className="rounded-2xl border border-blue-200/60 p-4 text-sm text-blue-700 shadow-sm dark:border-blue-800/40 dark:text-blue-200 md:p-5">
+              <h3 className="text-base font-semibold text-blue-900 dark:text-blue-100">Upcoming milestones</h3>
+              <ul className="mt-3 space-y-2 text-xs text-blue-600 dark:text-blue-300">
+                <li>• Judges sync — confirm rubric alignment and wifi details.</li>
+                <li>• Demo fair walkthrough — ensure power strips and signage are ready.</li>
+                <li>• Closing ceremony — draft slide deck with top projects and sponsors.</li>
+              </ul>
+            </Card>
+            <Card className="rounded-2xl border border-blue-200/60 p-4 text-sm text-blue-700 shadow-sm dark:border-blue-800/40 dark:text-blue-200 md:p-5">
+              <h3 className="text-base font-semibold text-blue-900 dark:text-blue-100">On-site checklist</h3>
+              <ul className="mt-3 space-y-2 text-xs text-blue-600 dark:text-blue-300">
+                <li>• Print QR badges for late registrants.</li>
+                <li>• Stage judging tablets with chargers at the help desk.</li>
+                <li>• Prep volunteer brief with emergency contacts and venue map.</li>
+              </ul>
+            </Card>
+          </div>
+
+          <Card className="rounded-2xl border border-blue-200/60 p-4 text-sm text-blue-700 shadow-sm dark:border-blue-800/40 dark:text-blue-200 md:p-6">
+            <h3 className="text-base font-semibold text-blue-900 dark:text-blue-100">Logistics radar</h3>
+            <div className="mt-3 grid gap-3 text-xs text-blue-600 dark:text-blue-300 md:grid-cols-3">
+              <div className="rounded-xl bg-white/80 p-3 shadow-sm dark:bg-gray-900/60">
+                <div className="text-[0.7rem] uppercase tracking-wide text-blue-500 dark:text-blue-300">Venue</div>
+                <p className="mt-1">Final floorplan confirmed — send layout PDF to volunteers by Thursday.</p>
+              </div>
+              <div className="rounded-xl bg-white/80 p-3 shadow-sm dark:bg-gray-900/60">
+                <div className="text-[0.7rem] uppercase tracking-wide text-blue-500 dark:text-blue-300">Sponsors</div>
+                <p className="mt-1">Booth assignments ready. Coordinate AV testing window with headline sponsor.</p>
+              </div>
+              <div className="rounded-xl bg-white/80 p-3 shadow-sm dark:bg-gray-900/60">
+                <div className="text-[0.7rem] uppercase tracking-wide text-blue-500 dark:text-blue-300">Communications</div>
+                <p className="mt-1">Schedule mentor welcome email + push notification for submission deadline reminder.</p>
+              </div>
+            </div>
           </Card>
         </div>
       )}
