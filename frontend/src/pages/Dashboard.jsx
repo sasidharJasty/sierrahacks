@@ -183,8 +183,8 @@ const Dashboard = () => {
       columnsSet.forEach((key) => {
         if (normalizedPayload[key] !== undefined) sanitizedPayload[key] = normalizedPayload[key]
       })
-      sanitizedPayload.id = user.id
-      sanitizedPayload.email = user.email
+      if (columnsSet.has('id')) sanitizedPayload.id = user.id
+      if (columnsSet.has('email')) sanitizedPayload.email = user.email
 
       // debug: log payload being upserted
       console.debug('Upsert payload', sanitizedPayload)

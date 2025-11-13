@@ -2,8 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import supabase from '../lib/supabaseClient'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { BrowserMultiFormatReader } from '@zxing/browser'
-import { BarcodeFormat, DecodeHintType } from '@zxing/library'
+import QrScanner from 'qr-scanner'
+import qrScannerWorkerPath from 'qr-scanner/qr-scanner-worker.min.js?url'
+
+QrScanner.WORKER_PATH = qrScannerWorkerPath
 import { FiSearch } from 'react-icons/fi'
 import DietSwitch from '../../components/DietSwitch'
 import Card from '../../components/Card'
@@ -11,7 +13,7 @@ import Card from '../../components/Card'
 
 const AdminScan = () => {
   const videoRef = useRef(null)
-  const readerRef = useRef(null)
+  const scannerRef = useRef(null)
   const [profile, setProfile] = useState(null)
   const [saving, setSaving] = useState(false)
   const [status, setStatus] = useState('Ready')
@@ -29,14 +31,28 @@ const AdminScan = () => {
   const [cameraError, setCameraError] = useState(null)
   const [requestingCamera, setRequestingCamera] = useState(false)
 
+  const stopScanner = useCallback(() => {
+    setScannerActive(false)
+    if (scannerRef.current) {
+      const stopResult = scannerRef.current.stop()
+      if (stopResult && typeof stopResult.catch === 'function') {
+        stopResult.catch(() => {})
+      }
+      scannerRef.current.destroy()
+        scannerRef.current = null
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null
+    }
+  }, [])
+
   const refreshCameraList = useCallback(async () => {
-    if (!readerRef.current) return []
     try {
-      const devices = await readerRef.current.listVideoInputDevices()
+      const devices = await QrScanner.listCameras(true)
       setCameraChoices(devices || [])
       if (devices && devices.length) {
         const preferred = devices.find((d) => /back|rear|environment/i.test(d.label)) || devices[0]
-        setSelectedCameraId((id) => id || preferred.deviceId)
+        setSelectedCameraId((id) => id || preferred?.id || preferred?.deviceId || null)
       }
       return devices || []
     } catch (err) {
@@ -87,67 +103,58 @@ const AdminScan = () => {
 
   useEffect(() => {
     if (isAdmin !== true) return
-    const hints = new Map()
-    hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.QR_CODE])
-    readerRef.current = new BrowserMultiFormatReader(hints, 200)
-
     ensureCameraAccess().catch((err) => {
       console.debug('Camera access check failed', err)
     })
 
     return () => {
       stopScanner()
-      readerRef.current?.reset()
-      readerRef.current = null
     }
   }, [isAdmin, ensureCameraAccess, stopScanner])
 
-  const stopScanner = useCallback(() => {
-    setScannerActive(false)
-    if (readerRef.current) {
-      try {
-        readerRef.current.reset()
-      } catch (err) {
-        console.debug('Failed to reset reader', err)
-      }
-    }
-    if (videoRef.current) {
-      videoRef.current.srcObject = null
-    }
-  }, [])
-
   const startScanner = useCallback(async () => {
     if (scannerActive) return
-    if (!readerRef.current) return
+    if (!videoRef.current) return
     setCameraError(null)
     setRequestingCamera(true)
     try {
       const devices = await ensureCameraAccess()
-      const deviceId = selectedCameraId || devices[0]?.deviceId
+      const firstDevice = devices[0]
+      const candidateId = firstDevice?.id || firstDevice?.deviceId
+      const deviceId = selectedCameraId || candidateId
       if (!deviceId) {
         setCameraError('No cameras found. Try connecting a camera or using a different device.')
         return
       }
       if (!selectedCameraId) setSelectedCameraId(deviceId)
 
-      const startPromise = readerRef.current.decodeFromVideoDevice(deviceId, videoRef.current, (result, err, controls) => {
-        if (result) {
-          controls.stop()
+      if (scannerRef.current) {
+        const stopResult = scannerRef.current.stop()
+        if (stopResult && typeof stopResult.catch === 'function') {
+          stopResult.catch(() => {})
+        }
+        scannerRef.current.destroy()
+        scannerRef.current = null
+      }
+
+      const scanner = new QrScanner(
+        videoRef.current,
+        (result) => {
           stopScanner()
           setStatus('QR scanned')
-          handleDecoded(result.getText())
-          return
+          handleDecoded(result.data || result)
+        },
+        {
+          preferredCamera: deviceId,
+          returnDetailedScanResult: true,
+          highlightScanRegion: true,
+          highlightCodeOutline: true
         }
-        if (err && err.name !== 'NotFoundException') {
-          console.debug('Decode error', err)
-        }
-      })
+      )
 
-      startPromise.catch((err) => {
-        console.error('Camera error', err)
-        setCameraError(err.message || 'Unable to access camera.')
-        stopScanner()
-      })
+      scannerRef.current = scanner
+      await scanner.setCamera(deviceId)
+      await scanner.start()
 
       setScannerActive(true)
       setStatus('Point camera at QR code')
@@ -160,24 +167,54 @@ const AdminScan = () => {
     }
   }, [ensureCameraAccess, scannerActive, selectedCameraId, stopScanner])
 
-  const handleDecoded = async (decodedText) => {
-    let payload = null
-    try {
-      payload = JSON.parse(decodedText)
-    } catch {
-      payload = { id: decodedText }
+  const handleDecoded = async (decodedInput) => {
+    const resolvedText = (() => {
+      if (typeof decodedInput === 'string') return decodedInput
+      if (decodedInput && typeof decodedInput === 'object') {
+        if (typeof decodedInput.data === 'string') return decodedInput.data
+        try {
+          return JSON.stringify(decodedInput)
+        } catch {
+          return String(decodedInput)
+        }
+      }
+      return String(decodedInput ?? '')
+    })().trim()
+
+    if (!resolvedText) {
+      setStatus('Invalid QR payload')
+      return
     }
 
-    if (payload?.id) await loadProfile(payload.id)
-    else setStatus('Invalid QR payload')
+    let payload = null
+    try {
+      payload = JSON.parse(resolvedText)
+    } catch {
+      payload = { id: resolvedText }
+    }
+
+    const rawId = payload?.id
+    const normalizedId = typeof rawId === 'string' ? rawId : (rawId && typeof rawId === 'object' ? (rawId.id ?? rawId.value ?? rawId.uuid ?? '') : String(rawId ?? ''))
+    const trimmedId = String(normalizedId ?? '').trim()
+
+    if (!trimmedId) {
+      setStatus('Invalid QR payload')
+      return
+    }
+
+    await loadProfile(trimmedId)
   }
 
   const handleCameraChange = async (event) => {
     const id = event.target.value
     setSelectedCameraId(id)
     if (scannerActive) {
-      stopScanner()
-      await startScanner()
+      try {
+        await scannerRef.current?.setCamera(id)
+      } catch (err) {
+        console.error('Failed to switch camera', err)
+        setCameraError(err.message || 'Unable to switch camera.')
+      }
     }
   }
 
@@ -251,16 +288,19 @@ const AdminScan = () => {
       <div className="grid md:grid-cols-3 gap-6">
         <Card className="md:col-span-2 p-4 text-blue-800 dark:text-blue-200">
           <div className="rounded-lg border overflow-hidden bg-black/80 flex items-center justify-center" style={{ minHeight: 360 }}>
-            <video ref={videoRef} className="w-full h-full object-cover" playsInline muted />
+            <video ref={videoRef} className="w-full h-full object-cover" playsInline autoPlay muted />
           </div>
           <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm text-gray-600 dark:text-blue-200">Status: {status}</div>
             <div className="flex flex-wrap items-center gap-2">
               {cameraChoices.length > 1 && (
                 <select value={selectedCameraId || ''} onChange={handleCameraChange} className="px-2 py-1 border rounded text-sm bg-white dark:bg-gray-800 dark:text-blue-100">
-                  {cameraChoices.map((device) => (
-                    <option key={device.deviceId} value={device.deviceId}>{device.label || `Camera ${device.deviceId.slice(-4)}`}</option>
-                  ))}
+                  {cameraChoices.map((device, index) => {
+                    const value = device.id || device.deviceId || `camera-${index}`
+                    return (
+                      <option key={value} value={value}>{device.label || `Camera ${index + 1}`}</option>
+                    )
+                  })}
                 </select>
               )}
               <button
