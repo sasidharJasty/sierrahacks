@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import supabase from '../lib/supabaseClient'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/authContextBase'
 import { Link, useNavigate } from 'react-router-dom'
 import Card from '../../components/Card'
 

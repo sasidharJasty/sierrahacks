@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import supabase from '../lib/supabaseClient'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/authContextBase'
 import { useNavigate } from 'react-router-dom'
 import QrScanner from 'qr-scanner'
 import qrScannerWorkerPath from 'qr-scanner/qr-scanner-worker.min.js?url'
-
-QrScanner.WORKER_PATH = qrScannerWorkerPath
 import { FiSearch } from 'react-icons/fi'
 import DietSwitch from '../../components/DietSwitch'
 import Card from '../../components/Card'
 // theme controlled by ThemeProvider (adds/removes 'dark' on documentElement)
+
+QrScanner.WORKER_PATH = qrScannerWorkerPath
 
 const AdminScan = () => {
   const videoRef = useRef(null)
@@ -31,15 +31,20 @@ const AdminScan = () => {
   const [cameraError, setCameraError] = useState(null)
   const [requestingCamera, setRequestingCamera] = useState(false)
 
-  const stopScanner = useCallback(() => {
+  const stopScanner = useCallback(async () => {
     setScannerActive(false)
     if (scannerRef.current) {
-      const stopResult = scannerRef.current.stop()
-      if (stopResult && typeof stopResult.catch === 'function') {
-        stopResult.catch(() => {})
+      try {
+        await scannerRef.current.stop()
+      } catch (err) {
+        console.debug('scanner stop error', err)
       }
+      const controlledStream = videoRef.current?.srcObject
       scannerRef.current.destroy()
-        scannerRef.current = null
+      scannerRef.current = null
+      if (controlledStream && typeof controlledStream.getTracks === 'function') {
+        controlledStream.getTracks().forEach((t) => t.stop())
+      }
     }
     if (videoRef.current) {
       videoRef.current.srcObject = null
@@ -68,8 +73,6 @@ const AdminScan = () => {
     let tempStream
     try {
       tempStream = await navigator.mediaDevices.getUserMedia({ video: true })
-    } catch (err) {
-      throw err
     } finally {
       if (tempStream) {
         tempStream.getTracks().forEach((track) => track.stop())
@@ -108,7 +111,7 @@ const AdminScan = () => {
     })
 
     return () => {
-      stopScanner()
+      stopScanner().catch(() => {})
     }
   }, [isAdmin, ensureCameraAccess, stopScanner])
 
@@ -129,18 +132,13 @@ const AdminScan = () => {
       if (!selectedCameraId) setSelectedCameraId(deviceId)
 
       if (scannerRef.current) {
-        const stopResult = scannerRef.current.stop()
-        if (stopResult && typeof stopResult.catch === 'function') {
-          stopResult.catch(() => {})
-        }
-        scannerRef.current.destroy()
-        scannerRef.current = null
+        await stopScanner()
       }
 
       const scanner = new QrScanner(
         videoRef.current,
         (result) => {
-          stopScanner()
+          void stopScanner()
           setStatus('QR scanned')
           handleDecoded(result.data || result)
         },
@@ -148,26 +146,68 @@ const AdminScan = () => {
           preferredCamera: deviceId,
           returnDetailedScanResult: true,
           highlightScanRegion: true,
-          highlightCodeOutline: true
+          highlightCodeOutline: true,
+          maxScansPerSecond: 12,
+          overlay: null
         }
       )
 
       scannerRef.current = scanner
       await scanner.setCamera(deviceId)
       await scanner.start()
+      if (!videoRef.current?.srcObject) {
+        const stream = scanner.getCameraStream?.()
+        if (stream) {
+          videoRef.current.srcObject = stream
+        }
+      }
 
       setScannerActive(true)
       setStatus('Point camera at QR code')
     } catch (err) {
       console.error('Camera error', err)
       setCameraError(err.message || 'Unable to access camera.')
-      stopScanner()
+      stopScanner().catch(() => {})
     } finally {
       setRequestingCamera(false)
     }
-  }, [ensureCameraAccess, scannerActive, selectedCameraId, stopScanner])
+  }, [ensureCameraAccess, handleDecoded, scannerActive, selectedCameraId, stopScanner])
 
-  const handleDecoded = async (decodedInput) => {
+  const handleCameraChange = async (event) => {
+    const id = event.target.value
+    setSelectedCameraId(id)
+    if (scannerActive) {
+      try {
+        await scannerRef.current?.setCamera(id)
+      } catch (err) {
+        console.error('Failed to switch camera', err)
+        setCameraError(err.message || 'Unable to switch camera.')
+      }
+    }
+  }
+
+  const loadProfile = useCallback(async (id) => {
+    setStatus('Fetching profile...')
+    const { data, error } = await supabase.from('profiles').select('*').eq('id', id).maybeSingle()
+    if (error) {
+      console.error(error)
+      setStatus('Error fetching profile')
+      return
+    }
+    if (!data) {
+      setProfile({ id, name: '', school: '', email: '', food: '' })
+      setCheckins([])
+      setStatus('Profile not found')
+      return
+    }
+    setProfile(data)
+    setStatus('Profile loaded')
+    // load recent checkins
+    const { data: recent } = await supabase.from('checkins').select('*').eq('user_id', id).order('checked_at', { ascending: false }).limit(6)
+    setCheckins(recent || [])
+  }, [])
+
+  const handleDecoded = useCallback(async (decodedInput) => {
     const resolvedText = (() => {
       if (typeof decodedInput === 'string') return decodedInput
       if (decodedInput && typeof decodedInput === 'object') {
@@ -180,6 +220,8 @@ const AdminScan = () => {
       }
       return String(decodedInput ?? '')
     })().trim()
+
+    console.debug('QR decoded payload', resolvedText)
 
     if (!resolvedText) {
       setStatus('Invalid QR payload')
@@ -203,41 +245,7 @@ const AdminScan = () => {
     }
 
     await loadProfile(trimmedId)
-  }
-
-  const handleCameraChange = async (event) => {
-    const id = event.target.value
-    setSelectedCameraId(id)
-    if (scannerActive) {
-      try {
-        await scannerRef.current?.setCamera(id)
-      } catch (err) {
-        console.error('Failed to switch camera', err)
-        setCameraError(err.message || 'Unable to switch camera.')
-      }
-    }
-  }
-
-  const loadProfile = async (id) => {
-    setStatus('Fetching profile...')
-    const { data, error } = await supabase.from('profiles').select('*').eq('id', id).maybeSingle()
-    if (error) {
-      console.error(error)
-      setStatus('Error fetching profile')
-      return
-    }
-    if (!data) {
-      setProfile({ id, name: '', school: '', email: '', food: '' })
-      setCheckins([])
-      setStatus('Profile not found')
-      return
-    }
-    setProfile(data)
-    setStatus('Profile loaded')
-    // load recent checkins
-    const { data: recent } = await supabase.from('checkins').select('*').eq('user_id', id).order('checked_at', { ascending: false }).limit(6)
-    setCheckins(recent || [])
-  }
+  }, [loadProfile])
 
   const handleSave = async () => {
     if (!profile) return
@@ -275,7 +283,7 @@ const AdminScan = () => {
     setProfile(null)
     setStatus('Ready')
     setCheckins([])
-    stopScanner()
+    stopScanner().catch(() => {})
   }
 
   return (
@@ -304,7 +312,7 @@ const AdminScan = () => {
                 </select>
               )}
               <button
-                onClick={scannerActive ? stopScanner : startScanner}
+                onClick={scannerActive ? () => { stopScanner().catch(() => {}) } : startScanner}
                 disabled={requestingCamera}
                 className={`px-3 py-1 rounded text-sm ${scannerActive ? 'bg-red-500 text-white' : 'bg-blue-600 text-white'}`}
               >

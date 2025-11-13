@@ -1,6 +1,5 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
-
-export const ThemeContext = createContext();
+import React, { useState, useEffect } from "react";
+import { ThemeContext } from "./themeContextBase";
 
 export function ThemeProvider({ children }) {
   // Check for system preference with modern API and fallbacks
@@ -53,8 +52,4 @@ export function ThemeProvider({ children }) {
       {children}
     </ThemeContext.Provider>
   );
-}
-
-export function useTheme() {
-  return useContext(ThemeContext);
 }
