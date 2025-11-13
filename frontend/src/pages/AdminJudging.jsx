@@ -113,7 +113,7 @@ const AdminJudging = () => {
     const { data, error } = await supabase
       .from('judging_scores')
       .select(
-        `id, project_title, comments, judge_name, judge_email, created_at, updated_at, total_score,
+        `id, project_title, comments, judge_name, judge_email, created_at, total_score,
          innovation_score, technical_score, design_score, relevance_score, presentation_score`
       )
       .order('created_at', { ascending: false })
@@ -257,7 +257,7 @@ const AdminJudging = () => {
         const raw = Number(entry[`${criterionKey}_score`]) || 0
         summary.criteriaSums[criterionKey] += (raw / 10) * weight
       })
-      const updatedAt = entry.updated_at || entry.created_at
+  const updatedAt = entry.updated_at || entry.created_at
       summary.lastUpdated = summary.lastUpdated && updatedAt
         ? new Date(updatedAt) > new Date(summary.lastUpdated)
           ? updatedAt

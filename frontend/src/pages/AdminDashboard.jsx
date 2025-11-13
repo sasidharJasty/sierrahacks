@@ -106,7 +106,7 @@ const AdminDashboard = () => {
         summary.criteriaSums[criterionKey] += (raw / 10) * weight
       })
 
-      const timestamp = row.updated_at || row.created_at
+      const timestamp = row.created_at
       if (!summary.lastUpdated || (timestamp && new Date(timestamp) > new Date(summary.lastUpdated))) {
         summary.lastUpdated = timestamp
       }
@@ -222,7 +222,7 @@ const AdminDashboard = () => {
       const { data: scoreRows, error: scoresError, count } = await supabase
         .from('judging_scores')
         .select(
-          'project_title, total_score, created_at, updated_at, innovation_score, technical_score, design_score, relevance_score, presentation_score',
+          'project_title, total_score, created_at, innovation_score, technical_score, design_score, relevance_score, presentation_score',
           { count: 'exact' }
         )
         .order('created_at', { ascending: false })
