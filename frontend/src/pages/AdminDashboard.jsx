@@ -37,6 +37,13 @@ const WORKSHOP_COLUMNS = {
   ai: 'ai_ml_workshop'
 }
 
+const formatScore = (value) => {
+  if (value == null || Number.isNaN(value)) {
+    return '0.0'
+  }
+  return Number(value).toFixed(1)
+}
+
 const formatName = (profile) => {
   if (profile?.name) return profile.name
   const full = `${profile?.first_name ?? ''} ${profile?.last_name ?? ''}`.trim()
@@ -116,8 +123,9 @@ const AdminDashboard = () => {
       .map((summary) => ({
         ...summary,
         averageTotal: summary.count ? summary.total / summary.count : 0,
-        criteriaAverages: JUDGING_CRITERIA.map(({ key, weight }) => ({
+        criteriaAverages: JUDGING_CRITERIA.map(({ key, label, weight }) => ({
           key,
+          label,
           weight,
           weightedAverage: summary.count ? summary.criteriaSums[key] / summary.count : 0
         }))
@@ -524,39 +532,55 @@ const AdminDashboard = () => {
                                 ) : projectSummaries.length === 0 ? (
                                   <div className="p-6 text-center text-sm text-blue-700 dark:text-blue-300">No judging entries recorded yet.</div>
                                 ) : (
-                                  <div className="overflow-x-auto">
-                                    <table className="min-w-full text-left text-xs text-blue-800 dark:text-blue-200">
-                                      <thead className="bg-white/70 text-[0.65rem] uppercase tracking-[0.2em] text-blue-600 dark:bg-gray-900/70 dark:text-blue-300">
-                                        <tr>
-                                          <th className="px-3 py-3">Project</th>
-                                          <th className="px-3 py-3 text-center">Reviews</th>
-                                          <th className="px-3 py-3 text-center">Avg total</th>
-                                          {JUDGING_CRITERIA.map(({ key, label, weight }) => (
-                                            <th key={key} className="px-3 py-3 text-center">
-                                              {label.split(' ')[0]} <span className="block text-[0.6rem] font-normal text-blue-400 dark:text-blue-500">/ {weight}</span>
-                                            </th>
-                                          ))}
-                                          <th className="px-3 py-3 text-center">Last review</th>
-                                        </tr>
-                                      </thead>
-                                      <tbody className="divide-y divide-blue-100 dark:divide-blue-800/60">
-                                        {projectSummaries.map((summary) => (
-                                          <tr key={summary.projectTitle} className="bg-white/80 transition hover:bg-blue-100/70 dark:bg-gray-900/70 dark:hover:bg-gray-800/80">
-                                            <td className="px-3 py-3 text-sm font-semibold text-blue-900 dark:text-blue-100">{summary.projectTitle}</td>
-                                            <td className="px-3 py-3 text-center text-sm font-semibold text-blue-700 dark:text-blue-200">{summary.count}</td>
-                                            <td className="px-3 py-3 text-center text-sm font-semibold text-blue-700 dark:text-blue-200">{summary.averageTotal.toFixed(1)}</td>
-                                            {summary.criteriaAverages.map(({ key, weightedAverage }) => (
-                                              <td key={key} className="px-3 py-3 text-center text-xs text-blue-700 dark:text-blue-200">
-                                                {weightedAverage.toFixed(1)}
-                                              </td>
-                                            ))}
-                                            <td className="px-3 py-3 text-center text-xs text-blue-500 dark:text-blue-300">
+                                  <div className="grid gap-4">
+                                    {projectSummaries.map((summary) => (
+                                      <div
+                                        key={summary.projectTitle}
+                                        className="rounded-xl border border-white/40 bg-white/80 p-4 text-sm shadow-sm transition hover:border-blue-200 hover:shadow-md dark:border-blue-800/40 dark:bg-gray-900/70 dark:hover:border-blue-600"
+                                      >
+                                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                                          <div>
+                                            <h4 className="text-base font-semibold text-blue-900 dark:text-blue-50">{summary.projectTitle}</h4>
+                                            <div className="text-xs text-blue-600 dark:text-blue-300">
+                                              {summary.count} review{summary.count === 1 ? '' : 's'} • Last review:{' '}
                                               {summary.lastUpdated ? new Date(summary.lastUpdated).toLocaleString() : '—'}
-                                            </td>
-                                          </tr>
-                                        ))}
-                                      </tbody>
-                                    </table>
+                                            </div>
+                                          </div>
+                                          <div className="text-sm font-semibold text-blue-700 dark:text-blue-200">
+                                            Avg total: {formatScore(summary.averageTotal)} / 100
+                                          </div>
+                                        </div>
+
+                                        <table className="mt-3 w-full text-xs text-blue-800 dark:text-blue-200">
+                                          <thead className="bg-blue-100/60 text-[0.65rem] uppercase tracking-[0.2em] text-blue-600 dark:bg-gray-800/70 dark:text-blue-300">
+                                            <tr>
+                                              <th className="px-3 py-2 text-left">Criterion</th>
+                                              <th className="px-3 py-2 text-right">Avg score</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody className="divide-y divide-blue-100/60 dark:divide-blue-800/60">
+                                            {summary.criteriaAverages.map(({ key, label, weight, weightedAverage }) => (
+                                              <tr key={key}>
+                                                <td className="px-3 py-2 text-left text-[0.75rem] font-medium text-blue-900 dark:text-blue-100">
+                                                  {label}
+                                                </td>
+                                                <td className="px-3 py-2 text-right text-[0.75rem] text-blue-700 dark:text-blue-200">
+                                                  {formatScore(weightedAverage)} <span className="text-[0.65rem] text-blue-400 dark:text-blue-500">/ {weight}</span>
+                                                </td>
+                                              </tr>
+                                            ))}
+                                            <tr>
+                                              <td className="px-3 py-2 text-left text-[0.75rem] font-semibold text-blue-900 dark:text-blue-100">
+                                                Weighted total
+                                              </td>
+                                              <td className="px-3 py-2 text-right text-[0.75rem] font-semibold text-blue-700 dark:text-blue-200">
+                                                {formatScore(summary.averageTotal)} <span className="text-[0.65rem] text-blue-400 dark:text-blue-500">/ 100</span>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </div>
+                                    ))}
                                   </div>
                                 )}
                               </div>
