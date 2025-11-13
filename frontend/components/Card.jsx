@@ -1,9 +1,13 @@
 import React from 'react'
 
-export default function Card({ children, className = '' }) {
+const Card = React.forwardRef(function Card({ as: Element = 'div', children, className = '', ...rest }, ref) {
+  const Component = Element
+
   return (
-    <div className={`bg-white/90 dark:bg-gray-800/60 shadow-md rounded-2xl ${className}`}>
+    <Component ref={ref} className={`w-full rounded-2xl bg-white/90 shadow-md dark:bg-gray-800/60 ${className}`} {...rest}>
       {children}
-    </div>
+    </Component>
   )
-}
+})
+
+export default Card

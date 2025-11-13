@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Scanner, useDevices } from '@yudiel/react-qr-scanner'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FiSearch, FiCheckCircle } from 'react-icons/fi'
 import supabase from '../lib/supabaseClient'
 import { useAuth } from '../context/authContextBase'
@@ -295,7 +295,15 @@ const AdminScan = () => {
 
   return (
     <div className="min-h-screen pt-24 p-6 bg-[#D9E7FD] dark:bg-gray-900">
-      <h2 className="text-2xl font-semibold mb-4 text-blue-800 dark:text-blue-200">Admin — QR Scan</h2>
+      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h2 className="text-2xl font-semibold text-blue-800 dark:text-blue-200">Admin — QR Scan</h2>
+        <Link
+          to="/admin/dashboard"
+          className="inline-flex items-center gap-2 text-sm font-medium text-blue-700 underline-offset-2 transition hover:underline dark:text-blue-200"
+        >
+          View workshop dashboard
+        </Link>
+      </div>
 
       {isAdmin === null && <div className="p-4 rounded bg-white/80 text-blue-800 dark:bg-gray-800 dark:text-blue-200">Checking permissions...</div>}
       {isAdmin === false && <div className="p-4 rounded bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200">Unauthorized — this area is for event admins only.</div>}
