@@ -29,6 +29,40 @@ const AdminScan = () => {
   const [cameraError, setCameraError] = useState(null)
   const [requestingCamera, setRequestingCamera] = useState(false)
 
+  const refreshCameraList = useCallback(async () => {
+    if (!readerRef.current) return []
+    try {
+      const devices = await readerRef.current.listVideoInputDevices()
+      setCameraChoices(devices || [])
+      if (devices && devices.length) {
+        const preferred = devices.find((d) => /back|rear|environment/i.test(d.label)) || devices[0]
+        setSelectedCameraId((id) => id || preferred.deviceId)
+      }
+      return devices || []
+    } catch (err) {
+      console.debug('Failed to enumerate cameras', err)
+      return []
+    }
+  }, [])
+
+  const ensureCameraAccess = useCallback(async () => {
+    let devices = await refreshCameraList()
+    if (devices.length > 0) return devices
+    // request permission by grabbing a temporary stream; required on some mobile browsers
+    let tempStream
+    try {
+      tempStream = await navigator.mediaDevices.getUserMedia({ video: true })
+    } catch (err) {
+      throw err
+    } finally {
+      if (tempStream) {
+        tempStream.getTracks().forEach((track) => track.stop())
+      }
+    }
+    devices = await refreshCameraList()
+    return devices
+  }, [refreshCameraList])
+
   // ensure user is signed-in and has admin privileges
   useEffect(() => {
     if (loading) return
@@ -53,31 +87,20 @@ const AdminScan = () => {
 
   useEffect(() => {
     if (isAdmin !== true) return
-  const hints = new Map()
-  hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.QR_CODE])
-  readerRef.current = new BrowserMultiFormatReader(hints, 200)
+    const hints = new Map()
+    hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.QR_CODE])
+    readerRef.current = new BrowserMultiFormatReader(hints, 200)
 
-    const loadDevices = async () => {
-      try {
-        const devices = await readerRef.current?.listVideoInputDevices()
-        setCameraChoices(devices || [])
-        if (devices && devices.length) {
-          const preferred = devices.find((d) => /back|rear|environment/i.test(d.label)) || devices[0]
-          setSelectedCameraId((id) => id || preferred.deviceId)
-        }
-      } catch (err) {
-        console.debug('Failed to enumerate cameras', err)
-      }
-    }
-
-    loadDevices()
+    ensureCameraAccess().catch((err) => {
+      console.debug('Camera access check failed', err)
+    })
 
     return () => {
       stopScanner()
       readerRef.current?.reset()
       readerRef.current = null
     }
-  }, [isAdmin])
+  }, [isAdmin, ensureCameraAccess, stopScanner])
 
   const stopScanner = useCallback(() => {
     setScannerActive(false)
@@ -99,11 +122,13 @@ const AdminScan = () => {
     setCameraError(null)
     setRequestingCamera(true)
     try {
-      const deviceId = selectedCameraId
+      const devices = await ensureCameraAccess()
+      const deviceId = selectedCameraId || devices[0]?.deviceId
       if (!deviceId) {
         setCameraError('No cameras found. Try connecting a camera or using a different device.')
         return
       }
+      if (!selectedCameraId) setSelectedCameraId(deviceId)
 
       const startPromise = readerRef.current.decodeFromVideoDevice(deviceId, videoRef.current, (result, err, controls) => {
         if (result) {
@@ -133,7 +158,7 @@ const AdminScan = () => {
     } finally {
       setRequestingCamera(false)
     }
-  }, [scannerActive, selectedCameraId, stopScanner])
+  }, [ensureCameraAccess, scannerActive, selectedCameraId, stopScanner])
 
   const handleDecoded = async (decodedText) => {
     let payload = null
