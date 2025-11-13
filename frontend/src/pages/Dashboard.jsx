@@ -32,7 +32,10 @@ const FALLBACK_PROFILE_COLUMNS = [
   'participating_solo',
   'looking_for_teammates',
   'is_vegetarian',
-  'allergies'
+  'allergies',
+  'website_workshop',
+  'python_workshop',
+  'ai_ml_workshop'
 ]
 
 const Dashboard = () => {
@@ -42,8 +45,8 @@ const Dashboard = () => {
   const [profile, setProfile] = useState({
     name: '', first_name: '', last_name: '', school: '', age: '', grade: '',
     phone_number: '', date_of_birth: '', city: '', teammates: '', parent_name: '', parent_email: '', parent_phone: '',
-    respondent_id: '', submission_id: '', participating_solo: null, looking_for_teammates: null,
-    is_vegetarian: null, allergies: ''
+  respondent_id: '', submission_id: '', participating_solo: null, looking_for_teammates: null,
+  is_vegetarian: null, allergies: '', website_workshop: false, python_workshop: false, ai_ml_workshop: false
   })
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState(null)
@@ -107,7 +110,10 @@ const Dashboard = () => {
           parent_email: data.parent_email || '',
           parent_phone: data.parent_phone || '',
           participating_solo: data.participating_solo ?? null,
-          looking_for_teammates: data.looking_for_teammates ?? null
+          looking_for_teammates: data.looking_for_teammates ?? null,
+          website_workshop: !!data.website_workshop,
+          python_workshop: !!data.python_workshop,
+          ai_ml_workshop: !!data.ai_ml_workshop
         })
         profileColumnsRef.current = new Set(Object.keys(data))
         profileColumnTemplateRef.current = data
@@ -298,6 +304,24 @@ const Dashboard = () => {
               <label className="flex items-center gap-2 text-sm text-blue-700 dark:text-blue-200">
                 <input type="checkbox" checked={!!profile.looking_for_teammates} onChange={(e) => setProfile(p => ({ ...p, looking_for_teammates: e.target.checked }))} className="w-4 h-4 rounded" /> Looking for teammates
               </label>
+            </div>
+
+            <div className="md:col-span-2">
+              <div className="text-sm text-blue-700 dark:text-blue-200">Workshops</div>
+              <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm">
+                <label className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 bg-white text-gray-900 dark:bg-gray-800 dark:text-blue-100">
+                  <input type="checkbox" checked={!!profile.website_workshop} onChange={(e) => setProfile((p) => ({ ...p, website_workshop: e.target.checked }))} />
+                  <span>Website workshop</span>
+                </label>
+                <label className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 bg-white text-gray-900 dark:bg-gray-800 dark:text-blue-100">
+                  <input type="checkbox" checked={!!profile.python_workshop} onChange={(e) => setProfile((p) => ({ ...p, python_workshop: e.target.checked }))} />
+                  <span>Python workshop</span>
+                </label>
+                <label className="flex items-center gap-2 p-3 rounded-xl border border-gray-200 bg-white text-gray-900 dark:bg-gray-800 dark:text-blue-100">
+                  <input type="checkbox" checked={!!profile.ai_ml_workshop} onChange={(e) => setProfile((p) => ({ ...p, ai_ml_workshop: e.target.checked }))} />
+                  <span>AI / ML workshop</span>
+                </label>
+              </div>
             </div>
 
             <div className="md:col-span-2">

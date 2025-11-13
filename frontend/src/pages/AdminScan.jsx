@@ -145,13 +145,20 @@ const AdminScan = () => {
       setStatus('Error fetching profile')
       return
     }
+
     if (!data) {
-      setProfile({ id })
+      setProfile({ id, website_workshop: false, python_workshop: false, ai_ml_workshop: false })
       setCheckins([])
       setStatus('Profile not found')
       return
     }
-    setProfile(data)
+
+    setProfile({
+      ...data,
+      website_workshop: !!data.website_workshop,
+      python_workshop: !!data.python_workshop,
+      ai_ml_workshop: !!data.ai_ml_workshop
+    })
     setStatus('Profile loaded')
     const { data: recent } = await supabase
       .from('checkins')
@@ -215,6 +222,22 @@ const AdminScan = () => {
     setSaving(true)
     setStatus(STATUS_SAVING)
     try {
+      const profileUpdate = {
+        id: profile.id,
+        breakfast_received: !!profile.breakfast_received,
+        lunch_received: !!profile.lunch_received,
+        dinner_received: !!profile.dinner_received,
+        website_workshop: !!profile.website_workshop,
+        python_workshop: !!profile.python_workshop,
+        ai_ml_workshop: !!profile.ai_ml_workshop
+      }
+
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert(profileUpdate, { onConflict: 'id', returning: 'minimal' })
+
+      if (profileError) throw profileError
+
       const payload = {
         user_id: profile.id,
         breakfast: !!profile.breakfast_received,
@@ -244,6 +267,10 @@ const AdminScan = () => {
 
   const toggleMeal = (meal) => {
     setProfile((p) => ({ ...p, [meal]: !p[meal] }))
+  }
+
+  const toggleWorkshop = (key) => {
+    setProfile((p) => ({ ...p, [key]: !p[key] }))
   }
 
   const resetScanner = () => {
@@ -482,6 +509,28 @@ const AdminScan = () => {
                   >
                     <input type="checkbox" checked={!!profile.dinner_received} onChange={() => toggleMeal('dinner_received')} />
                     <span>Dinner</span>
+                  </label>
+                </div>
+
+                <div className="mt-3 grid grid-cols-1 gap-2">
+                  <div className="text-sm font-medium">Workshops</div>
+                  <label
+                    className={`inline-flex items-center gap-2 px-3 py-2 rounded ${profile.website_workshop ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-blue-200'}`}
+                  >
+                    <input type="checkbox" checked={!!profile.website_workshop} onChange={() => toggleWorkshop('website_workshop')} />
+                    <span>Website workshop</span>
+                  </label>
+                  <label
+                    className={`inline-flex items-center gap-2 px-3 py-2 rounded ${profile.python_workshop ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-blue-200'}`}
+                  >
+                    <input type="checkbox" checked={!!profile.python_workshop} onChange={() => toggleWorkshop('python_workshop')} />
+                    <span>Python workshop</span>
+                  </label>
+                  <label
+                    className={`inline-flex items-center gap-2 px-3 py-2 rounded ${profile.ai_ml_workshop ? 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-100' : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-blue-200'}`}
+                  >
+                    <input type="checkbox" checked={!!profile.ai_ml_workshop} onChange={() => toggleWorkshop('ai_ml_workshop')} />
+                    <span>AI / ML workshop</span>
                   </label>
                 </div>
 
