@@ -1,15 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import supabase from '../lib/supabaseClient'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-import { FiSearch, FiClock, FiCoffee, FiUpload } from 'react-icons/fi'
-import { FaDrumstickBite, FaLeaf } from 'react-icons/fa'
+import { BrowserMultiFormatReader } from '@zxing/browser'
+import { BarcodeFormat, DecodeHintType } from '@zxing/library'
+import { FiSearch } from 'react-icons/fi'
 import DietSwitch from '../../components/DietSwitch'
 import Card from '../../components/Card'
 // theme controlled by ThemeProvider (adds/removes 'dark' on documentElement)
 
 const AdminScan = () => {
-  const scannerRef = useRef(null)
+  const videoRef = useRef(null)
+  const readerRef = useRef(null)
   const [profile, setProfile] = useState(null)
   const [saving, setSaving] = useState(false)
   const [status, setStatus] = useState('Ready')
@@ -21,6 +23,11 @@ const AdminScan = () => {
   const [editingDiet, setEditingDiet] = useState(false)
   const [dietEdits, setDietEdits] = useState({ is_vegetarian: false, allergies: '' })
   const [savingDiet, setSavingDiet] = useState(false)
+  const [cameraChoices, setCameraChoices] = useState([])
+  const [selectedCameraId, setSelectedCameraId] = useState(null)
+  const [scannerActive, setScannerActive] = useState(false)
+  const [cameraError, setCameraError] = useState(null)
+  const [requestingCamera, setRequestingCamera] = useState(false)
 
   // ensure user is signed-in and has admin privileges
   useEffect(() => {
@@ -46,29 +53,89 @@ const AdminScan = () => {
 
   useEffect(() => {
     if (isAdmin !== true) return
-    let scanner
-    import('html5-qrcode').then((mod) => {
-      const { Html5QrcodeScanner } = mod
-      const elementId = 'qr-reader'
-      const config = { fps: 10, qrbox: 280 }
-      scanner = new Html5QrcodeScanner(elementId, config, false)
-      scanner.render(onScanSuccess, onScanFailure)
-    }).catch((err) => {
-      console.error('Failed to load QR scanner', err)
-      setStatus('Failed to load QR scanner')
-    })
+  const hints = new Map()
+  hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.QR_CODE])
+  readerRef.current = new BrowserMultiFormatReader(hints, 200)
+
+    const loadDevices = async () => {
+      try {
+        const devices = await readerRef.current?.listVideoInputDevices()
+        setCameraChoices(devices || [])
+        if (devices && devices.length) {
+          const preferred = devices.find((d) => /back|rear|environment/i.test(d.label)) || devices[0]
+          setSelectedCameraId((id) => id || preferred.deviceId)
+        }
+      } catch (err) {
+        console.debug('Failed to enumerate cameras', err)
+      }
+    }
+
+    loadDevices()
 
     return () => {
-      try {
-        if (scanner) scanner.clear().catch(() => {})
-      } catch (err) {
-        console.debug('Failed to clear scanner', err)
-      }
+      stopScanner()
+      readerRef.current?.reset()
+      readerRef.current = null
     }
   }, [isAdmin])
 
-  const onScanSuccess = async (decodedText) => {
-  setStatus('QR scanned')
+  const stopScanner = useCallback(() => {
+    setScannerActive(false)
+    if (readerRef.current) {
+      try {
+        readerRef.current.reset()
+      } catch (err) {
+        console.debug('Failed to reset reader', err)
+      }
+    }
+    if (videoRef.current) {
+      videoRef.current.srcObject = null
+    }
+  }, [])
+
+  const startScanner = useCallback(async () => {
+    if (scannerActive) return
+    if (!readerRef.current) return
+    setCameraError(null)
+    setRequestingCamera(true)
+    try {
+      const deviceId = selectedCameraId
+      if (!deviceId) {
+        setCameraError('No cameras found. Try connecting a camera or using a different device.')
+        return
+      }
+
+      const startPromise = readerRef.current.decodeFromVideoDevice(deviceId, videoRef.current, (result, err, controls) => {
+        if (result) {
+          controls.stop()
+          stopScanner()
+          setStatus('QR scanned')
+          handleDecoded(result.getText())
+          return
+        }
+        if (err && err.name !== 'NotFoundException') {
+          console.debug('Decode error', err)
+        }
+      })
+
+      startPromise.catch((err) => {
+        console.error('Camera error', err)
+        setCameraError(err.message || 'Unable to access camera.')
+        stopScanner()
+      })
+
+      setScannerActive(true)
+      setStatus('Point camera at QR code')
+    } catch (err) {
+      console.error('Camera error', err)
+      setCameraError(err.message || 'Unable to access camera.')
+      stopScanner()
+    } finally {
+      setRequestingCamera(false)
+    }
+  }, [scannerActive, selectedCameraId, stopScanner])
+
+  const handleDecoded = async (decodedText) => {
     let payload = null
     try {
       payload = JSON.parse(decodedText)
@@ -80,9 +147,13 @@ const AdminScan = () => {
     else setStatus('Invalid QR payload')
   }
 
-  const onScanFailure = (err) => {
-    // log failures for debugging; scanner often reports intermittent failures
-    console.debug('QR scan failure', err)
+  const handleCameraChange = async (event) => {
+    const id = event.target.value
+    setSelectedCameraId(id)
+    if (scannerActive) {
+      stopScanner()
+      await startScanner()
+    }
   }
 
   const loadProfile = async (id) => {
@@ -142,6 +213,7 @@ const AdminScan = () => {
     setProfile(null)
     setStatus('Ready')
     setCheckins([])
+    stopScanner()
   }
 
   return (
@@ -151,17 +223,34 @@ const AdminScan = () => {
       {isAdmin === null && <div className="p-4 rounded bg-white/80 text-blue-800 dark:bg-gray-800 dark:text-blue-200">Checking permissions...</div>}
       {isAdmin === false && <div className="p-4 rounded bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200">Unauthorized — this area is for event admins only.</div>}
 
-  <div className="grid md:grid-cols-3 gap-6">
-    <Card className="md:col-span-2 p-4 text-blue-800 dark:text-blue-200">
-          <div id="qr-reader" ref={scannerRef} className="rounded-lg overflow-hidden border" style={{ minHeight: 360 }} />
-          <div className="mt-3 flex items-center justify-between">
+      <div className="grid md:grid-cols-3 gap-6">
+        <Card className="md:col-span-2 p-4 text-blue-800 dark:text-blue-200">
+          <div className="rounded-lg border overflow-hidden bg-black/80 flex items-center justify-center" style={{ minHeight: 360 }}>
+            <video ref={videoRef} className="w-full h-full object-cover" playsInline muted />
+          </div>
+          <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="text-sm text-gray-600 dark:text-blue-200">Status: {status}</div>
-            <div className="flex items-center gap-2">
-              <input value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} placeholder="Admin email (optional)" className="px-2 py-1 border rounded text-sm bg-white dark:bg-gray-800 dark:text-blue-100" />
+            <div className="flex flex-wrap items-center gap-2">
+              {cameraChoices.length > 1 && (
+                <select value={selectedCameraId || ''} onChange={handleCameraChange} className="px-2 py-1 border rounded text-sm bg-white dark:bg-gray-800 dark:text-blue-100">
+                  {cameraChoices.map((device) => (
+                    <option key={device.deviceId} value={device.deviceId}>{device.label || `Camera ${device.deviceId.slice(-4)}`}</option>
+                  ))}
+                </select>
+              )}
+              <button
+                onClick={scannerActive ? stopScanner : startScanner}
+                disabled={requestingCamera}
+                className={`px-3 py-1 rounded text-sm ${scannerActive ? 'bg-red-500 text-white' : 'bg-blue-600 text-white'}`}
+              >
+                {requestingCamera ? 'Starting…' : scannerActive ? 'Stop scanner' : 'Start scanner'}
+              </button>
               <button onClick={resetScanner} className="px-3 py-1 rounded bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-blue-100">Reset</button>
+              <input value={adminEmail} onChange={(e) => setAdminEmail(e.target.value)} placeholder="Admin email (optional)" className="px-2 py-1 border rounded text-sm bg-white dark:bg-gray-800 dark:text-blue-100" />
             </div>
           </div>
-    </Card>
+          {cameraError && <div className="mt-2 text-sm text-red-600 dark:text-red-300">{cameraError}</div>}
+        </Card>
         
   <Card className="p-6 text-blue-800 dark:text-blue-200">
           <h3 className="text-xl mb-3">Profile</h3>
