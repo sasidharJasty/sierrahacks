@@ -376,7 +376,7 @@ const AdminDashboard = () => {
             </Card>
           )}
 
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-4 md:grid-cols-5">
             <Card className="flex flex-col justify-between gap-3 p-5">
               <div className="flex items-center gap-3 text-sm uppercase tracking-wide text-blue-600 dark:text-blue-200">
                 <FiUsers className="h-5 w-5" /> Total attendees
