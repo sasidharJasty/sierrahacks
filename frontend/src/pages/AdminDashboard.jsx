@@ -506,87 +506,6 @@ const AdminDashboard = () => {
                         <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
                           <div>
                             <div className="text-sm font-semibold text-blue-900 dark:text-blue-50">{formatName(member)}</div>
-
-                        {averagesModalOpen && (
-                          <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/60 p-4">
-                            <div className="relative w-full max-w-5xl rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-900 dark:text-blue-100">
-                              <button
-                                type="button"
-                                onClick={() => setAveragesModalOpen(false)}
-                                className="absolute right-4 top-4 text-blue-700 transition hover:text-blue-900 dark:text-blue-200 dark:hover:text-white"
-                                aria-label="Close project averages"
-                              >
-                                <FiX className="h-5 w-5" />
-                              </button>
-
-                              <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-100">Project average scores</h3>
-                              <p className="mt-1 text-sm text-blue-600 dark:text-blue-300">
-                                Aggregated from {projectSummaries.length} project{projectSummaries.length === 1 ? '' : 's'}. Values show weighted contributions for each category.
-                              </p>
-
-                              <div className="mt-4 max-h-[70vh] overflow-y-auto rounded-xl border border-blue-100 bg-blue-50/40 p-3 dark:border-blue-700/40 dark:bg-gray-800/60">
-                                {judgingSummary.loading ? (
-                                  <div className="p-6 text-center text-sm text-blue-700 dark:text-blue-300">Refreshing judging data…</div>
-                                ) : judgingSummary.error ? (
-                                  <div className="p-6 text-center text-sm text-red-500">{judgingSummary.error}</div>
-                                ) : projectSummaries.length === 0 ? (
-                                  <div className="p-6 text-center text-sm text-blue-700 dark:text-blue-300">No judging entries recorded yet.</div>
-                                ) : (
-                                  <div className="grid gap-4">
-                                    {projectSummaries.map((summary) => (
-                                      <div
-                                        key={summary.projectTitle}
-                                        className="rounded-xl border border-white/40 bg-white/80 p-4 text-sm shadow-sm transition hover:border-blue-200 hover:shadow-md dark:border-blue-800/40 dark:bg-gray-900/70 dark:hover:border-blue-600"
-                                      >
-                                        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                                          <div>
-                                            <h4 className="text-base font-semibold text-blue-900 dark:text-blue-50">{summary.projectTitle}</h4>
-                                            <div className="text-xs text-blue-600 dark:text-blue-300">
-                                              {summary.count} review{summary.count === 1 ? '' : 's'} • Last review:{' '}
-                                              {summary.lastUpdated ? new Date(summary.lastUpdated).toLocaleString() : '—'}
-                                            </div>
-                                          </div>
-                                          <div className="text-sm font-semibold text-blue-700 dark:text-blue-200">
-                                            Avg total: {formatScore(summary.averageTotal)} / 100
-                                          </div>
-                                        </div>
-
-                                        <table className="mt-3 w-full text-xs text-blue-800 dark:text-blue-200">
-                                          <thead className="bg-blue-100/60 text-[0.65rem] uppercase tracking-[0.2em] text-blue-600 dark:bg-gray-800/70 dark:text-blue-300">
-                                            <tr>
-                                              <th className="px-3 py-2 text-left">Criterion</th>
-                                              <th className="px-3 py-2 text-right">Avg score</th>
-                                            </tr>
-                                          </thead>
-                                          <tbody className="divide-y divide-blue-100/60 dark:divide-blue-800/60">
-                                            {summary.criteriaAverages.map(({ key, label, weight, weightedAverage }) => (
-                                              <tr key={key}>
-                                                <td className="px-3 py-2 text-left text-[0.75rem] font-medium text-blue-900 dark:text-blue-100">
-                                                  {label}
-                                                </td>
-                                                <td className="px-3 py-2 text-right text-[0.75rem] text-blue-700 dark:text-blue-200">
-                                                  {formatScore(weightedAverage)} <span className="text-[0.65rem] text-blue-400 dark:text-blue-500">/ {weight}</span>
-                                                </td>
-                                              </tr>
-                                            ))}
-                                            <tr>
-                                              <td className="px-3 py-2 text-left text-[0.75rem] font-semibold text-blue-900 dark:text-blue-100">
-                                                Weighted total
-                                              </td>
-                                              <td className="px-3 py-2 text-right text-[0.75rem] font-semibold text-blue-700 dark:text-blue-200">
-                                                {formatScore(summary.averageTotal)} <span className="text-[0.65rem] text-blue-400 dark:text-blue-500">/ 100</span>
-                                              </td>
-                                            </tr>
-                                          </tbody>
-                                        </table>
-                                      </div>
-                                    ))}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        )}
                             <div className="text-xs text-blue-600 dark:text-blue-300">{member.email || 'No email on file'}</div>
                           </div>
                           <div className="text-[0.65rem] uppercase tracking-wide text-blue-400 dark:text-blue-500">
@@ -597,6 +516,87 @@ const AdminDashboard = () => {
                     </li>
                   ))}
                 </ul>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {averagesModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="relative w-full max-w-5xl rounded-2xl bg-white p-6 shadow-2xl dark:bg-gray-900 dark:text-blue-100">
+            <button
+              type="button"
+              onClick={() => setAveragesModalOpen(false)}
+              className="absolute right-4 top-4 text-blue-700 transition hover:text-blue-900 dark:text-blue-200 dark:hover:text-white"
+              aria-label="Close project averages"
+            >
+              <FiX className="h-5 w-5" />
+            </button>
+
+            <h3 className="text-xl font-semibold text-blue-900 dark:text-blue-100">Project average scores</h3>
+            <p className="mt-1 text-sm text-blue-600 dark:text-blue-300">
+              Aggregated from {projectSummaries.length} project{projectSummaries.length === 1 ? '' : 's'}. Values show weighted contributions for each category.
+            </p>
+
+            <div className="mt-4 max-h-[70vh] overflow-y-auto rounded-xl border border-blue-100 bg-blue-50/40 p-3 dark:border-blue-700/40 dark:bg-gray-800/60">
+              {judgingSummary.loading ? (
+                <div className="p-6 text-center text-sm text-blue-700 dark:text-blue-300">Refreshing judging data…</div>
+              ) : judgingSummary.error ? (
+                <div className="p-6 text-center text-sm text-red-500">{judgingSummary.error}</div>
+              ) : projectSummaries.length === 0 ? (
+                <div className="p-6 text-center text-sm text-blue-700 dark:text-blue-300">No judging entries recorded yet.</div>
+              ) : (
+                <div className="grid gap-4">
+                  {projectSummaries.map((summary) => (
+                    <div
+                      key={summary.projectTitle}
+                      className="rounded-xl border border-white/40 bg-white/80 p-4 text-sm shadow-sm transition hover:border-blue-200 hover:shadow-md dark:border-blue-800/40 dark:bg-gray-900/70 dark:hover:border-blue-600"
+                    >
+                      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div>
+                          <h4 className="text-base font-semibold text-blue-900 dark:text-blue-50">{summary.projectTitle}</h4>
+                          <div className="text-xs text-blue-600 dark:text-blue-300">
+                            {summary.count} review{summary.count === 1 ? '' : 's'} • Last review:{' '}
+                            {summary.lastUpdated ? new Date(summary.lastUpdated).toLocaleString() : '—'}
+                          </div>
+                        </div>
+                        <div className="text-sm font-semibold text-blue-700 dark:text-blue-200">
+                          Avg total: {formatScore(summary.averageTotal)} / 100
+                        </div>
+                      </div>
+
+                      <table className="mt-3 w-full text-xs text-blue-800 dark:text-blue-200">
+                        <thead className="bg-blue-100/60 text-[0.65rem] uppercase tracking-[0.2em] text-blue-600 dark:bg-gray-800/70 dark:text-blue-300">
+                          <tr>
+                            <th className="px-3 py-2 text-left">Criterion</th>
+                            <th className="px-3 py-2 text-right">Avg score</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-blue-100/60 dark:divide-blue-800/60">
+                          {summary.criteriaAverages.map(({ key, label, weight, weightedAverage }) => (
+                            <tr key={key}>
+                              <td className="px-3 py-2 text-left text-[0.75rem] font-medium text-blue-900 dark:text-blue-100">
+                                {label}
+                              </td>
+                              <td className="px-3 py-2 text-right text-[0.75rem] text-blue-700 dark:text-blue-200">
+                                {formatScore(weightedAverage)} <span className="text-[0.65rem] text-blue-400 dark:text-blue-500">/ {weight}</span>
+                              </td>
+                            </tr>
+                          ))}
+                          <tr>
+                            <td className="px-3 py-2 text-left text-[0.75rem] font-semibold text-blue-900 dark:text-blue-100">
+                              Weighted total
+                            </td>
+                            <td className="px-3 py-2 text-right text-[0.75rem] font-semibold text-blue-700 dark:text-blue-200">
+                              {formatScore(summary.averageTotal)} <span className="text-[0.65rem] text-blue-400 dark:text-blue-500">/ 100</span>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  ))}
+                </div>
               )}
             </div>
           </div>
