@@ -266,12 +266,14 @@ const Dashboard = () => {
             <FormField label="Grade">
               <select value={profile.grade || ''} onChange={(e) => setProfile(p => ({ ...p, grade: e.target.value }))} className="w-full p-3 rounded-xl border border-gray-200 bg-white text-gray-900 dark:bg-gray-800 dark:text-blue-100 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
                 <option value="">Select grade</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
                 <option value="9">9</option>
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
-                <option value="college">College</option>
-                <option value="other">Other</option>
+
               </select>
             </FormField>
 
