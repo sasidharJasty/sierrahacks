@@ -5,11 +5,12 @@ const NavbarVisibilityContext = createContext({ visible: true, setVisible: () =>
 
 export function NavbarVisibilityProvider({ children }) {
   const location = useLocation()
-  const [visible, setVisible] = useState(true)
+  const isCountdownRoute = location.pathname === '/submission-countdown'
+  const [visible, setVisible] = useState(() => !isCountdownRoute)
 
   useEffect(() => {
-    setVisible(true)
-  }, [location.pathname])
+    setVisible(!isCountdownRoute)
+  }, [isCountdownRoute])
 
   return (
     <NavbarVisibilityContext.Provider value={{ visible, setVisible }}>
