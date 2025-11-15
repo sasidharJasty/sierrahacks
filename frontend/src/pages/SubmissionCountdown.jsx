@@ -35,6 +35,10 @@ function SubmissionCountdown() {
     return () => clearInterval(ticker)
   }, [])
 
+  useEffect(() => {
+    setNavbarVisible(false)
+  }, [setNavbarVisible])
+
   const statusPanel = useMemo(() => {
     if (timeRemaining.delta <= 0) {
       return {
