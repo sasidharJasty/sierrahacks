@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavbarVisibility } from '../context/NavbarVisibilityContext'
 
-const TARGET_TIMESTAMP = new Date('2025-11-16T02:00:00Z').getTime()
+const TARGET_TIMESTAMP = new Date('2025-11-16T02:15:00Z').getTime()
 
 const getTimeParts = () => {
   const now = Date.now()
@@ -92,7 +92,7 @@ function SubmissionCountdown() {
         <img src="/logo.png" alt="Sierra Hacks logo" className="h-16 w-16 rounded-full border border-white/10 bg-white/90 p-3 shadow-xl sm:h-20 sm:w-20" />
         <p className="mt-6 text-xs uppercase tracking-[0.35em] text-cyan-200/80 sm:text-sm">Submission Countdown</p>
         <h1 className="mt-4 bg-gradient-to-r from-cyan-300 via-blue-100 to-indigo-200 bg-clip-text text-3xl font-semibold text-transparent sm:text-5xl">
-          Final Submissions due on <br/> <span className="text-white">November 15 · 6:00PM PT</span>
+          Final Submissions due on <br/> <span className="text-white">November 15 · 6:15PM PT</span>
         </h1>
         <p className="mt-4 max-w-2xl text-sm text-blue-200/90 sm:text-base">
           Polish your projects, rehearse your demo, and make sure everything is deployed. The clock is ticking—let&apos;s make the finish line unforgettable.
