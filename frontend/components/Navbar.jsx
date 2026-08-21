@@ -80,7 +80,7 @@ const Navbar = () => {
     { name: "FAQ", id: "about", path: "/", delay: 0.2 },
     { name: "Criteria", id: "criteria", path: "/", delay: 0.25 },
     { name: "Team", id: "team", path: "/", delay: 0.3 },
-    { name: "Portal", id: "portal", path: "/portal", delay: 0.35 },
+    //{ name: "Portal", id: "portal", path: "/portal", delay: 0.35 },
     // separate page for sponsor inquiries
     { name: "Sponsor", id: "sponsor-page", path: "/sponsor", delay: 0.4 }
   ];
