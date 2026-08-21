@@ -694,7 +694,7 @@ const Hero = () => {
           IN PARTNERSHIP WITH
         </div>
         <div className="flex flex-row items-end space-x-2">
-        <motion.a
+        {/*<motion.a
           href="https://www.codestack.org" 
           target="_blank"
           rel="noopener noreferrer"
@@ -706,7 +706,7 @@ const Hero = () => {
             CODESTACK
           </span>
           <img src={cs} alt="CodeStack Logo" className="w-6 h-6 sm:w-8 sm:h-8 rounded-md sm:rounded-lg" />
-        </motion.a>
+        </motion.a>*/}
 
         <motion.a
           href="https://hcb.hackclub.com/donations/start/codecatalyst" 
@@ -745,12 +745,12 @@ const Hero = () => {
 
           {/* Event name */}
           <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-300 dark:to-blue-100">
-            Sierra<span className="text-blue-500">Hacks</span> 2025
+            Sierra<span className="text-blue-500">Hacks</span> 2026
           </h1>
 
           {/* Date and location */}
                 <h2 className="text-xl md:text-2xl text-blue-700 dark:text-white font-light flex justify-center items-center space-x-2 text-center">
-                <span>Nov 15, 2025 •</span>
+                <span>Oct 24, 2026 •</span>
                 <a
                   href="https://www.google.com/maps/place/Sierra+High+School/@37.7925198,-121.2458948,1539m/data=!3m2!1e3!4b1!4m6!3m5!1s0x809040691efd4429:0xbaa4e817e5d16dcf!8m2!3d37.7925198!4d-121.2433199!16s%2Fm%2F04cw651?entry=ttu&g_ep=EgoyMDI1MTEwNS4wIKXMDSoASAFQAw%3D%3D"
                   target="_blank"

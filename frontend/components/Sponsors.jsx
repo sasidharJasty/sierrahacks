@@ -26,7 +26,7 @@ export default function Sponsors() {
       url: "https://www.codestack.org/",
     },
     
-    {
+    /*{
       name: "XYZ",
       logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/.xyz_logo.svg/800px-.xyz_logo.svg.png",
       tier: "Gold",
@@ -49,7 +49,7 @@ export default function Sponsors() {
       logo: "https://1000logos.net/wp-content/uploads/2021/04/Costco-logo.png",
       tier: "Bronze",
       url: "https://www.costco.com",
-    }
+    }*/
   ];
 
   const tierRank = { Fisical: 1, Platinum: 0, Gold: 2, Silver: 3, Bronze: 4 };

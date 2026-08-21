@@ -16,7 +16,7 @@ const Members = () => {
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
     
-    {
+    /*{
       name: "Jayanth Bandaru",
       role: "Marketing and Finance",
       bio: "Driving outreach and managing finances to ensure a successful and well-funded event.",
@@ -46,7 +46,7 @@ const Members = () => {
       role: "Organizer",
       bio: "Spreading the word about SierraHacks to attract diverse participants.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
-    },
+    },*/
 
     
   ];

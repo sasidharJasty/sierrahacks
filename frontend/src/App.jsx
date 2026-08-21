@@ -30,12 +30,12 @@ function AppShell() {
             <Route path="/" element={<HomePage />} />
             <Route path="/sponsor" element={<SponsorPage />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/portal" element={<Portal />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/admin/scan" element={<AdminScan />} />
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/judging" element={<AdminJudging />} />
-            <Route path="/submission-countdown" element={<SubmissionCountdown />} />
+            {/* <Route path="/portal" element={<Portal />} /> */}
+            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+            {/* <Route path="/admin/scan" element={<AdminScan />} /> */}
+            {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
+            {/* <Route path="/admin/judging" element={<AdminJudging />} /> */}
+            {/* <Route path="/submission-countdown" element={<SubmissionCountdown />} /> */}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
