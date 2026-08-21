@@ -775,7 +775,7 @@ const Hero = () => {
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Hackers</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-500 font-mono">13</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-500 font-mono">12</div>
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Hours</div>
             </div>
             <div className="text-center">
