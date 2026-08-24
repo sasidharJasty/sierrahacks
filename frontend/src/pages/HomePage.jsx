@@ -1,5 +1,6 @@
 import React from 'react'
 import Hero from '../../components/Hero'
+import AboutSection from '../../components/AboutSection'
 
 import Timeline from '../../components/Timeline'
 import Criteria from '../../components/Criteria'
@@ -12,6 +13,7 @@ const HomePage = () => {
   return (
     <>
       <Hero />
+      <AboutSection />
       <Sponsors />
       <Timeline />
       <FAQ />

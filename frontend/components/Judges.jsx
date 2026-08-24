@@ -38,8 +38,8 @@ const Judges = () => {
   ];
 
   return (
-    <div id="judges" className="relative py-20 bg-[#D9E7FD] dark:bg-gray-900">
-      {/* Terminal matrix code effect */}
+    <div id="judges" className="relative overflow-hidden bg-black/70 py-24">
+      {/* Quiet data rain */}
       <div className="absolute inset-0 opacity-5 dark:opacity-10 overflow-hidden">
         {[...Array(15)].map((_, i) => (
           <motion.div
@@ -73,11 +73,11 @@ const Judges = () => {
           transition={{ duration: 0.5 }}
           className="mb-12 text-center"
         >
-          <h2 className="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-4 font-mono">
-            Judges<span className="text-blue-600 dark:text-blue-500 animate-pulse">_</span>
+          <h2 className="mb-4 font-mono text-4xl font-bold text-blue-100">
+            Judges<span className="ml-2 text-[#0E43B6] animate-pulse">✦</span>
           </h2>
-          <p className="text-blue-800/80 dark:text-blue-200/80 max-w-2xl mx-auto font-mono">
-            <span className="text-green-600 dark:text-green-400">$</span> ls -la ./experts/
+          <p className="mx-auto max-w-2xl font-mono text-blue-300/70">
+            <span className="text-[#0E43B6]">///</span> A panel of curious experts
           </p>
         </motion.div>
 
@@ -89,16 +89,15 @@ const Judges = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-              className="border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg"
+              className="overflow-hidden border border-[#0E43B6]/50 bg-black shadow-[0_0_24px_rgba(14,67,182,0.14)] transition-colors hover:border-[#0E43B6]"
             >
-              {/* Terminal header */}
-              <div className="bg-blue-100/80 dark:bg-gray-800/80 px-3 py-1.5 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
+              <div className="flex items-center border-b border-[#0E43B6]/35 bg-[#0E43B6]/10 px-3 py-1.5">
                 <div className="flex space-x-1.5 mr-3">
                   <div className="w-2 h-2 rounded-full bg-red-400/70"></div>
                   <div className="w-2 h-2 rounded-full bg-yellow-400/70"></div>
                   <div className="w-2 h-2 rounded-full bg-green-400/70"></div>
                 </div>
-                <div className="flex-1 text-center font-mono text-xs text-blue-500/70 dark:text-blue-300/70 truncate">{judge.name.toLowerCase().replace(' ', '-')}.json</div>
+                <div className="flex-1 text-center font-mono text-xs text-blue-300/70 truncate">expert profile / {String(index + 1).padStart(2, "0")}</div>
               </div>
 
               {/* Image */}

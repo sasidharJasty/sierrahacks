@@ -243,7 +243,7 @@ const SponsorPage = () => {
   return (
     <div
       id="sponsor"
-      className="relative py-20 bg-[#D9E7FD] dark:bg-gray-900 overflow-hidden"
+      className="relative min-h-screen overflow-hidden bg-black py-20 text-blue-100"
     >
       <div className="absolute inset-0 opacity-5 dark:opacity-10">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -283,7 +283,7 @@ const SponsorPage = () => {
           </h2>
           <p className="text-blue-800/80 dark:text-blue-200/80 max-w-2xl mx-auto font-mono">
             <span className="text-green-600 dark:text-green-400">$</span>{" "}
-            ./sponsor-opportunities.sh
+            Explore ways to power the next build
           </p>
         </motion.div>
 
@@ -294,8 +294,8 @@ const SponsorPage = () => {
           transition={{ duration: 0.5 }}
           className="max-w-4xl mx-auto mb-12"
         >
-          <div className="border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg">
-            <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-2 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
+          <div className="overflow-hidden border border-[#0E43B6]/60 bg-black/80 shadow-[0_0_28px_rgba(14,67,182,0.16)]">
+            <div className="flex items-center border-b border-[#0E43B6]/40 bg-[#0E43B6]/10 px-4 py-2">
               <div className="flex space-x-2 mr-4">
                 <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
                 <div className="w-3 h-3 rounded-full bg-yellow-400/70"></div>
@@ -378,23 +378,22 @@ const SponsorPage = () => {
           transition={{ duration: 0.5 }}
           className="max-w-6xl mx-auto mb-16"
         >
-          <div className="border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg">
-            {/* Terminal header - existing code */}
-            <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-2 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
+          <div className="overflow-hidden border border-[#0E43B6]/60 bg-black/80 shadow-[0_0_28px_rgba(14,67,182,0.16)]">
+            <div className="flex items-center border-b border-[#0E43B6]/40 bg-[#0E43B6]/10 px-4 py-2">
               <div className="flex space-x-2 mr-4">
                 <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
                 <div className="w-3 h-3 rounded-full bg-yellow-400/70"></div>
                 <div className="w-3 h-3 rounded-full bg-green-400/70"></div>
               </div>
               <div className="flex-1 text-center font-mono text-xs text-blue-500/70 dark:text-blue-300/70">
-                sponsorship-tiers.sh — terminal — 112×32
+                Sponsorship levels / choose your signal
               </div>
             </div>
 
             <div className="p-4 sm:p-6">
               <div className="mb-6 font-mono text-blue-800 dark:text-blue-300">
                 <span className="text-green-600 dark:text-green-400">$</span>{" "}
-                ./compare-tiers.sh{" "}
+                Compare ways to contribute{" "}
                 <span className="text-yellow-600 dark:text-yellow-400">
                   --format=table --show-all
                 </span>
@@ -606,11 +605,10 @@ const SponsorPage = () => {
                 </div>
               </div>
 
-              {/* Terminal Prompt Footer */}
               <div className="mt-8 pt-4 border-t border-blue-200/50 dark:border-blue-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between font-mono text-sm gap-4">
                 <div className="text-blue-600/70 dark:text-blue-300/70">
-                  <span className="text-green-600 dark:text-green-400">$</span>{" "}
-                  Found {sponsorshipTiers.length} tiers. Use '--help' for more options.
+                  <span className="text-[#0E43B6]">///</span>{" "}
+                  {sponsorshipTiers.length} partnership levels available.
                 </div>
 
                 <motion.button
@@ -658,15 +656,15 @@ const SponsorPage = () => {
             transition={{ duration: 0.5 }}
             className="max-w-2xl mx-auto"
           >
-            <div className="border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg">
-              <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-2 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
+            <div className="overflow-hidden border border-[#0E43B6]/60 bg-black/80 shadow-[0_0_28px_rgba(14,67,182,0.16)]">
+              <div className="flex items-center border-b border-[#0E43B6]/40 bg-[#0E43B6]/10 px-4 py-2">
                 <div className="flex space-x-2 mr-4">
                   <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
                   <div className="w-3 h-3 rounded-full bg-yellow-400/70"></div>
                   <div className="w-3 h-3 rounded-full bg-green-400/70"></div>
                 </div>
                 <div className="flex-1 text-center font-mono text-xs text-blue-500/70 dark:text-blue-300/70">
-                  contact-us.sh — bash — 80×24
+                  Partnership desk / open channel
                 </div>
               </div>
 
@@ -677,7 +675,7 @@ const SponsorPage = () => {
                   </span>
                   <span className="font-mono text-blue-700 dark:text-blue-300">
                     {" "}
-                    ./contact-form.sh --inquiry=sponsor
+                    Send a partnership inquiry
                   </span>
                 </div>
 
@@ -863,7 +861,7 @@ const SponsorPage = () => {
             </div>
           </motion.div>
         </motion.div>
-      {/* Terminal grid background */}
+      {/* Previous partner placeholders */}
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -873,15 +871,14 @@ const SponsorPage = () => {
           className="max-w-4xl mx-auto mt-16 text-center"
         >
           <h3 className="text-2xl font-mono text-blue-700 dark:text-blue-300 mb-8">
-            <span className="text-green-600 dark:text-green-400">$</span> cat
-            previous-sponsors.txt
+            <span className="text-[#0E43B6]">///</span> Previous partners
           </h3>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
             {[...Array(8)].map((_, i) => (
               <div
                 key={i}
-                className="bg-white/50 dark:bg-gray-800/50 h-16 rounded-lg flex items-center justify-center p-4 border border-blue-200/30 dark:border-blue-500/20 shadow-sm"
+                className="h-16 rounded-lg flex items-center justify-center border border-[#0E43B6]/25 bg-[#0E43B6]/[0.04] p-4 shadow-[0_0_16px_rgba(14,67,182,0.08)]"
               >
                 <div className="bg-blue-200/30 dark:bg-blue-900/30 w-full h-6 rounded animate-pulse"></div>
               </div>
@@ -904,10 +901,10 @@ const SponsorPage = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
               transition={{ type: "spring", bounce: 0.2 }}
-              className="bg-white dark:bg-gray-900 max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-lg shadow-xl border border-blue-300/30 dark:border-blue-700/30"
+              className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-lg border border-[#0E43B6]/60 bg-[#030712] text-blue-100 shadow-[0_0_36px_rgba(14,67,182,0.24)]"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-3 sticky top-0 z-10 flex items-center justify-between border-b border-blue-200/50 dark:border-blue-500/20">
+              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[#0E43B6]/40 bg-[#0E43B6]/10 px-4 py-3">
                 <div className="flex items-center">
                   <div className="flex space-x-2 mr-4">
                     <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
@@ -915,7 +912,7 @@ const SponsorPage = () => {
                     <div className="w-3 h-3 rounded-full bg-green-400/70"></div>
                   </div>
                   <div className="font-mono text-sm text-blue-700 dark:text-blue-300">
-                    inquire.sh --tier={selectedTier.name.toLowerCase()}
+                    Partnership inquiry / {selectedTier.name}
                   </div>
                 </div>
                 <button
@@ -959,10 +956,8 @@ const SponsorPage = () => {
                 <form onSubmit={handleDetailedSubmit} className="space-y-6 font-mono">
                   <div className="border-b border-blue-200/50 dark:border-blue-700/30 pb-6">
                     <h4 className="text-blue-800 dark:text-blue-200 font-mono text-sm mb-4 flex items-center">
-                      <span className="text-green-600 dark:text-green-400 mr-2">
-                        $
-                      </span>
-                      cat contact-information.txt
+                      <span className="mr-2 text-[#0E43B6]">+</span>
+                      Contact details
                     </h4>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1036,10 +1031,8 @@ const SponsorPage = () => {
 
                   <div className="border-b border-blue-200/50 dark:border-blue-700/30 pb-6">
                     <h4 className="text-blue-800 dark:text-blue-200 font-mono text-sm mb-4 flex items-center">
-                      <span className="text-green-600 dark:text-green-400 mr-2">
-                        $
-                      </span>
-                      cat company-information.txt
+                      <span className="mr-2 text-[#0E43B6]">+</span>
+                      Company details
                     </h4>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1131,10 +1124,8 @@ const SponsorPage = () => {
 
                   <div className="border-b border-blue-200/50 dark:border-blue-700/30 pb-6">
                     <h4 className="text-blue-800 dark:text-blue-200 font-mono text-sm mb-4 flex items-center">
-                      <span className="text-green-600 dark:text-green-400 mr-2">
-                        $
-                      </span>
-                      cat sponsorship-details.txt
+                      <span className="mr-2 text-[#0E43B6]">+</span>
+                      Partnership details
                     </h4>
 
                     <div className="space-y-4">

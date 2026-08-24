@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm border-t border-blue-200/30 dark:border-blue-800/30 py-8">
+    <footer className="bg-black border-t border-[#0E43B6]/50 py-10">
       <div className="container mx-auto px-20">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div className="mb-6 md:mb-0">
             <Link to="/" className="text-xl font-bold flex items-center justify-center md:justify-start">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-sky-500 dark:from-blue-300 dark:to-blue-100">
+              <span className="text-blue-200">
                 Sierra
               </span>
-              <span className="text-blue-600 dark:text-blue-400">Hacks</span>
+              <span className="text-[#0E43B6]">Hacks</span>
             </Link>
             <p className="mt-2 text-center md:text-left text-sm text-blue-700/70 dark:text-blue-300/70">
             A 12-hour coding marathon where innovation meets collaboration!

@@ -36,8 +36,8 @@ const Criteria = () => {
   ];
 
   return (
-    <div id="criteria" className="relative py-20 bg-[#D9E7FD] dark:bg-gray-900">
-      {/* Terminal scanlines effect */}
+    <div id="criteria" className="relative overflow-hidden bg-black/70 py-24">
+      {/* Fine scoring grid */}
       <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.03] pointer-events-none">
         <div style={{
           backgroundImage: 'linear-gradient(0deg, rgba(30, 64, 175, 0.2) 1px, transparent 1px)',
@@ -53,35 +53,19 @@ const Criteria = () => {
           transition={{ duration: 0.5 }}
           className="mb-12 text-center"
         >
-          <h2 className="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-4 font-mono">
-            Criteria<span className="text-blue-600 dark:text-blue-500 animate-pulse">_</span>
+          <h2 className="mb-4 font-mono text-4xl font-bold text-blue-100">
+            Criteria<span className="ml-2 text-[#0E43B6] animate-pulse">✦</span>
           </h2>
-          <p className="text-blue-800/80 dark:text-blue-200/80 max-w-2xl mx-auto font-mono">
-            <span className="text-green-600 dark:text-green-400">$</span> ./evaluate-projects --criteria
+          <p className="mx-auto max-w-2xl font-mono text-blue-300/70">
+            <span className="text-[#0E43B6]">///</span> How projects become standouts
           </p>
         </motion.div>
 
         <div className="max-w-4xl mx-auto">
-          {/* Terminal window */}
-          <div className="border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg">
-            {/* Terminal header */}
-            <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-2 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
-              <div className="flex space-x-2 mr-4">
-                <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-400/70"></div>
-                <div className="w-3 h-3 rounded-full bg-green-400/70"></div>
-              </div>
-              <div className="flex-1 text-center font-mono text-xs text-blue-500/70 dark:text-blue-300/70">
-                criteria.json — bash — 80×24
-              </div>
-            </div>
-
-            {/* Terminal content */}
+          <div className="overflow-hidden bg-black">
             <div className="p-6 font-mono">
-              <div className="mb-4 text-blue-700 dark:text-blue-300">
-                <span className="text-blue-800 dark:text-blue-400">const</span> <span className="text-green-600 dark:text-green-400">judgingCriteria</span> <span className="text-blue-700 dark:text-blue-300">=</span> <span className="text-blue-800 dark:text-yellow-300">[</span>
-              </div>
-              
+
+
               {criteria.map((criterion, index) => (
                 <motion.div 
                   key={index}
@@ -89,9 +73,9 @@ const Criteria = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="mb-4 pl-6"
+                  className="mb-4 pl-6 shadow-[0_0_28px_rgba(14,67,182,0.16)] hover:scale-[1.05] transition-transform ease-in-out duration-300"
                 >
-                  <div className="bg-blue-100/50 dark:bg-blue-900/10 border border-blue-300/30 dark:border-blue-500/20 rounded-lg p-4">
+                  <div className="rounded-lg border border-[#0E43B6]/35 bg-[#0E43B6]/[0.06] p-4">
                     <div className="flex items-center mb-3">
                       <span className="text-2xl mr-3">{criterion.icon}</span>
                       <span className="text-blue-800 dark:text-blue-100 font-bold">{criterion.name}</span>
@@ -118,12 +102,10 @@ const Criteria = () => {
                 </motion.div>
               ))}
               
-              <div className="mt-2 text-blue-700 dark:text-blue-300">
-                <span className="text-blue-800 dark:text-yellow-300">];</span>
-              </div>
+
               
               <div className="mt-6 text-blue-600/70 dark:text-blue-300/70 text-sm border-t border-blue-200/50 dark:border-blue-500/20 pt-4">
-                <span className="text-green-600 dark:text-green-400">$</span> All projects will be evaluated by our panel of judges using the above criteria. Scores from each criterion will be weighted and combined for a final score.
+                <span className="text-[#0E43B6]">///</span> Scores are weighted into one final project signal.
               </div>
             </div>
           </div>

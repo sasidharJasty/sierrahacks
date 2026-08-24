@@ -13,6 +13,7 @@ import AdminDashboard from './pages/AdminDashboard';
 import SubmissionCountdown from './pages/SubmissionCountdown';
 import AdminJudging from './pages/AdminJudging';
 import NotFound from './pages/NotFound';
+import StarfieldBackground from '../components/StarfieldBackground';
 import { NavbarVisibilityProvider, useNavbarVisibility } from './context/NavbarVisibilityContext';
 
 function AppShell() {
@@ -23,7 +24,9 @@ function AppShell() {
 
   return (
 
-      <div className="min-h-screen bg-blue-50 dark:bg-gray-900 text-blue-800 dark:text-blue-100">
+      <div className="min-h-screen bg-black text-blue-100">
+        <StarfieldBackground className="opacity-90" count={520} speed={0.35} parallax />
+        <div className="relative z-10">
         {shouldShowNavbar && <Navbar />}
         <main>
           <Routes>
@@ -40,6 +43,7 @@ function AppShell() {
           </Routes>
         </main>
         <Footer />
+        </div>
       </div>
 
   );

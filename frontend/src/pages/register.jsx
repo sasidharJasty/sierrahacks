@@ -239,7 +239,7 @@ export default function HackathonSignup() {
 
   if (submitted) {
     return (
-      <div className="relative min-h-screen py-20 bg-[#D9E7FD] dark:bg-gray-900 overflow-hidden">
+      <div className="relative min-h-screen overflow-hidden bg-black py-20 text-blue-100">
 
       <div className="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -304,7 +304,7 @@ export default function HackathonSignup() {
   }
 */
   /*return (
-    <div className="relative min-h-screen py-20 bg-[#D9E7FD] dark:bg-gray-900 overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-black py-20 text-blue-100">
      
       <div className="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">

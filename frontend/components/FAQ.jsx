@@ -42,8 +42,8 @@ const FAQ = () => {
   const toggle = (i) => setOpenIndex((prev) => (prev === i ? null : i));
 
   return (
-    <div id="about" className="relative py-20 bg-[#D9E7FD] dark:bg-gray-900 overflow-hidden">
-      {/* Terminal dot matrix background */}
+    <div id="faq" className="relative overflow-hidden bg-black/70 py-24">
+      {/* Soft signal field */}
       <div className="absolute inset-0 opacity-5 dark:opacity-10">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -63,30 +63,16 @@ const FAQ = () => {
           transition={{ duration: 0.5 }}
           className="mb-12 text-center"
         >
-          <h2 className="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-4 font-mono">
-            FAQ<span className="text-blue-600 dark:text-blue-500 animate-pulse">_</span>
+          <h2 className="mb-4 font-mono text-4xl font-bold text-blue-100">
+            FAQ<span className="ml-2 text-[#0E43B6] animate-pulse">✦</span>
           </h2>
-          <p className="text-blue-800/80 dark:text-blue-200/80 max-w-2xl mx-auto font-mono">
-            <span className="text-green-600 dark:text-green-400">$</span> frequently_asked_questions.sh
+          <p className="mx-auto max-w-2xl font-mono text-blue-300/70">
+            <span className="text-[#0E43B6]">///</span> Clear answers for the big build
           </p>
         </motion.div>
 
         <div className="max-w-3xl mx-auto">
-          {/* Terminal window container */}
-          <div className="border border-blue-300/30 dark:border-blue-500/30 rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg">
-            {/* Terminal header */}
-            <div className="bg-blue-100/80 dark:bg-gray-800/80 px-4 py-2 flex items-center border-b border-blue-200/50 dark:border-blue-500/20">
-              <div className="flex space-x-2 mr-4">
-                <div className="w-3 h-3 rounded-full bg-red-400/70"></div>
-                <div className="w-3 h-3 rounded-full bg-yellow-400/70"></div>
-                <div className="w-3 h-3 rounded-full bg-green-400/70"></div>
-              </div>
-              <div className="flex-1 text-center font-mono text-xs text-blue-500/70 dark:text-blue-300/70">
-                faq.sh — bash — 80×24
-              </div>
-            </div>
-
-            {/* Terminal content - changed to accordion */}
+          <div className="overflow-hidden border border-[#0E43B6]/60 bg-black shadow-[0_0_28px_rgba(14,67,182,0.16)]">
             <div className="p-4 font-mono">
               {faqItems.map((item, index) => (
                 <motion.div
@@ -102,11 +88,11 @@ const FAQ = () => {
                     onClick={() => toggle(index)}
                     aria-expanded={openIndex === index}
                     aria-controls={`faq-panel-${index}`}
-                    className="w-full text-left flex items-start justify-between gap-3 px-2 py-3 rounded-md hover:bg-blue-50/60 dark:hover:bg-white/5 transition-colors"
+                    className="flex w-full items-start justify-between gap-3 rounded-md border-b border-[#0E43B6]/20 px-2 py-3 text-left transition-colors hover:bg-[#0E43B6]/10"
                   >
                     <div className="text-green-600 dark:text-green-400 mb-0 flex items-start">
-                      <span className="mr-2">$</span>
-                      <span className="text-blue-700 dark:text-yellow-300 font-bold">{item.question}</span>
+                      <span className="mr-2 text-[#0E43B6]">+</span>
+                      <span className="font-bold text-blue-100">{item.question}</span>
                     </div>
 
                     {/* Chevron icon */}
@@ -150,7 +136,7 @@ const FAQ = () => {
                 className="text-blue-600/70 dark:text-blue-300/70 mt-6 pt-4 border-t border-blue-200/50 dark:border-blue-500/20"
               >
                 <div className="flex items-center text-sm">
-                  <span className="text-green-600 dark:text-green-400 mr-2">$</span>
+                  <span className="mr-2 text-[#0E43B6]">+</span>
                   <span>Still have questions? Contact us at <span className="text-blue-600 dark:text-blue-300 underline">support@sierrahacks.com</span></span>
                 </div>
               </motion.div>

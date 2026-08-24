@@ -77,7 +77,7 @@ const Navbar = () => {
     // 'sponsors' is an in-page section on the home route
     { name: "Sponsors", id: "sponsors", path: "/", delay: 0.1 },
     { name: "Timeline", id: "timeline", path: "/", delay: 0.15 },
-    { name: "FAQ", id: "about", path: "/", delay: 0.2 },
+    { name: "FAQ", id: "faq", path: "/", delay: 0.2 },
     { name: "Criteria", id: "criteria", path: "/", delay: 0.25 },
     { name: "Team", id: "team", path: "/", delay: 0.3 },
     //{ name: "Portal", id: "portal", path: "/portal", delay: 0.35 },
@@ -154,13 +154,16 @@ const Navbar = () => {
   
   return (
     <nav 
-      className={`fixed top-0  py-2 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "bg-gray-900/80 backdrop-blur-lg border-b border-blue-900/30 shadow-lg shadow-blue-900/10" 
-          : "dark:bg-transparent bg-gray-900/80 border-b border-blue-900/10"
-      }`}
+      className="fixed left-0 top-0 z-50 w-full bg-transparent px-3 pt-3"
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className={`relative mx-auto flex max-w-7xl items-center justify-between overflow-hidden rounded-2xl border px-4 py-2 backdrop-blur-xl transition-all duration-300 sm:px-6 ${isScrolled ? "border-[#0E43B6]/60 bg-black/95 shadow-[0_0_30px_rgba(14,67,182,0.24)]" : "border-[#0E43B6]/35 bg-black/80 shadow-[0_0_20px_rgba(14,67,182,0.12)]"}`}>
+        <motion.div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 opacity-40"
+          animate={{ backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
+          style={{ backgroundImage: "radial-gradient(ellipse at center, rgba(14,67,182,0.22), transparent 55%)", backgroundSize: "180% 100%" }}
+        />
         {/* Terminal-style Header with macOS Controls */}
         <div className="flex items-center">
           
@@ -189,7 +192,7 @@ const Navbar = () => {
                 animate={{ opacity: [1, 0.5, 1] }}
                 transition={{ duration: 2, repeat: Infinity }}
               />
-              <span className="text-green-400 ml-2 font-mono text-sm hidden sm:block">~</span>
+              <span className="ml-2 hidden font-mono text-sm text-[#0E43B6] sm:block">✦</span>
             </motion.div>
           </Link>
         </div>
@@ -229,7 +232,7 @@ const Navbar = () => {
             href="https://hcb.hackclub.com/donations/start/codecatalyst"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-md hover:shadow-lg hover:shadow-purple-500/25 transition-all relative overflow-hidden group border border-blue-400/20"
+            className="inline-flex items-center justify-center px-4 py-2 bg-[#0E43B6] text-white rounded-md hover:shadow-lg hover:shadow-purple-500/25 transition-all relative overflow-hidden group border border-blue-400/20"
             data-cursor-text="support()"
             data-cursor-color="#a855f7"
           >
@@ -243,7 +246,7 @@ const Navbar = () => {
             
             {/* Hover animation background */}
             <motion.div 
-              className="absolute inset-0 bg-gradient-to-r from-indigo-700 to-purple-700 z-0"
+              className="absolute inset-0 bg-[#0E43B6] z-0"
               initial={{ x: "-100%" }}
               whileHover={{ x: 0 }}
               transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
@@ -261,7 +264,7 @@ const Navbar = () => {
           {/* Desktop Navigation Register Button - FIXED */}
           <a
             href="/register"
-            className="inline-flex items-center justify-center px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-md hover:shadow-lg hover:shadow-blue-500/25 transition-all relative overflow-hidden group"
+            className="inline-flex items-center justify-center px-5 py-2 bg-[#0E43B6] text-white rounded-md hover:shadow-lg hover:shadow-blue-500/25 transition-all relative overflow-hidden group"
             data-cursor-text="register()"
             data-cursor-color="#3b82f6"
           >
@@ -275,7 +278,7 @@ const Navbar = () => {
             
             {/* Hover animation background */}
             <motion.div 
-              className="absolute inset-0 bg-blue-700 z-0"
+              className="absolute inset-0 bg-[#0E43B6] z-0"
               initial={{ x: "-100%" }}
               whileHover={{ x: 0 }}
               transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
@@ -327,7 +330,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden absolute top-full left-0 w-full bg-gray-900/95 backdrop-blur-md border-t border-blue-900/30 shadow-lg shadow-blue-900/10 overflow-hidden"
+            className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-md border-t border-[#0E43B6]/40 shadow-lg shadow-[#0E43B6]/20 overflow-hidden"
           >
             <div className="flex flex-col py-2">
               {navItems.map((item, index) => (
@@ -354,7 +357,7 @@ const Navbar = () => {
                     animate={{ x: 0, opacity: 1 }}
                     transition={{ delay: index * 0.05, duration: 0.2 }}
                   >
-                    {isItemActive(item) && <span className="text-green-500 mr-1">$</span>}
+                    {isItemActive(item) && <span className="mr-1 text-[#0E43B6]">✦</span>}
                     {item.name}
                   </motion.div>
                 </Link>
@@ -364,7 +367,7 @@ const Navbar = () => {
                 href="https://hcb.hackclub.com/donations/start/codecatalyst"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="m-6 mb-2 py-3 px-6 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-purple-500/25 transition-all border border-purple-400/20"
+                className="m-6 mb-2 py-3 px-6 bg-[#0E43B6] text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-purple-500/25 transition-all border border-purple-400/20"
                 data-cursor-text="support()"
                 data-cursor-color="#a855f7"
                 onClick={() => setIsOpen(false)}
@@ -392,7 +395,7 @@ const Navbar = () => {
                   }
                   setIsOpen(false);
                 }}
-                className="m-6 mt-2 py-3 px-6 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-blue-500/25 transition-all"
+                className="m-6 mt-2 py-3 px-6 bg-[#0E43B6] text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-blue-500/25 transition-all"
                 data-cursor-text="register()"
                 data-cursor-color="#3b82f6"
               >

@@ -126,9 +126,8 @@ export default function Sponsors() {
   const sorted = [...sponsors].sort((a, b) => tierRank[a.tier] - tierRank[b.tier]);
 
   return (
-    <div id="sponsor" className="relative py-20 bg-[#D9E7FD] dark:bg-gray-900 overflow-hidden">
-      {/* Terminal dot matrix background */}
-      <div className="absolute inset-0 opacity-5 dark:opacity-10 pointer-events-none">
+    <div id="sponsors" className="relative overflow-hidden bg-black/70 py-24">
+      <div className="pointer-events-none absolute inset-0 opacity-20" style={{ backgroundImage: "radial-gradient(circle at 20% 20%, rgba(14,67,182,0.3), transparent 32%), linear-gradient(115deg, transparent 0 48%, rgba(14,67,182,0.12) 49%, transparent 50%)", backgroundSize: "auto, 28px 28px" }}>
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="terminal-dots-sponsors" width="20" height="20" patternUnits="userSpaceOnUse">
@@ -141,11 +140,11 @@ export default function Sponsors() {
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="mb-12 text-center">
-          <h2 className="text-4xl font-bold text-blue-700 dark:text-blue-300 mb-2 font-mono">
-            Sponsors<span className="text-blue-600 dark:text-blue-500 animate-pulse">_</span>
+          <h2 className="mb-2 font-mono text-4xl font-bold text-blue-100">
+            Sponsors<span className="ml-2 text-[#0E43B6] animate-pulse">✦</span>
           </h2>
-          <p className="text-blue-800/80 dark:text-blue-200/80 font-mono">
-            <span className="text-green-600 dark:text-green-400">$</span> cat sponsors.txt
+          <p className="font-mono text-blue-300/70">
+            <span className="text-[#0E43B6]">///</span> Partners powering the build
           </p>
         </div>
 
@@ -165,12 +164,12 @@ export default function Sponsors() {
                 transition={{ delay: index * 0.05, duration: 0.4 }}
                 whileHover={{ y: -4, scale: 1.01 }}
                 // append sponsor.className so each sponsor can have custom classes
-                className={`border ${t.border} rounded-lg overflow-hidden bg-white/80 dark:bg-gray-900/60 backdrop-blur-sm shadow-lg ${t.cardGlow} transition-colors ${t.colSpan} cursor-pointer focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400/60 `}
+                className={`border ${t.border} rounded-lg overflow-hidden bg-black shadow-[0_0_24px_rgba(14,67,182,0.12)] ${t.colSpan} cursor-pointer transition-all hover:border-[#0E43B6] focus:outline-none focus:ring-2 focus:ring-[#0E43B6]`}
               >
                 {/* Tier color bar */}
                 <div className={`h-1.5 w-full bg-gradient-to-r ${t.bar}`} />
 
-                {/* Terminal header */}
+                {/* Sponsor identity strip */}
                 <div className={`${t.headerBg} px-3 py-1.5 flex items-center border-b ${t.border}`}>
                   <div className="flex space-x-1.5 mr-3">
                     <div className="w-2 h-2 rounded-full bg-red-400/70"></div>
@@ -178,7 +177,7 @@ export default function Sponsors() {
                     <div className="w-2 h-2 rounded-full bg-green-400/70"></div>
                   </div>
                   <div className="flex-1 text-center font-mono text-xs text-blue-500/70 dark:text-blue-300/70">
-                    sponsor-card.sh
+                    partner signal / {String(index + 1).padStart(2, "0")}
                   </div>
                 </div>
 
