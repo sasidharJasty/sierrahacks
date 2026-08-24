@@ -13,6 +13,7 @@ const Hero = () => {
       url: "/images/IMG_8336.JPG",
       description: "Ideas begin as a blank canvas and a room full of curious people.",
     },
+        { url: "/images/IMG_8511.JPG" },
     {
       url: "/images/IMG_8524.JPG",
       description: "Late-night building, bright screens, and one more feature to ship.",
@@ -29,10 +30,10 @@ const Hero = () => {
     { url: "/images/IMG_8434.JPG" },
     { url: "/images/IMG_8435.JPG" },
     { url: "/images/IMG_8451.JPG" },
-    { url: "/images/IMG_8477.JPG" },
+
     { url: "/images/IMG_8479.JPG" },
     { url: "/images/IMG_8483.JPG" },
-    { url: "/images/IMG_8511.JPG" },
+
   ];
   // Sync Tailwind dark mode with site/system/user preference
   useEffect(() => {
