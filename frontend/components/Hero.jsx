@@ -10,22 +10,29 @@ const Hero = () => {
 
   const slides = [
     {
-      url: "https://picsum.photos/400",
+      url: "/images/IMG_8336.JPG",
       description: "Ideas begin as a blank canvas and a room full of curious people.",
     },
     {
-      url: "https://picsum.photos/400?random=1",
+      url: "/images/IMG_8524.JPG",
       description: "Late-night building, bright screens, and one more feature to ship.",
     },
     {
-      url: "https://picsum.photos/400?random=2",
+      url: "/images/IMG_8388.JPG",
       description: "A little bit of chaos makes the best collaborations memorable.",
     },
     {
-      url: "https://picsum.photos/400?random=3",
+      url: "/images/IMG_8400.JPG",
       description: "The finished project is only part of the story. The people are the rest.",
     },
-
+    { url: "/images/IMG_8433.JPG" },
+    { url: "/images/IMG_8434.JPG" },
+    { url: "/images/IMG_8435.JPG" },
+    { url: "/images/IMG_8451.JPG" },
+    { url: "/images/IMG_8477.JPG" },
+    { url: "/images/IMG_8479.JPG" },
+    { url: "/images/IMG_8483.JPG" },
+    { url: "/images/IMG_8511.JPG" },
   ];
   // Sync Tailwind dark mode with site/system/user preference
   useEffect(() => {
@@ -87,7 +94,7 @@ const Hero = () => {
   };
 
   return (
-    <div id="home" className="relative min-h-screen bg-black/70 flex items-center justify-center overflow-hidden">
+    <div id="home" className="relative md:min-h-screen min-h-[120vh] bg-black/70 flex items-center justify-center overflow-hidden">
       {/* Enhanced dot matrix background with subtle animation */}
       <div className="absolute inset-0 opacity-10">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -156,7 +163,7 @@ const Hero = () => {
    
 
       {/* Main container */}
-      <div className="container mx-auto px-4 -mt-20 relative z-10 text-left max-w-8xl flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-16">
+      <div className="container mx-auto px-4 -mt-20 relative z-10 md:text-left text-center max-w-8xl flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -164,17 +171,17 @@ const Hero = () => {
           className="space-y-8"
         >
           {/* Logo icon */}
-          <div className="w-32 h-32 shadow-blue-500/10 dark:shadow-blue-500/5 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-xl mt-25 mb-[-10]">
+          <div className="w-32 h-32 shadow-blue-500/10 dark:shadow-blue-500/5 backdrop-blur-sm rounded-lg flex items-center justify-center shadow-xl mt-25 mb-[-10] hidden md:block">
             <img src={logo}  alt="SierraHacks logo" />
           </div>
 
           {/* Event name */}
-          <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-300 dark:to-blue-100">
+          <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-300 dark:to-blue-100 md:mt-0  mt-[0vh] ">
             Sierra<span className="text-blue-500">Hacks</span> 2026
           </h1>
 
           {/* Date and location */}
-                <h2 className="text-xl md:text-2xl text-blue-700 dark:text-white font-light flex justify-start items-center space-x-2 text-left">
+                <h2 className="text-xl md:text-2xl text-blue-700 dark:text-white font-light flex md:justify-start justify-center items-center space-x-2 md:text-left text:center">
                 <span>Oct 24, 2026 •</span>
                 <a
                   href="https://www.google.com/maps/place/Sierra+High+School/@37.7925198,-121.2458948,1539m/data=!3m2!1e3!4b1!4m6!3m5!1s0x809040691efd4429:0xbaa4e817e5d16dcf!8m2!3d37.7925198!4d-121.2433199!16s%2Fm%2F04cw651?entry=ttu&g_ep=EgoyMDI1MTEwNS4wIKXMDSoASAFQAw%3D%3D"
@@ -194,7 +201,7 @@ const Hero = () => {
           </p>
 
           {/* Key stats */}
-          <div className="flex justify-start gap-10 lg:gap-16">
+          <div className="flex md:justify-start justify-center gap-10 lg:gap-16">
             <div className="text-center">
               <div className="text-2xl font-bold text-blue-600 dark:text-blue-500 font-mono">175+</div>
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Hackers</div>
@@ -210,25 +217,25 @@ const Hero = () => {
           </div>
 
           {/* CTA buttons */}
-          <div className="w-full flex flex-col sm:flex-row justify-start items-start gap-4 pt-4 text-left">
-            <a href="/register" target="_blank" rel="noopener noreferrer">
+          <div className="w-full flex flex-col items-center gap-4 pt-4 text-center sm:flex-row sm:justify-center md:items-start md:justify-start md:text-left">
+            <a className="w-full sm:w-auto" href="/register" target="_blank" rel="noopener noreferrer">
               <motion.button
                 onClick={() => scrollToSection("register")}
-                className="bg-[#0E43B6] cursor-pointer hover:bg-[#0E43B6] text-white px-8 py-3 rounded-md font-semibold transition-colors group flex items-center justify-center shadow-lg shadow-blue-500/30 dark:shadow-blue-900/20"
+                className="group flex w-full items-center justify-center rounded-md bg-[#0E43B6] px-8 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-colors hover:bg-[#0E43B6] dark:shadow-blue-900/20 md:w-auto"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >
                 <span>Register Now</span>
-                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </motion.button>
             </a>
 
-            <a href="https://hcb.hackclub.com/donations/start/codecatalyst">
+            <a className="w-full sm:w-auto" href="https://hcb.hackclub.com/donations/start/codecatalyst">
               <motion.button
                 onClick={() => scrollToSection("about")}
-                className="cursor-pointer bg-[#0E43B6] dark:bg-blue-400 hover:bg-[#0E43B6] text-white px-8 py-3 rounded-md font-semibold min-w-full md:min-w-fit transition-colors border border-blue-500/30 dark:border-blue-400/20"
+                className="w-full cursor-pointer rounded-md border border-blue-500/30 bg-[#0E43B6] px-8 py-3 font-semibold text-white transition-colors hover:bg-[#0E43B6] dark:border-blue-400/20 dark:bg-blue-400 md:w-auto"
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
               >

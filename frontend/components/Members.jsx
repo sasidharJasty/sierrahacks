@@ -15,6 +15,19 @@ const Members = () => {
       bio: "Passionate about building tech communities and making hackathons accessible to everyone.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     },
+    {
+      name: "Sagar Shah",
+      role: "Finance Lead",
+      bio: "Dedicated to creating a positive and inclusive environment for all participants.",
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+    },
+    {
+      name: "Nihal Tiyyagura",
+      role: "Tech Lead",
+      bio: "Focused on connecting with sponsors and partners to enhance the hackathon experience with technology.",
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+    }
+
     
     /*{
       name: "Jayanth Bandaru",

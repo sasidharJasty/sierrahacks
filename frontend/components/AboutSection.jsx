@@ -32,17 +32,17 @@ const moments = [
 
 const photos = [
   {
-    src: "https://user-cdn.hackclub-assets.com/019d8423-5b27-7a55-9d01-26dcea5eb310/DSC05979.jpg",
+    src: "/images/IMG_8516.JPG",
     alt: "Hackers building projects together",
     label: "BUILD / 01",
   },
   {
-    src: "https://user-cdn.hackclub-assets.com/019d841d-0a05-789f-81f7-91c303a8a981/DSC05861.jpg",
+    src: "/images/IMG_8351.JPG",
     alt: "Participants collaborating",
     label: "CONNECT / 02",
   },
   {
-    src: "https://user-cdn.hackclub-assets.com/019d8407-5fb3-74b7-ac8f-ddfed30910e1/DSC05900.jpg",
+    src: "/images/IMG_8525.JPG",
     alt: "A hackathon workshop",
     label: "LEARN / 03",
   },

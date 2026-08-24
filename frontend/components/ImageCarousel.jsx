@@ -109,7 +109,7 @@ const ImageCarousel = ({ images, autoSlide = false, autoSlideInterval = 3000 }) 
             key={slideIndex}
             onClick={() => goToSlide(slideIndex)}
             aria-label={`Show image ${slideIndex + 1}`}
-            className={`h-2 w-6 transition-all duration-300 ${
+            className={`h-2 w-6 rounded-xl transition-all duration-300 ${
               currentIndex === slideIndex ? "bg-[#8bc3e6]" : "bg-slate-400/50"
             }`}
           />
