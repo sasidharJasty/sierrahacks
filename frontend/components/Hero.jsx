@@ -11,28 +11,49 @@ const Hero = () => {
   const slides = [
     {
       url: "/images/IMG_8336.JPG",
-      description: "Ideas begin as a blank canvas and a room full of curious people.",
+      description: "Students work on laptops as a teammate presents a project to the room.",
     },
-        { url: "/images/IMG_8511.JPG" },
+    {
+      url: "/images/IMG_8511.JPG",
+      description: "Students present an AI robot project on a classroom display.",
+    },
     {
       url: "/images/IMG_8524.JPG",
-      description: "Late-night building, bright screens, and one more feature to ship.",
+      description: "A student presents a project about challenges in coding education.",
     },
     {
       url: "/images/IMG_8388.JPG",
-      description: "A little bit of chaos makes the best collaborations memorable.",
+      description: "A mentor points at a laptop while helping a student debug a project.",
     },
     {
       url: "/images/IMG_8400.JPG",
-      description: "The finished project is only part of the story. The people are the rest.",
+      description: "Students collaborate around tables with laptops during the hackathon.",
     },
-    { url: "/images/IMG_8433.JPG" },
-    { url: "/images/IMG_8434.JPG" },
-    { url: "/images/IMG_8435.JPG" },
-    { url: "/images/IMG_8451.JPG" },
+    {
+      url: "/images/IMG_8433.JPG",
+      description: "Teammates gather around laptops and an electronics kit while building.",
+    },
+    {
+      url: "/images/IMG_8434.JPG",
+      description: "Two students work together on laptops at a shared table.",
+    },
+    {
+      url: "/images/IMG_8435.JPG",
+      description: "A team gathers around a laptop and hardware prototype during a demo.",
+    },
+    {
+      url: "/images/IMG_8451.JPG",
+      description: "Students explain their GlobalBridge project to an audience.",
+    },
 
-    { url: "/images/IMG_8479.JPG" },
-    { url: "/images/IMG_8483.JPG" },
+    {
+      url: "/images/IMG_8479.JPG",
+      description: "A team demonstrates a hardware project while others gather around to watch.",
+    },
+    {
+      url: "/images/IMG_8483.JPG",
+      description: "Two presenters walk through the GlobalBridge project on a large display.",
+    },
 
   ];
   // Sync Tailwind dark mode with site/system/user preference

@@ -1,8 +1,43 @@
 import React from "react";
 
 export default function HackathonSignup() {
+  return (
+    <iframe
+      src="https://luma.com/embed/event/evt-uT9MFE7qz6NbLq6/simple"
+      width="100%"
+      height="700"
+      frameBorder="0"
+      style={{
+        width: "100%",
+        border: "1px solid #bfcbda88",
+        borderRadius: "4px",
+        display: "block",
+        margin: "10vh auto",
+      }}
+      allow="fullscreen; payment"
+      aria-hidden="false"
+      tabIndex="0"
+      title="Hackathon Registration"
+    />
+  );
+}
+/*
+export default function HackathonSignup() {
   // External registration handled by Tally; redirect immediately
-  if (typeof window !== 'undefined') window.location.href = "https://tally.so/r/3XZxOO";
+  //if (typeof window !== 'undefined') window.location.href = "https://tally.so/r/3XZxOO";
+
+  return (
+    <iframe
+  src="https://luma.com/embed/event/evt-uT9MFE7qz6NbLq6/simple"
+  width="600"
+  height="450"
+  frameborder="0"
+  style="border: 1px solid #bfcbda88; border-radius: 4px;"
+  allow="fullscreen; payment"
+  aria-hidden="false"
+  tabindex="0"
+></iframe>
+  )
   /*const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [submitted, setSubmitted] = useState(false);
@@ -476,5 +511,6 @@ export default function HackathonSignup() {
         </div>
       </div>
     </div>
-  );*/
+  );
 }
+*/
