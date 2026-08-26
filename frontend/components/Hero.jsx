@@ -240,7 +240,7 @@ const Hero = () => {
 
           {/* CTA buttons */}
           <div className="w-full flex flex-col items-center gap-4 pt-4 text-center sm:flex-row sm:justify-center md:items-start md:justify-start md:text-left">
-            <a className="w-full sm:w-auto" href="/register" target="_blank" rel="noopener noreferrer">
+            <a className="w-full sm:w-auto" href="https://luma.com/7y8mmyo1?lm_source=sierrahacks-website" target="_blank" rel="noopener noreferrer">
               <motion.button
                 onClick={() => scrollToSection("register")}
                 className="group flex w-full items-center justify-center rounded-md bg-[#0E43B6] px-8 py-3 font-semibold text-white shadow-lg shadow-blue-500/30 transition-colors hover:bg-[#0E43B6] dark:shadow-blue-900/20 md:w-auto"

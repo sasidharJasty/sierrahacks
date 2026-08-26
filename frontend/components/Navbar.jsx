@@ -263,9 +263,10 @@ const Navbar = () => {
           
           {/* Desktop Navigation Register Button - FIXED */}
           <a
-            href="/register"
+            href="https://luma.com/7y8mmyo1?lm_source=sierrahacks-website"
             className="inline-flex items-center justify-center px-5 py-2 bg-[#0E43B6] text-white rounded-md hover:shadow-lg hover:shadow-blue-500/25 transition-all relative overflow-hidden group"
             data-cursor-text="register()"
+            target="_blank"
             data-cursor-color="#3b82f6"
           >
             {/* Text container with proper z-index */}
