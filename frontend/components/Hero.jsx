@@ -31,7 +31,7 @@ const Hero = () => {
   },
   {
     url: "/images/IMG_8433.JPG",
-    description: "Hands-on hardware innovation",
+    description: "Building real-world prototypes",
   },
   {
     url: "/images/IMG_8434.JPG",
@@ -39,7 +39,7 @@ const Hero = () => {
   },
   {
     url: "/images/IMG_8435.JPG",
-    description: "Building real-world prototypes",
+    description: "Hands-on hardware innovation",
   },
   {
     url: "/images/IMG_8451.JPG",
