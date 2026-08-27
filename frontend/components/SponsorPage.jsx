@@ -1,6 +1,19 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import emailjs from '@emailjs/browser';
 
+emailjs.init({
+  publicKey: 'q0VSXMXvZvvNhMZR4',
+  blockHeadless: true,
+  blockList: {
+    list: ['foo@emailjs.com', 'bar@emailjs.com'],
+    watchVariable: 'email',
+  },
+  limitRate: {
+    id: 'sponsorship-form',
+    throttle: 1000, // 1 request per second
+  },
+});
 
 
 const SponsorPage = () => {
@@ -163,155 +176,57 @@ const SponsorPage = () => {
   };
 
   // Handle detailed form submission
-  // Handle detailed form submission
-const handleDetailedSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
-
-  const formData = new FormData();
-
-  formData.append(
-    "access_key",
-    "c8c83104-c1d8-48a7-89ad-a43389c290de"
-  );
-
-  formData.append(
-    "subject",
-    `New ${selectedTier.name} Sponsorship Inquiry - SierraHacks`
-  );
-
-  formData.append(
-    "from_name",
-    "SierraHacks Sponsorship Form"
-  );
-
-  formData.append(
-    "tier",
-    `${selectedTier.name} (${selectedTier.price})`
-  );
-
-  formData.append("firstName", detailedFormData.firstName);
-  formData.append("lastName", detailedFormData.lastName);
-  formData.append("jobTitle", detailedFormData.jobTitle);
-  formData.append("email", detailedFormData.email);
-  formData.append("phone", detailedFormData.phone);
-  formData.append("company", detailedFormData.company);
-  formData.append("website", detailedFormData.website);
-  formData.append("industry", detailedFormData.industry);
-  formData.append("employeeCount", detailedFormData.employeeCount);
-  formData.append(
-    "interests",
-    detailedFormData.interests.join(", ")
-  );
-  formData.append(
-    "previousSponsor",
-    detailedFormData.previousSponsor
-  );
-  formData.append(
-    "hearAboutUs",
-    detailedFormData.hearAboutUs
-  );
-  formData.append(
-    "mailingAddress",
-    detailedFormData.mailingAddress
-  );
-  formData.append(
-    "additionalInfo",
-    detailedFormData.additionalInfo
-  );
-
-  try {
-    const response = await fetch(
-      "https://api.web3forms.com/submit",
-      {
-        method: "POST",
-        body: formData,
+  const handleDetailedSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+  
+    const templateParams = {
+      tier: selectedTier.name + " (" + selectedTier.price + ")",
+      firstName: detailedFormData.firstName,
+      lastName: detailedFormData.lastName,
+      email: detailedFormData.email,
+      phone: detailedFormData.phone,
+      company: detailedFormData.company,
+      jobTitle: detailedFormData.jobTitle,
+      website: detailedFormData.website,
+      industry: detailedFormData.industry,
+      employeeCount: detailedFormData.employeeCount,
+      mailingAddress: detailedFormData.mailingAddress,
+      interests: detailedFormData.interests.join(", "),
+      previousSponsor: detailedFormData.previousSponsor,
+      hearAboutUs: detailedFormData.hearAboutUs,
+      additionalInfo: detailedFormData.additionalInfo,
+    };
+  
+    emailjs.send(
+      'service_xvv7sft',       // found in EmailJS dashboard
+      'sponsorship_interest',  // your template ID
+      templateParams
+    ).then(
+      (response) => {
+        console.log("SUCCESS!", response.status, response.text);
+        setSubmitSuccess(true);
+        setIsPopupOpen(false);
+        setIsSubmitting(false);
+        // Clear form here...
+      },
+      (error) => {
+        console.error("FAILED...", error);
+        setIsSubmitting(false);
+        alert("Failed to send email. Please try again.");
       }
     );
-
-    const result = await response.json();
-
-    if (result.success) {
-      console.log("SUCCESS", result);
-
-      setSubmitSuccess(true);
-      setIsPopupOpen(false);
-
-      setDetailedFormData({
-        firstName: "",
-        lastName: "",
-        jobTitle: "",
-        email: "",
-        phone: "",
-        company: "",
-        website: "",
-        industry: "",
-        employeeCount: "",
-        interests: [],
-        additionalInfo: "",
-        mailingAddress: "",
-        hearAboutUs: "",
-        previousSponsor: "no"
-      });
-
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 5000);
-
-    } else {
-      throw new Error(result.message);
-    }
-
-  } catch (error) {
-    console.error("WEB3FORMS ERROR:", error);
-    alert("Failed to submit sponsorship request. Please try again.");
-  }
-
-  setIsSubmitting(false);
-};
+  };
   
 
   // Handle regular form submission
-  const handleSubmit = async (e) => {
-  e.preventDefault();
-  setIsSubmitting(true);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
 
-  const formData = new FormData();
-
-  formData.append(
-    "access_key",
-    "c8c83104-c1d8-48a7-89ad-a43389c290de"
-  );
-
-  formData.append(
-    "subject",
-    "New SierraHacks Partnership Inquiry"
-  );
-
-  formData.append(
-    "from_name",
-    "SierraHacks Website"
-  );
-
-  formData.append("name", formData.name);
-  formData.append("email", formData.email);
-  formData.append("company", formData.company);
-  formData.append("message", formData.message);
-
-  try {
-    const response = await fetch(
-      "https://api.web3forms.com/submit",
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
-
-    const result = await response.json();
-
-    if (result.success) {
+    setTimeout(() => {
+      setIsSubmitting(false);
       setSubmitSuccess(true);
-
       setFormData({
         name: "",
         email: "",
@@ -322,15 +237,8 @@ const handleDetailedSubmit = async (e) => {
       setTimeout(() => {
         setSubmitSuccess(false);
       }, 5000);
-    }
-
-  } catch (error) {
-    console.error(error);
-    alert("Failed to send message.");
-  }
-
-  setIsSubmitting(false);
-};
+    }, 1500);
+  };
 
   return (
     <div
@@ -930,10 +838,10 @@ const handleDetailedSubmit = async (e) => {
                         EMAIL:
                       </span>
                       <a
-                        href="mailto:sponsors@sierrahacks.tech"
+                        href="mailto:sponsors@sierrahacks.com"
                         className="ml-2 text-green-600 dark:text-green-400 hover:underline"
                       >
-                        sponsors@sierrahacks.tech
+                        sponsors@sierrahacks.com
                       </a>
                     </div>
                     <div className="flex items-center mt-1">
@@ -1045,10 +953,7 @@ const handleDetailedSubmit = async (e) => {
                   </div>
                 </div>
 
-                <form 
-  onSubmit={handleDetailedSubmit} 
-  className="space-y-6 font-mono"
->
+                <form onSubmit={handleDetailedSubmit} className="space-y-6 font-mono">
                   <div className="border-b border-blue-200/50 dark:border-blue-700/30 pb-6">
                     <h4 className="text-blue-800 dark:text-blue-200 font-mono text-sm mb-4 flex items-center">
                       <span className="mr-2 text-[#0E43B6]">+</span>

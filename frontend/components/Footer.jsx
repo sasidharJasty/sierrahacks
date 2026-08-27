@@ -54,8 +54,8 @@ const Footer = () => {
             <div>
               <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-3">Contact</h3>
               <ul className="space-y-2 text-sm">
-                <li className="text-blue-600 dark:text-blue-400"><a href="mailto:support@sierrahacks.tech" className="hover:underline">support@sierrahacks.tech</a></li>
-                <li className="text-blue-600 dark:text-blue-400"><a href="https://www.google.com/maps/place/Sierra+High+School/@37.7925198,-121.2458948,1539m/data=!3m2!1e3!4b1!4m6!3m5!1s0x809040691efd4429:0xbaa4e817e5d16dcf!8m2!3d37.7925198!4d-121.2433199!16s%2Fm%2F04cw651?entry=ttu&g_ep=EgoyMDI1MTEwNS4wIKXMDSoASAFQAw%3D%3D" className="hover:underline" target="_blank" rel="noopener noreferrer">Sierra High School</a></li>
+                <li className="text-blue-600 dark:text-blue-400">support@sierrahacks.com</li>
+                <li className="text-blue-600 dark:text-blue-400">Sierra High School</li>
               </ul>
             </div>
           </div>
