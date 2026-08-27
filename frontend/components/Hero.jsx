@@ -9,53 +9,51 @@ import ImageCarousel from "./ImageCarousel";
 const Hero = () => {
 
   const slides = [
-    {
-      url: "/images/IMG_8336.JPG",
-      description: "Students work on laptops as a teammate presents a project to the room.",
-    },
-    {
-      url: "/images/IMG_8511.JPG",
-      description: "Students present an AI robot project on a classroom display.",
-    },
-    {
-      url: "/images/IMG_8524.JPG",
-      description: "A student presents a project about challenges in coding education.",
-    },
-    {
-      url: "/images/IMG_8388.JPG",
-      description: "A mentor points at a laptop while helping a student debug a project.",
-    },
-    {
-      url: "/images/IMG_8400.JPG",
-      description: "Students collaborate around tables with laptops during the hackathon.",
-    },
-    {
-      url: "/images/IMG_8433.JPG",
-      description: "Teammates gather around laptops and an electronics kit while building.",
-    },
-    {
-      url: "/images/IMG_8434.JPG",
-      description: "Two students work together on laptops at a shared table.",
-    },
-    {
-      url: "/images/IMG_8435.JPG",
-      description: "A team gathers around a laptop and hardware prototype during a demo.",
-    },
-    {
-      url: "/images/IMG_8451.JPG",
-      description: "Students explain their GlobalBridge project to an audience.",
-    },
-
-    {
-      url: "/images/IMG_8479.JPG",
-      description: "A team demonstrates a hardware project while others gather around to watch.",
-    },
-    {
-      url: "/images/IMG_8483.JPG",
-      description: "Two presenters walk through the GlobalBridge project on a large display.",
-    },
-
-  ];
+  {
+    url: "/images/IMG_8336.JPG",
+    description: "A space to build and collaborate",
+  },
+  {
+    url: "/images/IMG_8511.JPG",
+    description: "Exploring AI and emerging technology",
+  },
+  {
+    url: "/images/IMG_8524.JPG",
+    description: "Turning ideas into solutions",
+  },
+  {
+    url: "/images/IMG_8388.JPG",
+    description: "Guidance from experienced mentors",
+  },
+  {
+    url: "/images/IMG_8400.JPG",
+    description: "A community of passionate creators",
+  },
+  {
+    url: "/images/IMG_8433.JPG",
+    description: "Hands-on hardware innovation",
+  },
+  {
+    url: "/images/IMG_8434.JPG",
+    description: "Learning through teamwork",
+  },
+  {
+    url: "/images/IMG_8435.JPG",
+    description: "Building real-world prototypes",
+  },
+  {
+    url: "/images/IMG_8451.JPG",
+    description: "Showcasing student innovation",
+  },
+  {
+    url: "/images/IMG_8479.JPG",
+    description: "Bringing concepts to life",
+  },
+  {
+    url: "/images/IMG_8483.JPG",
+    description: "Sharing ideas with the community",
+  },
+];
   // Sync Tailwind dark mode with site/system/user preference
   useEffect(() => {
     const root = document.documentElement;
