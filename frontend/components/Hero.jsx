@@ -231,7 +231,7 @@ const Hero = () => {
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">Hours</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-500 font-mono">$20K</div>
+              <div className="text-2xl font-bold text-blue-600 dark:text-blue-500 font-mono">$15K</div>
               <div className="text-blue-600/80 dark:text-blue-200/80 text-sm">In Prizes</div>
             </div>
           </div>
