@@ -3,6 +3,9 @@ import { motion } from "framer-motion";
 import shs from "../public/shs.png";
 import cs from "../public/codestack.jpg";
 
+import xyz from "../public/xyz.webp";
+import n8n from "../public/n8n_pink+white_logo.png";
+
 export default function Sponsors() {
   const sponsors = [
     {
@@ -26,12 +29,20 @@ export default function Sponsors() {
       url: "https://www.codestack.org/",
     },
     
-    /*{
+    {
       name: "XYZ",
-      logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/.xyz_logo.svg/800px-.xyz_logo.svg.png",
+      logo: xyz,
       tier: "Gold",
       url: "https://gen.xyz",
     },
+    {
+      name: "n8n",
+      logo: n8n,
+      tier: "Gold",
+      url: "https://n8n.io",
+    }
+    
+    /*
     {
       name: "Great Wolf Lodge",
       logo: "https://1000logos.net/wp-content/uploads/2020/08/Great-Wolf-Lodge-logo.png",
@@ -164,7 +175,7 @@ export default function Sponsors() {
                 transition={{ delay: index * 0.05, duration: 0.4 }}
                 whileHover={{ y: -4, scale: 1.01 }}
                 // append sponsor.className so each sponsor can have custom classes
-                className={`border ${t.border} rounded-lg overflow-hidden bg-black shadow-[0_0_24px_rgba(14,67,182,0.12)] ${t.colSpan} cursor-pointer transition-all hover:border-[#0E43B6] focus:outline-none focus:ring-2 focus:ring-[#0E43B6]`}
+                className={`border ${t.border} rounded-lg overflow-hidden bg-black shadow-[0_0_24px_rgba(14,67,182,0.12)] ${t.colSpan} cursor-pointer transition-all hover:border-[#0E43B6] focus:outline-none focus:ring-2 focus:ring-[#0E43B6] `}
               >
                 {/* Tier color bar */}
                 <div className={`h-1.5 w-full bg-gradient-to-r ${t.bar}`} />
@@ -182,8 +193,8 @@ export default function Sponsors() {
                 </div>
 
                 {/* Content */}
-                <div className="p-5 font-mono flex flex-col items-center text-center">
-                  <div className={`${t.logoWrap} rounded-md border ${t.border} flex items-center justify-center mb-4 ${t.ring}`}>
+                <div className={`p-5 font-mono flex flex-col items-center text-center ${sponsor.className ?? ""}`}>
+                  <div className={`${t.logoWrap} rounded-md border ${t.border} flex items-center justify-center mb-4 ${t.ring} `}>
                     <img
                       src={sponsor.logo}
                       alt={sponsor.name}

@@ -137,7 +137,7 @@ const FAQ = () => {
               >
                 <div className="flex items-center text-sm">
                   <span className="mr-2 text-[#0E43B6]">+</span>
-                  <span>Still have questions? Contact us at <span className="text-blue-600 dark:text-blue-300 underline">support@sierrahacks.com</span></span>
+                  <span>Still have questions? Contact us at <a href="mailto:admin@sierrahacks.tech" className="text-blue-600 dark:text-blue-300 underline">admin@sierrahacks.tech</a></span>
                 </div>
               </motion.div>
             </div>

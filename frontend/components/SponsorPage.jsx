@@ -838,10 +838,10 @@ const SponsorPage = () => {
                         EMAIL:
                       </span>
                       <a
-                        href="mailto:sponsors@sierrahacks.com"
+                        href="mailto:admin@sierrahacks.tech"
                         className="ml-2 text-green-600 dark:text-green-400 hover:underline"
                       >
-                        sponsors@sierrahacks.com
+                        admin@sierrahacks.tech
                       </a>
                     </div>
                     <div className="flex items-center mt-1">
