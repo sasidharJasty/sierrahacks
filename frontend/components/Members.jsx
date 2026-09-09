@@ -26,6 +26,12 @@ const Members = () => {
       role: "Tech Lead",
       bio: "Focused on connecting with sponsors and partners to enhance the hackathon experience with technology.",
       image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
+    },
+    {
+      name: "Gnanadeep Jasty",
+      role: "Organizer",
+      bio: "Focused on connecting with sponsors and partners to enhance the hackathon experience.",
+      image: "https://cdn.pixabay.com/photo/2020/07/01/12/58/icon-5359553_640.png"
     }
 
     
