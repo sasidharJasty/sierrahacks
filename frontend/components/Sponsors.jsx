@@ -18,7 +18,7 @@ export default function Sponsors() {
     {
       name: "Hack Club",
       logo: "https://assets.hackclub.com/hcb-light.png",
-      tier: "Fisical", // changed to a 2-wide tier
+      tier: "Physical",
       url: "https://hackclub.com",
       className: "invert dark:invert-0",
     },
@@ -28,7 +28,6 @@ export default function Sponsors() {
       tier: "Educational",
       url: "https://www.codestack.org/",
     },
-    
     {
       name: "XYZ",
       logo: xyz,
@@ -40,57 +39,32 @@ export default function Sponsors() {
       logo: n8n,
       tier: "Gold",
       url: "https://n8n.io",
-    }
-    
-    /*
-    {
-      name: "Great Wolf Lodge",
-      logo: "https://1000logos.net/wp-content/uploads/2020/08/Great-Wolf-Lodge-logo.png",
-      tier: "Gold",
-      url: "https://www.greatwolf.com",
     },
     {
-      name: "Bowlero",
-      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfCFMiQhnJ0lZB1Qv7T2qJ2qRGaNJrzgGqqw&s",
+      name: "YRI Science",
+      logo: "https://www.yriscience.com/yrilogo.png",
+      tier: "Gold",
+      url: "https://yriscience.com/",
+    },
+    {
+      name: "PCBWay",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJnEO2ob5CONqeeLQRgYxTrsikttvWubse98_g_Cos5A&s=10",
       tier: "Silver",
-      url: "https://www.bowlero.com",
+      url: "https://www.pcbway.com/",
     },
     {
       name: "Costco",
       logo: "https://1000logos.net/wp-content/uploads/2021/04/Costco-logo.png",
       tier: "Bronze",
       url: "https://www.costco.com",
-    }*/
+    },
   ];
 
-  const tierRank = { Fisical: 1, Platinum: 0, Gold: 2, Silver: 3, Bronze: 4 };
+  const tierRank = { Platinum: 0, Physical: 1, Educational: 2, Gold: 3, Silver: 4, Bronze: 5 };
 
   const tierStyles = {
-    Educational: {
-      colSpan: "md:col-span-1 lg:col-span-1",
-      cardGlow: "shadow-green-500/30 dark:shadow-green-500/20",
-      border: "border-green-400/60 dark:border-green-400/50",
-      headerBg: "bg-gradient-to-r from-green-100/90 to-slate-100/80 dark:from-gray-800/80 dark:to-green-900/40",
-      bar: "from-green-400/70 to-emerald-400/70",
-      badge: "bg-green-100/70 dark:bg-green-900/30 text-green-800 dark:text-green-100 border-green-300/60 dark:border-green-500/40",
-      logoWrap: "w-36 h-36 sm:w-40 sm:h-40 bg-white/90 dark:bg-gray-900/40",
-      ring: "ring-2 ring-green-400/60 dark:ring-green-400/40",
-      name: "text-green-900 dark:text-green-100",
-    },
-    Fisical: {
-      colSpan: "md:col-span-1 lg:col-span-1",
-      cardGlow: "shadow-green-500/30 dark:shadow-green-500/20",
-      border: "border-green-400/60 dark:border-green-400/50",
-      headerBg: "bg-gradient-to-r from-green-100/90 to-slate-100/80 dark:from-gray-800/80 dark:to-green-900/40",
-      bar: "from-green-400/70 to-emerald-400/70",
-      badge: "bg-green-100/70 dark:bg-green-900/30 text-green-800 dark:text-green-100 border-green-300/60 dark:border-green-500/40",
-      logoWrap: "w-36 h-36 sm:w-40 sm:h-40 bg-white/90 dark:bg-gray-900/40",
-      ring: "ring-2 ring-green-400/60 dark:ring-green-400/40",
-      name: "text-green-900 dark:text-green-100",
-    },
     Platinum: {
       colSpan: "md:col-span-2 lg:col-span-2",
-      cardGlow: "shadow-blue-500/30 dark:shadow-blue-500/20",
       border: "border-blue-400/60 dark:border-blue-400/50",
       headerBg: "bg-gradient-to-r from-blue-100/90 to-slate-100/80 dark:from-gray-800/80 dark:to-blue-900/40",
       bar: "from-blue-400/70 to-sky-400/70",
@@ -99,9 +73,28 @@ export default function Sponsors() {
       ring: "ring-2 ring-blue-400/60 dark:ring-blue-400/40",
       name: "text-blue-900 dark:text-blue-100",
     },
+    Physical: {
+      colSpan: "md:col-span-1 lg:col-span-1",
+      border: "border-green-400/60 dark:border-green-400/50",
+      headerBg: "bg-gradient-to-r from-green-100/90 to-slate-100/80 dark:from-gray-800/80 dark:to-green-900/40",
+      bar: "from-green-400/70 to-emerald-400/70",
+      badge: "bg-green-100/70 dark:bg-green-900/30 text-green-800 dark:text-green-100 border-green-300/60 dark:border-green-500/40",
+      logoWrap: "w-36 h-36 sm:w-40 sm:h-40 bg-white/90 dark:bg-gray-900/40",
+      ring: "ring-2 ring-green-400/60 dark:ring-green-400/40",
+      name: "text-green-900 dark:text-green-100",
+    },
+    Educational: {
+      colSpan: "md:col-span-1 lg:col-span-1",
+      border: "border-green-400/60 dark:border-green-400/50",
+      headerBg: "bg-gradient-to-r from-green-100/90 to-slate-100/80 dark:from-gray-800/80 dark:to-green-900/40",
+      bar: "from-green-400/70 to-emerald-400/70",
+      badge: "bg-green-100/70 dark:bg-green-900/30 text-green-800 dark:text-green-100 border-green-300/60 dark:border-green-500/40",
+      logoWrap: "w-36 h-36 sm:w-40 sm:h-40 bg-white/90 dark:bg-gray-900/40",
+      ring: "ring-2 ring-green-400/60 dark:ring-green-400/40",
+      name: "text-green-900 dark:text-green-100",
+    },
     Gold: {
       colSpan: "md:col-span-2 lg:col-span-2",
-      cardGlow: "shadow-amber-500/20 dark:shadow-amber-500/15",
       border: "border-amber-300/60 dark:border-amber-400/40",
       headerBg: "bg-gradient-to-r from-amber-100/80 to-yellow-100/70 dark:from-amber-900/30 dark:to-yellow-900/20",
       bar: "from-amber-400/80 to-yellow-400/80",
@@ -112,7 +105,6 @@ export default function Sponsors() {
     },
     Silver: {
       colSpan: "md:col-span-1 lg:col-span-1",
-      cardGlow: "shadow-slate-500/15 dark:shadow-slate-500/10",
       border: "border-slate-300/60 dark:border-slate-500/40",
       headerBg: "bg-gradient-to-r from-slate-100/80 to-gray-100/70 dark:from-slate-900/30 dark:to-gray-900/20",
       bar: "from-slate-300/80 to-gray-300/80",
@@ -123,7 +115,6 @@ export default function Sponsors() {
     },
     Bronze: {
       colSpan: "md:col-span-1 lg:col-span-1",
-      cardGlow: "shadow-orange-500/15 dark:shadow-orange-500/10",
       border: "border-orange-300/60 dark:border-orange-500/40",
       headerBg: "bg-gradient-to-r from-orange-100/80 to-amber-100/70 dark:from-orange-900/30 dark:to-amber-900/20",
       bar: "from-orange-400/80 to-amber-400/80",
@@ -174,13 +165,10 @@ export default function Sponsors() {
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.05, duration: 0.4 }}
                 whileHover={{ y: -4, scale: 1.01 }}
-                // append sponsor.className so each sponsor can have custom classes
                 className={`border ${t.border} rounded-lg overflow-hidden bg-black shadow-[0_0_24px_rgba(14,67,182,0.12)] ${t.colSpan} cursor-pointer transition-all hover:border-[#0E43B6] focus:outline-none focus:ring-2 focus:ring-[#0E43B6] `}
               >
-                {/* Tier color bar */}
                 <div className={`h-1.5 w-full bg-gradient-to-r ${t.bar}`} />
 
-                {/* Sponsor identity strip */}
                 <div className={`${t.headerBg} px-3 py-1.5 flex items-center border-b ${t.border}`}>
                   <div className="flex space-x-1.5 mr-3">
                     <div className="w-2 h-2 rounded-full bg-red-400/70"></div>
@@ -192,7 +180,6 @@ export default function Sponsors() {
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className={`p-5 font-mono flex flex-col items-center text-center ${sponsor.className ?? ""}`}>
                   <div className={`${t.logoWrap} rounded-md border ${t.border} flex items-center justify-center mb-4 ${t.ring} `}>
                     <img

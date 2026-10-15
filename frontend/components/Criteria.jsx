@@ -7,31 +7,31 @@ const Criteria = () => {
       name: "Innovation & Creativity",
       description: "Uniqueness and originality of the project. How different is it from existing solutions?",
       weight: 30,
-      icon: "💡"
+      icon: ""
     },
     {
       name: "Technical Implementation",
       description: "Complexity and efficiency of the solution. How well was it executed from a technical perspective?",
       weight: 25,
-      icon: "⚙️"
+      icon: ""
     },
     {
       name: "Design & UX",
       description: "Is the project well-designed and user-friendly? Does it provide a good user experience?",
       weight: 20,
-      icon: "🎨"
+      icon: ""
     },
     {
       name: "Relavence & Impact",
       description: "How well it addresses the given problem and its potential real-world impact.",
       weight: 15,
-      icon: "✅"
+      icon: ""
     },
     {
       name: "Presentation",
       description: "How well was the project presented? Was the demo clear and compelling?",
       weight: 10,
-      icon: "🎭"
+      icon: ""
     }
   ];
 
@@ -73,7 +73,7 @@ const Criteria = () => {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1, duration: 0.5 }}
-                  className="mb-4 pl-6 shadow-[0_0_28px_rgba(14,67,182,0.16)] hover:scale-[1.05] transition-transform ease-in-out duration-300"
+                  className="mb-4 ml-6 shadow-[0_0_28px_rgba(14,67,182,0.16)] hover:scale-[1.05] transition-transform ease-in-out duration-300"
                 >
                   <div className="rounded-lg border border-[#0E43B6]/35 bg-[#0E43B6]/[0.06] p-4">
                     <div className="flex items-center mb-3">
@@ -105,7 +105,7 @@ const Criteria = () => {
 
               
               <div className="mt-6 text-blue-600/70 dark:text-blue-300/70 text-sm border-t border-blue-200/50 dark:border-blue-500/20 pt-4">
-                <span className="text-[#0E43B6]">///</span> Scores are weighted into one final project signal.
+                <span className="text-[#0E43B6]">///</span> Scores are weighted into one final project score.
               </div>
             </div>
           </div>

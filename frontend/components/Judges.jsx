@@ -2,40 +2,12 @@ import React from "react";
 import { motion } from "framer-motion";
 
 const Judges = () => {
-  const judges = [
-    {
-      name: "Dr. Alexandra Chen",
-      role: "CTO, TechFuture Inc.",
-      expertise: "AI & Machine Learning",
-      image: "https://randomuser.me/api/portraits/women/29.jpg",
-      twitter: "@alexchen",
-      github: "alexchen"
-    },
-    {
-      name: "Michael Rodriguez",
-      role: "Lead Engineer, CloudWave",
-      expertise: "Cloud Architecture & DevOps",
-      image: "https://randomuser.me/api/portraits/men/32.jpg",
-      twitter: "@mrodriguez",
-      github: "mrodriguez"
-    },
-    {
-      name: "Sarah Washington",
-      role: "UX Director, DesignHub",
-      expertise: "UI/UX & Product Design",
-      image: "https://randomuser.me/api/portraits/women/44.jpg",
-      twitter: "@sarahw",
-      github: "sarahw"
-    },
-    {
-      name: "James Tran",
-      role: "VP Engineering, InnovateNow",
-      expertise: "Mobile & Web Development",
-      image: "https://randomuser.me/api/portraits/men/68.jpg",
-      twitter: "@jamestran",
-      github: "jamestran"
-    }
-  ];
+  const judges = Array.from({ length: 8 }, (_, index) => ({
+    name: "TBA",
+    role: "Judge announcement coming soon",
+    expertise: "To be announced",
+    number: index + 1,
+  }));
 
   return (
     <div id="judges" className="relative overflow-hidden bg-black/70 py-24">
@@ -81,7 +53,7 @@ const Judges = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
           {judges.map((judge, index) => (
             <motion.div
               key={index}
@@ -113,15 +85,11 @@ const Judges = () => {
                     ))}
                   </div>
                 </div>
-                <motion.div 
-                  className="w-28 h-28 rounded-full border-2 border-blue-300/40 dark:border-blue-500/40 overflow-hidden z-10"
+                <motion.div
+                  className="flex h-28 w-28 items-center justify-center rounded-full border-2 border-blue-300/40 font-mono text-xl text-blue-200/70 dark:border-blue-500/40 z-10"
                   whileHover={{ scale: 1.05 }}
                 >
-                  <img 
-                    src={judge.image} 
-                    alt={judge.name}
-                    className="w-full h-full object-cover"
-                  />
+                  TBA
                 </motion.div>
               </div>
 
@@ -143,13 +111,8 @@ const Judges = () => {
                 <div className="text-blue-700/80 dark:text-blue-300/80 text-sm mb-4">
                   <span className="text-blue-600 dark:text-blue-400 opacity-70">expertise:</span> {judge.expertise}
                 </div>
-                <div className="flex justify-between text-xs mt-2">
-                  <a href={`https://twitter.com/${judge.twitter}`} className="text-blue-600 dark:text-blue-400 hover:underline">
-                    {judge.twitter}
-                  </a>
-                  <a href={`https://github.com/${judge.github}`} className="text-blue-600 dark:text-blue-400 hover:underline">
-                    github/{judge.github}
-                  </a>
+                <div className="mt-2 text-xs text-blue-300/55">
+                  Judge {String(judge.number).padStart(2, "0")} / details coming soon
                 </div>
               </div>
             </motion.div>

@@ -96,7 +96,7 @@ const Timeline = () => {
         </motion.div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="border-l border-[#0E43B6]/60 bg-black/70 p-6 font-mono shadow-[0_0_28px_rgba(14,67,182,0.16)]">
+          <div className="rounded-xl border-l border-[#0E43B6]/60 bg-black/70 p-6 font-mono shadow-[0_0_28px_rgba(14,67,182,0.16)]">
               <div className="relative pl-8 border-l-2 border-blue-400/30 dark:border-blue-500/30">
                 {timelineData.map((item, index) => (
                   <motion.div
@@ -108,7 +108,7 @@ const Timeline = () => {
                     className="mb-8 relative"
                   >
                     {/* Terminal node */}
-                    <div className="absolute -left-[25px] w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/50 border-2 border-blue-500 dark:border-blue-400 flex items-center justify-center">
+                    <div className="absolute -left-[45px] top-[35px] w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/50 border-2 border-blue-500 dark:border-blue-400 flex items-center justify-center">
                       <div className="w-2 h-2 rounded-full bg-blue-500 dark:bg-blue-400 animate-pulse"></div>
                     </div>
 

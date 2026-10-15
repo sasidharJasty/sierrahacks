@@ -54,7 +54,7 @@ const AboutSection = () => (
     <div className="pointer-events-none absolute inset-0 opacity-40" style={{ backgroundImage: "radial-gradient(circle at 80% 15%, rgba(14,67,182,0.22), transparent 28%), radial-gradient(circle at 15% 80%, rgba(14,67,182,0.12), transparent 30%)" }} />
     <div className="pointer-events-none absolute left-1/2 top-0 h-px w-2/3 -translate-x-1/2 bg-gradient-to-r from-transparent via-[#0E43B6] to-transparent" />
 
-    <div className="relative z-10 mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+    <div className="relative z-10 container mx-auto px-4">
       <motion.div
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -62,20 +62,22 @@ const AboutSection = () => (
         transition={{ duration: 0.6 }}
         className="mb-14 max-w-3xl"
       >
-        <p className="mb-4 font-mono text-xs uppercase tracking-[0.28em] text-[#5d9aff]">SierraHacks / the experience</p>
-        <h2 className="max-w-2xl text-4xl font-black tracking-tight text-white sm:text-6xl">
-          12 hours of making, learning, and building something worth sharing.
+        <p className="mb-4 font-mono text-xs tracking-[0.2em] text-[#5d9aff]">SierraHacks / the experience</p>
+        <h2 className="mb-4 font-mono text-4xl font-bold text-blue-100">
+          Build, learn, and meet people<span className="ml-2 text-[#0E43B6] animate-pulse">✦</span>
         </h2>
-        <p className="mt-6 max-w-2xl text-base leading-relaxed text-blue-200/70 sm:text-lg">
-          SierraHacks brings high-school builders together at Sierra High School to turn curiosity into something you can demo, share, and be proud of.
+        <p className="font-mono text-blue-300/70">
+          <span className="text-[#0E43B6]">///</span> A 12-hour hackathon at Sierra High School for making things together.
         </p>
       </motion.div>
 
-      <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+      <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
         <div className="grid gap-3 sm:grid-cols-2">
-          {moments.map(({ icon: Icon, title, text }, index) => (
+          {moments.map((moment, index) => {
+            const momentIcon = moment.icon;
+            return (
             <motion.article
-              key={title}
+              key={moment.title}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -83,13 +85,14 @@ const AboutSection = () => (
               className={`group border border-[#0E43B6]/35 bg-[#0E43B6]/[0.05] p-5 transition-all hover:-translate-y-1 hover:border-[#5d9aff] hover:bg-[#0E43B6]/[0.11] ${index === 0 ? "sm:col-span-2" : ""}`}
             >
               <div className="mb-4 flex items-center justify-between">
-                <Icon className="text-xl text-[#5d9aff]" />
+                {React.createElement(momentIcon, { className: "text-xl text-[#5d9aff]", "aria-hidden": true })}
                 <span className="font-mono text-[10px] tracking-[0.2em] text-blue-300/45">0{index + 1}</span>
               </div>
-              <h3 className="font-bold text-white">{title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-blue-200/65">{text}</p>
+              <h3 className="font-bold text-white">{moment.title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-blue-200/65">{moment.text}</p>
             </motion.article>
-          ))}
+            );
+          })}
         </div>
 
         <div className="grid grid-cols-2 gap-3 sm:gap-4">

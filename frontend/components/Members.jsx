@@ -92,7 +92,7 @@ const Members = () => {
             Team Members<span className="ml-2 text-[#0E43B6] animate-pulse">✦</span>
           </h2>
           <p className="mx-auto max-w-2xl font-mono text-blue-300/70">
-            <span className="text-[#0E43B6]">///</span> The people behind the signal
+            <span className="text-[#0E43B6]">///</span> The people behind the event
           </p>
         </motion.div>
 
@@ -133,7 +133,7 @@ const Members = () => {
                   </div>
 
                   <div className="mt-4 bg-blue-100/50 dark:bg-blue-900/10 rounded p-3 border border-blue-300/30 dark:border-blue-500/20">
-                    <div className="mb-1 text-xs text-[#5d9aff]">FIELD NOTE</div>
+                    <div className="mb-1 text-xs text-[#5d9aff]">NOTES</div>
                     <div className="text-blue-100/85">{member.bio}</div>
                   </div>
 

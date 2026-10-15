@@ -55,7 +55,7 @@ const FAQ = () => {
         </svg>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
+      <div className="container mx-auto px-4 relative z-10 ">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -72,7 +72,7 @@ const FAQ = () => {
         </motion.div>
 
         <div className="max-w-3xl mx-auto">
-          <div className="overflow-hidden border border-[#0E43B6]/60 bg-black shadow-[0_0_28px_rgba(14,67,182,0.16)]">
+          <div className="overflow-hidden border border-[#0E43B6]/60 bg-black shadow-[0_0_28px_rgba(14,67,182,0.16)] rounded-xl">
             <div className="p-4 font-mono">
               {faqItems.map((item, index) => (
                 <motion.div
