@@ -183,7 +183,7 @@ const Hero = () => {
    
 
       {/* Main container */}
-      <div className="container mx-auto px-4 -mt-20 relative z-10 md:text-left text-center max-w-8xl flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-16">
+      <div className="container mx-auto px-4 md:-mt-20 mt-[10vh]  relative z-10 md:text-left text-center max-w-8xl flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -196,7 +196,7 @@ const Hero = () => {
           </div>
 
           {/* Event name */}
-          <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-300 dark:to-blue-100 md:mt-0  mt-[0vh] ">
+          <h1 className="text-5xl md:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-500 dark:from-blue-300 dark:to-blue-100 md:mt-0 sm:mt-[10vh] mt-[0vh] ">
             Sierra<span className="text-blue-500">Hacks</span> 2026
           </h1>
 
