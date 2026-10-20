@@ -10,7 +10,7 @@ const Timeline = () => {
     description: "Registration, check-in, and morning refreshments."
   },
   {
-    date: "8:45 AM - 9:30 AM",
+    date: "9:00 AM - 9:30 AM",
     title: "Opening Ceremony & Team Formation",
     description: "Welcome address, event overview, rules, and team formation."
   },
