@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useNavbarVisibility } from '../context/NavbarVisibilityContext'
 
-const TARGET_TIMESTAMP = new Date('2025-11-16T02:30:00Z').getTime()
+const TARGET_TIMESTAMP = new Date('2026-10-25T01:30:00Z').getTime()
 
 const getTimeParts = () => {
   const now = Date.now()
@@ -76,45 +76,46 @@ function SubmissionCountdown() {
   const toggleNavbar = () => setNavbarVisible((current) => !current)
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-blue-900 via-indigo-900 to-black">
+    <div className="relative min-h-screen bg-black text-blue-100">
       <div className="absolute right-4 top-4 z-20 sm:right-6 sm:top-6">
         <button
           type="button"
           onClick={toggleNavbar}
-          className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.3em] text-blue-100 shadow-lg backdrop-blur transition hover:border-white/40 hover:bg-white/20 sm:text-xs"
+          className="rounded border border-[#0E43B6]/60 px-4 py-2 text-[0.6rem] font-semibold uppercase tracking-[0.2em] text-blue-200 transition hover:border-cyan-300/60 hover:text-cyan-200 sm:text-xs"
         >
           {navbarVisible ? 'Hide navbar' : 'Show navbar'}
         </button>
       </div>
-      <div className="absolute inset-0 opacity-50" style={{ backgroundImage: 'radial-gradient(circle at 20% 20%, rgba(79, 209, 197, 0.35), transparent 55%), radial-gradient(circle at 80% 30%, rgba(136, 132, 255, 0.3), transparent 60%)' }} />
 
-      <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center px-4 pb-20 pt-28 text-center text-blue-50 sm:px-6">
-        <img src="/logo.png" alt="Sierra Hacks logo" className="h-16 w-16 rounded-full border border-white/10 bg-white/90 p-3 shadow-xl sm:h-20 sm:w-20" />
-        <p className="mt-6 text-xs uppercase tracking-[0.35em] text-cyan-200/80 sm:text-sm">Submission Countdown</p>
-        <h1 className="mt-4 bg-gradient-to-r from-cyan-300 via-blue-100 to-indigo-200 bg-clip-text text-3xl font-semibold text-transparent sm:text-5xl">
-          Final Submissions due on <br/> <span className="text-white">November 15 · 6:30PM PT</span>
-        </h1>
-        <p className="mt-4 max-w-2xl text-sm text-blue-200/90 sm:text-base">
+      <div className="relative z-10 mx-auto flex w-full max-w-4xl flex-col items-center px-4 pb-20 pt-28 sm:px-6">
+        <div className="w-full border-y border-[#0E43B6]/50 py-10 text-center text-blue-50 sm:py-14">
+          <div className="flex flex-col items-center">
+            <img src="/logo.png" alt="Sierra Hacks logo" className="h-16 w-16 rounded-lg border border-blue-500/30 bg-white/90 p-3 shadow-[0_0_24px_rgba(14,67,182,0.2)] sm:h-20 sm:w-20" />
+            <p className="mt-6 text-xs uppercase tracking-[0.35em] text-blue-400/80 sm:text-sm">Submission Countdown</p>
+            <h1 className="mt-4 text-3xl font-bold leading-tight text-blue-100 sm:text-5xl">
+              Final submissions due on <br/> <span className="text-blue-400">October 24 · 6:30PM PT</span>
+            </h1>
+            <p className="mt-4 max-w-2xl font-sans text-sm text-blue-200/80 sm:text-base">
           Polish your projects, rehearse your demo, and make sure everything is deployed. The clock is ticking—let&apos;s make the finish line unforgettable.
-        </p>
+            </p>
 
-        <div className="mt-10 grid w-full max-w-md grid-cols-2 gap-3 sm:max-w-none sm:grid-cols-4 sm:gap-4">
+            <div className="mt-10 grid w-full max-w-md grid-cols-2 gap-3 sm:max-w-none sm:grid-cols-4 sm:gap-4">
           {TIME_SEGMENTS.map(({ key, label }) => (
-            <div key={key} className="rounded-2xl border border-white/10 bg-white/10 p-5 shadow-lg backdrop-blur-md sm:p-6">
-              <div className="text-3xl font-bold tracking-tight text-white sm:text-5xl">
+            <div key={key} className="border border-[#0E43B6]/50 bg-blue-950/20 p-5 sm:p-6">
+              <div className="text-3xl font-bold tracking-tight text-blue-300 sm:text-5xl">
                 {String(timeRemaining[key]).padStart(2, '0')}
               </div>
-              <div className="mt-2 text-[0.65rem] uppercase tracking-[0.3em] text-blue-200/70 sm:text-xs">{label}</div>
+              <div className="mt-2 text-[0.65rem] uppercase tracking-[0.3em] text-blue-300/70 sm:text-xs">{label}</div>
             </div>
           ))}
-        </div>
+            </div>
 
-        <div className={statusPanel.className}>{statusPanel.message}</div>
+            <div className={`${statusPanel.className.replaceAll('rounded-2xl', 'rounded').replaceAll('backdrop-blur', '')} font-sans`}>{statusPanel.message}</div>
 
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-3 text-xs sm:gap-4 sm:text-sm">
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3 text-xs sm:gap-4 sm:text-sm">
           <Link
             to="/"
-            className="rounded-full border border-white/20 bg-white/10 px-6 py-3 font-medium text-blue-50 transition hover:border-white/40 hover:bg-white/20"
+            className="rounded border border-[#0E43B6]/60 bg-[#0E43B6]/20 px-6 py-3 font-medium text-blue-100 transition hover:border-cyan-300/60 hover:bg-[#0E43B6]/40"
           >
             Return to homepage
           </Link>
@@ -122,10 +123,12 @@ function SubmissionCountdown() {
             href="https://discord.gg/ADEZh8FRMm"
             target="_blank"
             rel="noreferrer"
-            className="rounded-full border border-cyan-300/50 bg-cyan-400/20 px-6 py-3 font-medium text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/30"
+            className="rounded border border-cyan-300/50 bg-cyan-400/10 px-6 py-3 font-medium text-cyan-100 transition hover:border-cyan-200 hover:bg-cyan-300/20"
           >
             Get last-minute help
           </a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

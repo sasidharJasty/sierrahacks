@@ -38,7 +38,7 @@ function AppShell() {
             {/* <Route path="/admin/scan" element={<AdminScan />} /> */}
             {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
             {/* <Route path="/admin/judging" element={<AdminJudging />} /> */}
-            {/* <Route path="/submission-countdown" element={<SubmissionCountdown />} /> */}
+            <Route path="/submission-countdown" element={<SubmissionCountdown />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
