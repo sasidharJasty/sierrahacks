@@ -10,6 +10,8 @@ import DietSwitch from '../../components/DietSwitch'
 import Card from '../../components/Card'
 import FormField from '../../components/FormField'
 import TeammatesInput from '../../components/TeammatesInput'
+import Participants from './Participants'
+import TeamWorkspace from '../components/TeamWorkspace'
 
 const FALLBACK_PROFILE_COLUMNS = [
   'id',
@@ -39,9 +41,9 @@ const FALLBACK_PROFILE_COLUMNS = [
 ]
 
 const WORKSHOP_OPTIONS = [
-  { key: 'website_workshop', label: 'Website workshop' },
-  { key: 'python_workshop', label: 'Python workshop' },
-  { key: 'ai_ml_workshop', label: 'AI / ML workshop' }
+  { key: 'python_workshop', label: 'Python 3 workshop' },
+  { key: 'website_workshop', label: 'n8n automation' },
+  { key: 'ai_ml_workshop', label: 'AI workshop' }
 ]
 
 const Dashboard = () => {
@@ -60,6 +62,8 @@ const Dashboard = () => {
   const { isDarkMode } = useTheme()
   const profileColumnsRef = useRef(null)
   const profileColumnTemplateRef = useRef(null)
+  const autoSaveReadyRef = useRef(false)
+  const [profileLoaded, setProfileLoaded] = useState(false)
 
   const ensureProfileColumns = useCallback(async () => {
     if (profileColumnsRef.current && profileColumnsRef.current.size) return profileColumnsRef.current
@@ -126,6 +130,7 @@ const Dashboard = () => {
       } else {
         await ensureProfileColumns()
       }
+      setProfileLoaded(true)
     }
 
     fetchProfile()
@@ -133,16 +138,15 @@ const Dashboard = () => {
 
   const handleChange = (k) => (e) => setProfile((p) => ({ ...p, [k]: e.target.value }))
 
-  const handleSave = async (e) => {
-    e.preventDefault()
+  const saveProfile = useCallback(async (profileToSave, silent = false) => {
     if (!user) return
     setSaving(true)
-    setMessage(null)
+    if (!silent) setMessage(null)
     try {
       const phonePattern = /^[0-9+()\s-]{7,}$/
 
       // normalize payload: convert empty strings to null to avoid inserting '' into integer/text columns
-      const payload = { id: user.id, email: user.email, ...profile }
+      const payload = { id: user.id, email: user.email, ...profileToSave }
       Object.keys(payload).forEach((k) => {
         if (typeof payload[k] === 'string' && payload[k].trim() === '') payload[k] = null
       })
@@ -211,15 +215,31 @@ const Dashboard = () => {
         }
         throw error
       }
-      setMessage({ type: 'success', text: 'Profile saved.' })
+      if (!silent) setMessage({ type: 'success', text: 'Profile saved.' })
+      else setMessage((current) => current?.type === 'error' ? null : current)
     } catch (err) {
       console.error('Save failed', err)
       setMessage({ type: 'error', text: err.message || String(err) })
     } finally {
       setSaving(false)
-      setTimeout(() => setMessage(null), 4000)
+      if (!silent) setTimeout(() => setMessage(null), 4000)
     }
+  }, [user, ensureProfileColumns])
+
+  const handleSave = (e) => {
+    e.preventDefault()
+    void saveProfile(profile)
   }
+
+  useEffect(() => {
+    if (!profileLoaded || !user) return
+    if (!autoSaveReadyRef.current) {
+      autoSaveReadyRef.current = true
+      return
+    }
+    const timer = setTimeout(() => { void saveProfile(profile, true) }, 700)
+    return () => clearTimeout(timer)
+  }, [profile, profileLoaded, saveProfile, user])
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -227,15 +247,18 @@ const Dashboard = () => {
   }
 
   // QR value: include a compact JSON of important profile fields and user id
-  const qrValue = JSON.stringify({ id: user?.id, name: profile.name, school: profile.school, grade: profile.grade })
+  // The QR has only a stable reference; scanners retrieve current data from Supabase.
+  const qrValue = JSON.stringify({ type: 'sierrahacks-profile', id: user?.id })
 
   if (loading) return <div className="p-8">Loading...</div>
 
   if (!user) return null
 
   return (
-    <div className="min-h-screen pt-24 flex items-start justify-center py-8 bg-blue-50 dark:bg-gray-900">
-      <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-6 px-4">
+    <div className="min-h-screen bg-slate-50 pt-24 py-8 dark:bg-slate-950">
+      <div className="w-full max-w-5xl px-4 mx-auto">
+        <div className="mb-6 flex flex-wrap items-end justify-between gap-3"><div><p className="text-sm font-medium uppercase tracking-[0.2em] text-blue-500">Sierra Hacks 2026</p><h1 className="mt-1 text-3xl font-bold text-blue-950 dark:text-white">Your hacker portal</h1><p className="mt-1 text-sm text-blue-700 dark:text-blue-200">Changes save automatically as you update your profile.</p></div><span className={`rounded-full px-3 py-1 text-sm ${saving ? 'bg-blue-100 text-blue-700' : 'bg-emerald-100 text-emerald-700'}`}>{saving ? 'Saving…' : 'Saved'}</span></div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="md:col-span-2 p-6 text-blue-800 dark:text-blue-200">
           <div className="flex items-center gap-4">
             <div className="h-20 w-20 rounded-full bg-blue-100 flex items-center justify-center text-3xl text-blue-600">
@@ -324,7 +347,7 @@ const Dashboard = () => {
                       key={key}
                       type="button"
                       onClick={() => setProfile((prev) => ({ ...prev, [key]: !prev[key] }))}
-                      className={`flex items-center justify-between gap-3 rounded-xl px-3 py-3 text-left transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-900 ${active ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg' : 'border border-gray-200 bg-white text-gray-800 hover:border-blue-300 hover:shadow-md dark:border-gray-700 dark:bg-gray-800 dark:text-blue-100'}`}
+                      className={`flex items-center justify-between gap-3 rounded-lg border px-3 py-3 text-left transition focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-950 ${active ? 'border-blue-600 bg-blue-600 text-white' : 'border-slate-200 bg-white text-slate-800 hover:border-blue-400 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100'}`}
                       aria-pressed={active}
                     >
                       <span>{label}</span>
@@ -350,7 +373,7 @@ const Dashboard = () => {
             </div>
 
             <div className="md:col-span-2 flex items-center gap-3 mt-6">
-              <button type="submit" disabled={saving} className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-full shadow-xl hover:shadow-2xl transform hover:-translate-y-0.5 transition">{saving ? 'Saving...' : 'Save profile'}</button>
+              <button type="submit" disabled={saving} className="rounded-lg bg-blue-600 px-5 py-2.5 text-white transition hover:bg-blue-700 disabled:bg-blue-400">{saving ? 'Saving...' : 'Save now'}</button>
               <button type="button" onClick={handleSignOut} className="px-5 py-3 rounded-full bg-gray-100 text-gray-900 dark:bg-gray-700 dark:text-blue-100">Sign out</button>
             </div>
           </form>
@@ -377,6 +400,7 @@ const Dashboard = () => {
               </div>
             )}
             <div className="mt-2 text-xs text-blue-700 dark:text-blue-200">Present this QR at check-in.</div>
+            <a href="/scan" className="mt-2 inline-block text-xs text-blue-600 underline dark:text-blue-300">Scan another participant’s QR</a>
           </div>
 
           <button
@@ -399,6 +423,8 @@ const Dashboard = () => {
             <FiDownload /> Download QR
           </button>
         </Card>
+      </div>
+      <div className="mt-8 grid gap-8"><TeamWorkspace /><Participants embedded /></div>
       </div>
     </div>
   )

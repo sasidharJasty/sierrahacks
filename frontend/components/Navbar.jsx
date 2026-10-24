@@ -9,6 +9,7 @@ const Navbar = () => {
   const [activeSection, setActiveSection] = useState("home");
   const location = useLocation();
   const navigate = useNavigate();
+  const isAppRoute = ['/portal', '/dashboard', '/scan', '/admin/scan', '/admin/dashboard', '/admin/queue', '/admin/teams'].includes(location.pathname);
   
   // Handle scroll effect for navbar background and section highlighting
   useEffect(() => {
@@ -72,7 +73,7 @@ const Navbar = () => {
   }, [location.pathname]);
   
   // Navigation items with their respective sections
-  const navItems = [
+  const siteNavItems = [
     { name: "Home", id: "home", path: "/", delay: 0.05 },
     // 'sponsors' is an in-page section on the home route
     { name: "Sponsors", id: "sponsors", path: "/", delay: 0.1 },
@@ -84,6 +85,14 @@ const Navbar = () => {
     // separate page for sponsor inquiries
     { name: "Sponsor", id: "sponsor-page", path: "/sponsor", delay: 0.4 }
   ];
+  const navItems = isAppRoute
+    ? [
+        { name: 'Portal', id: 'portal', path: '/dashboard', delay: 0.05 },
+        { name: 'QR Connect', id: 'scan', path: '/scan', delay: 0.1 },
+        { name: 'Organizer', id: 'admin-dashboard', path: '/admin/dashboard', delay: 0.15 },
+        { name: 'Judging Order', id: 'queue', path: '/queue', delay: 0.2 }
+      ]
+    : siteNavItems;
   
   // Improved smooth scroll function with fallback
   const scrollToSection = (sectionId) => {
@@ -154,9 +163,9 @@ const Navbar = () => {
   
   return (
     <nav 
-      className="fixed left-0 top-0 z-50 w-full bg-transparent px-3 pt-3"
+      className="fixed left-0 top-0 z-50 w-full bg-transparent px-2 pt-2"
     >
-      <div className={`relative mx-auto flex max-w-7xl items-center justify-between overflow-hidden rounded-2xl border px-4 py-2 backdrop-blur-xl transition-all duration-300 sm:px-6 ${isScrolled ? "border-[#0E43B6]/60 bg-black/95 shadow-[0_0_30px_rgba(14,67,182,0.24)]" : "border-[#0E43B6]/35 bg-black/80 shadow-[0_0_20px_rgba(14,67,182,0.12)]"}`}>
+      <div className={`relative mx-auto flex max-w-6xl items-center justify-between overflow-hidden rounded-xl border px-3 py-1.5 backdrop-blur-xl transition-all duration-300 sm:px-4 ${isScrolled ? "border-[#0E43B6]/60 bg-black/95" : "border-[#0E43B6]/35 bg-black/80"}`}>
         <motion.div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 opacity-40"
@@ -171,7 +180,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link 
             to="/"
-            className="text-xl ml-10 md:ml-0  font-bold flex items-center cursor-pointer"
+            className="ml-2 flex cursor-pointer items-center text-lg font-bold md:ml-0"
             data-cursor-text="navigate('home')"
             data-cursor-color="#38bdf8"
           >
@@ -181,7 +190,7 @@ const Navbar = () => {
               transition={{ duration: 0.5 }}
               className="flex items-center"
             >
-              <img src={logo} className="h-15 mr-2">
+              <img src={logo} className="mr-2 h-9">
               </img>
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-100">
                 Sierra
@@ -198,7 +207,7 @@ const Navbar = () => {
         </div>
         
         {/* Desktop Navigation */}
-        <div className="hidden md:flex items-center space-x-8">
+        <div className="hidden items-center space-x-5 md:flex">
           {navItems.map((item) => (
             <Link
               key={item.id}
@@ -228,7 +237,7 @@ const Navbar = () => {
           ))}
           
           {/* Donate Button */}
-          <a
+          {!isAppRoute && <a
             href="https://hcb.hackclub.com/donations/start/codecatalyst"
             target="_blank"
             rel="noopener noreferrer"
@@ -259,10 +268,10 @@ const Navbar = () => {
               whileHover={{ boxShadow: "0 0 8px rgba(168, 85, 247, 0.6)" }}
               transition={{ duration: 0.3 }}
             />
-          </a>
+          </a>}
           
           {/* Desktop Navigation Register Button - FIXED */}
-          <a
+          {!isAppRoute && <a
             href="https://luma.com/7y8mmyo1?lm_source=sierrahacks-website"
             className="inline-flex items-center justify-center px-5 py-2 bg-[#0E43B6] text-white rounded-md hover:shadow-lg hover:shadow-blue-500/25 transition-all relative overflow-hidden group"
             data-cursor-text="register()"
@@ -284,12 +293,12 @@ const Navbar = () => {
               whileHover={{ x: 0 }}
               transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
             />
-          </a>
+          </a>}
         </div>
         
         {/* Mobile Menu Button */}
         <motion.button 
-          className="block md:hidden text-blue-200 mr-10"
+          className="mr-1 block text-blue-200 md:hidden"
           onClick={() => setIsOpen(!isOpen)}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

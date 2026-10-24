@@ -23,9 +23,9 @@ const MEAL_OPTIONS = [
 ]
 
 const WORKSHOP_OPTIONS = [
-  { key: 'website_workshop', label: 'Website workshop' },
-  { key: 'python_workshop', label: 'Python workshop' },
-  { key: 'ai_ml_workshop', label: 'AI / ML workshop' }
+  { key: 'python_workshop', label: 'Python 3 workshop' },
+  { key: 'website_workshop', label: 'n8n automation' },
+  { key: 'ai_ml_workshop', label: 'AI workshop' }
 ]
 
 const AdminScan = () => {
@@ -47,6 +47,9 @@ const AdminScan = () => {
   const [scannerActive, setScannerActive] = useState(false)
   const [cameraError, setCameraError] = useState(null)
   const [requestingCamera, setRequestingCamera] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchResults, setSearchResults] = useState([])
+  const [searching, setSearching] = useState(false)
 
   useEffect(() => {
     if (!devices.length) return
@@ -181,6 +184,48 @@ const AdminScan = () => {
     setCheckins(recent || [])
   }, [])
 
+  const searchProfiles = useCallback(async (event) => {
+    event?.preventDefault()
+    const query = searchQuery.trim().replace(/[,%()]/g, '')
+    if (!query) { setSearchResults([]); return }
+    setSearching(true)
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id,name,first_name,last_name,email,school,grade')
+      .or(`name.ilike.%${query}%,email.ilike.%${query}%,school.ilike.%${query}%`)
+      .limit(8)
+    setSearching(false)
+    if (error) { setStatus(`Search failed: ${error.message}`); return }
+    setSearchResults(data || [])
+  }, [searchQuery])
+
+  const loadLumaGuest = useCallback(async (qrUrl) => {
+    setStatus(STATUS_FETCHING)
+    const { data: registration, error } = await supabase.from('registrations').select('*').eq('luma_qr_code_url', qrUrl).maybeSingle()
+    if (error || !registration) { setStatus('Luma guest not found'); return }
+    const { data: linkedProfile } = await supabase.from('profiles').select('*').ilike('email', registration.email_address).maybeSingle()
+    setProfile({
+      ...(linkedProfile || {}),
+      id: linkedProfile?.id || registration.submission_id,
+      name: linkedProfile?.name || `${registration.first_name || ''} ${registration.last_name || ''}`.trim(),
+      email: linkedProfile?.email || registration.email_address,
+      school: linkedProfile?.school || registration.school,
+      grade: linkedProfile?.grade || registration.grade,
+      phone_number: linkedProfile?.phone_number || registration.phone_number,
+      teammates: linkedProfile?.teammates || registration.teammates,
+      participating_solo: linkedProfile?.participating_solo ?? registration.participating_solo,
+      looking_for_teammates: linkedProfile?.looking_for_teammates ?? registration.looking_for_teammates,
+      is_vegetarian: linkedProfile?.is_vegetarian ?? registration.is_vegetarian,
+      allergies: linkedProfile?.allergies || registration.allergies,
+      luma_guest: !linkedProfile,
+      website_workshop: !!linkedProfile?.website_workshop,
+      python_workshop: !!linkedProfile?.python_workshop,
+      ai_ml_workshop: !!linkedProfile?.ai_ml_workshop
+    })
+    setCheckins([])
+    setStatus('Luma guest loaded')
+  }, [])
+
   const handleDecoded = useCallback(async (payload) => {
     const textPayload = (typeof payload === 'string' ? payload : String(payload ?? '')).trim()
 
@@ -197,6 +242,10 @@ const AdminScan = () => {
     }
 
     const rawId = parsed?.id ?? parsed?.user_id ?? parsed?.profile_id ?? ''
+    if (!rawId && /^https:\/\/luma\.com\/check-in\//i.test(textPayload)) {
+      await loadLumaGuest(textPayload)
+      return
+    }
     const normalisedId = typeof rawId === 'string' ? rawId.trim() : String(rawId || '').trim()
 
     if (!normalisedId) {
@@ -205,7 +254,7 @@ const AdminScan = () => {
     }
 
     await loadProfile(normalisedId)
-  }, [loadProfile])
+  }, [loadProfile, loadLumaGuest])
 
   const handleScanResults = useCallback((detectedCodes) => {
     if (!scannerActive) return
@@ -231,6 +280,10 @@ const AdminScan = () => {
 
   const handleSave = async () => {
     if (!profile) return
+    if (profile.luma_guest) {
+      setStatus('This guest must sign in before attendance changes can be saved.')
+      return
+    }
     setSaving(true)
     setStatus(STATUS_SAVING)
     try {
@@ -294,7 +347,7 @@ const AdminScan = () => {
   }
 
   return (
-    <div className="min-h-screen pt-24 p-6 bg-[#D9E7FD] dark:bg-gray-900">
+    <div className="min-h-screen bg-slate-50 pt-24 p-4 dark:bg-slate-950 sm:p-6">
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-2xl font-semibold text-blue-800 dark:text-blue-200">Admin — QR Scan</h2>
         <Link
@@ -309,10 +362,11 @@ const AdminScan = () => {
       {isAdmin === false && <div className="p-4 rounded bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200">Unauthorized — this area is for event admins only.</div>}
 
       {isAdmin && (
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid gap-6 lg:grid-cols-3">
           <Card className="md:col-span-2 p-4 text-blue-800 dark:text-blue-200">
-            <div className="rounded-lg border overflow-hidden bg-black/80 flex items-center justify-center" style={{ minHeight: 360 }}>
-              <Scanner
+            <form onSubmit={searchProfiles} className="mb-4"><label className="text-sm font-medium">Find an attendee</label><div className="mt-1 flex flex-col gap-2 sm:flex-row"><input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search by name, email, or school" className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900" /><button className="rounded-lg bg-blue-600 px-4 py-2 text-white disabled:bg-blue-400" disabled={searching}>{searching ? 'Searching…' : 'Search'}</button></div>{searchResults.length > 0 && <div className="mt-2 overflow-hidden rounded-lg border border-slate-200 bg-white">{searchResults.map((result) => <button type="button" key={result.id} onClick={() => { setSearchResults([]); setSearchQuery(''); void loadProfile(result.id) }} className="flex w-full items-center justify-between border-b border-slate-100 px-3 py-2 text-left text-sm last:border-0 hover:bg-slate-50"><span className="font-medium">{result.name || `${result.first_name || ''} ${result.last_name || ''}`.trim() || 'Unnamed attendee'}</span><span className="text-slate-500">{result.school || result.email || '—'}</span></button>)}</div>}</form>
+            <div className="flex min-h-[240px] overflow-hidden rounded-lg border border-slate-800 bg-slate-950 sm:min-h-[360px]">
+              {scannerActive ? <Scanner
                 key={selectedCameraId || 'default-camera'}
                 paused={!scannerActive}
                 constraints={constraints}
@@ -325,7 +379,7 @@ const AdminScan = () => {
                   container: { width: '100%', height: '100%' },
                   video: { width: '100%', height: '100%', objectFit: 'cover' }
                 }}
-              />
+              /> : <div className="flex w-full items-center justify-center p-6 text-center text-sm text-slate-300">Start the scanner to use the camera, or search for an attendee above.</div>}
             </div>
 
             <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -397,6 +451,9 @@ const AdminScan = () => {
 
                 <div className="text-sm">
                   <strong>Email:</strong> {profile.email || '—'}
+                </div>
+                <div className="rounded-lg bg-blue-50 px-3 py-2 text-sm font-semibold text-blue-900 dark:bg-slate-800 dark:text-blue-100">
+                  Team number: {profile.team_number ? `#${profile.team_number}` : 'Not assigned'}
                 </div>
                 <div className="text-sm">
                   <strong>Phone:</strong> {profile.phone_number || '—'}

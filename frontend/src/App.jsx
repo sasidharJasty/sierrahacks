@@ -13,6 +13,10 @@ import AdminDashboard from './pages/AdminDashboard';
 import SubmissionCountdown from './pages/SubmissionCountdown';
 import AdminJudging from './pages/AdminJudging';
 import NotFound from './pages/NotFound';
+import ParticipantScan from './pages/ParticipantScan';
+import AdminQueue from './pages/AdminQueue';
+import QueueDisplay from './pages/QueueDisplay';
+import AdminTeams from './pages/AdminTeams';
 import StarfieldBackground from '../components/StarfieldBackground';
 import { NavbarVisibilityProvider, useNavbarVisibility } from './context/NavbarVisibilityContext';
 
@@ -20,7 +24,8 @@ function AppShell() {
   const location = useLocation();
   const { visible } = useNavbarVisibility();
   const isCountdownRoute = location.pathname === '/submission-countdown';
-  const shouldShowNavbar = isCountdownRoute ? visible : true;
+  const isQueueDisplay = location.pathname === '/queue';
+  const shouldShowNavbar = isQueueDisplay ? new URLSearchParams(location.search).get('navbar') === 'show' : (isCountdownRoute ? visible : true);
 
   return (
 
@@ -33,16 +38,20 @@ function AppShell() {
             <Route path="/" element={<HomePage />} />
             <Route path="/sponsor" element={<SponsorPage />} />
             <Route path="/register" element={<Register />} />
-            {/* <Route path="/portal" element={<Portal />} /> */}
-            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
-            {/* <Route path="/admin/scan" element={<AdminScan />} /> */}
-            {/* <Route path="/admin/dashboard" element={<AdminDashboard />} /> */}
-            {/* <Route path="/admin/judging" element={<AdminJudging />} /> */}
+            <Route path="/portal" element={<Portal />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/scan" element={<ParticipantScan />} />
+            <Route path="/admin/scan" element={<AdminScan />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/queue" element={<AdminQueue />} />
+            <Route path="/admin/teams" element={<AdminTeams />} />
+            <Route path="/queue" element={<QueueDisplay />} />
+            <Route path="/admin/judging" element={<AdminJudging />} />
             <Route path="/submission-countdown" element={<SubmissionCountdown />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </main>
-        <Footer />
+        {!isQueueDisplay && <Footer />}
         </div>
       </div>
 

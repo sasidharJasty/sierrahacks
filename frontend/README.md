@@ -43,3 +43,23 @@ An admin QR scanner page is available at `/admin/scan` which uses the device cam
 Before using the admin page, run the SQL file `db/create_checkins.sql` in your Supabase SQL editor to create the `checkins` table.
 
 The admin scanner component lives at `src/pages/AdminScan.jsx` and uses the `html5-qrcode` library.
+
+## Import a Luma guest CSV
+
+Export the event's guest list from Luma as CSV. In Supabase Dashboard, open
+**Settings → API Keys** and copy a server-side **Secret key** (`sb_secret_...`)
+or the legacy `service_role` key. Never put this key in `VITE_...`, `.env`,
+browser code, or source control.
+
+From the `frontend` folder, run:
+
+```bash
+SUPABASE_URL=https://nvxqgkingpelttihmami.supabase.co \
+SUPABASE_KEY='YOUR_SECRET_KEY' \
+npm run import:luma -- '/absolute/path/to/luma-guests.csv'
+```
+
+The importer upserts rows into `public.registrations`. It is safe to rerun the
+same export. Guests appear in the participant directory, their Luma QR links can
+be scanned by organizers, and a future portal account is automatically linked
+when its email matches the CSV email.

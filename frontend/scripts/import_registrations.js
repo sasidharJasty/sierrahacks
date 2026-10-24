@@ -7,8 +7,8 @@
  * Usage:
  *   SUPABASE_URL=https://your.supabase.co SUPABASE_KEY=your-service-or-anon-key node scripts/import_registrations.js path/to/registrations.csv
  *
- * This script parses a CSV exported from your spreadsheet and inserts rows into the
- * `registrations` table in Supabase. It expects the CSV to have headers similar to:
+ * This script parses either the registration form export or a Luma Guests export and inserts rows into the
+ * `registrations` table in Supabase. It expects headers similar to:
  * Submission ID, Respondent ID, Submitted at, First Name, Last Name, Email Address, Phone Number,
  * Date of Birth, Are you participating solo?, Are you looking for teammates?, List out all your teammates names (if applicable),
  * What school do you attend?, What grade are you currently in?, City of Residence, Parent Name, Parent Email, Parent Phone Number
@@ -74,25 +74,28 @@ function mapRecord(row) {
     return null
   }
 
-  const submittedAtRaw = get('Submitted at') || get('submitted at') || get('submitted_at')
+  const isLuma = Boolean(get('guest_id'))
+  const submittedAtRaw = get('Submitted at') || get('submitted at') || get('submitted_at') || get('created_at')
   const submitted_at = submittedAtRaw ? new Date(submittedAtRaw).toISOString() : null
 
   const dobRaw = get('Date of Birth') || get('date of birth') || get('date_of_birth')
   const date_of_birth = dobRaw ? new Date(dobRaw).toISOString().split('T')[0] : null
 
-  mapped.submission_id = get('Submission ID') || get('Submission ID'.toLowerCase()) || ''
+  mapped.submission_id = get('Submission ID') || get('Submission ID'.toLowerCase()) || get('guest_id') || ''
   mapped.respondent_id = get('Respondent ID') || ''
   mapped.submitted_at = submitted_at
-  mapped.first_name = get('First Name') || ''
-  mapped.last_name = get('Last Name') || ''
-  mapped.email_address = get('Email Address') || get('Email') || ''
-  mapped.phone_number = get('Phone Number') || get('Phone') || ''
+  mapped.first_name = get('First Name') || get('first_name') || ''
+  mapped.last_name = get('Last Name') || get('last_name') || ''
+  mapped.email_address = get('Email Address') || get('Email') || get('email') || ''
+  mapped.phone_number = get('Phone Number') || get('Phone') || get('phone_number') || ''
   mapped.date_of_birth = date_of_birth
+  const teamStatus = get('Team Status') || get('team status') || ''
   mapped.participating_solo = boolFromYesNo(get('Are you participating solo?') || get('participating solo') || '')
+  if (isLuma && teamStatus) mapped.participating_solo = /solo/i.test(teamStatus)
   mapped.looking_for_teammates = boolFromYesNo(get('Are you looking for teammates?') || get('looking for teammates') || '')
-  mapped.teammates = get('List out all your teammates names (if applicable)') || get('List out all your teammates names (if applicable)'.toLowerCase()) || get('teammates') || ''
-  mapped.school = get('What school do you attend?') || get('school') || ''
-  mapped.grade = get('What grade are you currently in?') || get('grade') || ''
+  mapped.teammates = get('List out all your teammates names (if applicable)') || get('List out all your teammates names (if applicable)'.toLowerCase()) || get('If you already have teammates, enter their names.') || get('teammates') || ''
+  mapped.school = get('What school do you attend?') || get('School') || get('school') || ''
+  mapped.grade = get('What grade are you currently in?') || get('Grade') || get('grade') || ''
   mapped.city = get('City of Residence') || get('City') || ''
   mapped.parent_name = get('Parent Name') || get('Parent') || ''
   mapped.parent_email = get('Parent Email') || get('Parent Email Address') || ''
@@ -101,6 +104,20 @@ function mapRecord(row) {
   const veg = get('Are you vegetarian?') || get('Vegetarian') || get('Dietary preference') || ''
   mapped.is_vegetarian = veg ? (String(veg).trim().toLowerCase().startsWith('y') || String(veg).trim().toLowerCase() === 'vegetarian') : null
   mapped.allergies = get('Allergies') || get('Allergy') || get('Allergies (please list)') || ''
+
+  // Luma-specific data and a compact record of non-sensitive form answers.
+  mapped.luma_guest_id = get('guest_id') || null
+  mapped.approval_status = get('approval_status') || 'approved'
+  mapped.checked_in_at = get('checked_in_at') || null
+  mapped.luma_qr_code_url = get('qr_code_url') || null
+  mapped.ticket_name = get('ticket_name') || null
+  mapped.team_status = teamStatus || null
+  mapped.form_responses = {
+    team_status: teamStatus || null,
+    teammates: mapped.teammates || null,
+    survey_rating: get('survey_response_rating') || null,
+    survey_feedback: get('survey_response_feedback') || null
+  }
 
   // Normalize numeric/id fields: avoid empty strings for integer DB columns
   const normalizeId = (v) => {
@@ -295,6 +312,8 @@ async function syncRegistrationsToProfiles(rows) {
       last_name: r.last_name || null,
       name: [r.first_name, r.last_name].filter(Boolean).join(' ') || null,
       phone_number: r.phone_number || null,
+      school: r.school || null,
+      grade: r.grade || null,
       date_of_birth: r.date_of_birth || null,
       city: r.city || null,
       teammates: r.teammates || null,
@@ -303,11 +322,11 @@ async function syncRegistrationsToProfiles(rows) {
       parent_phone: r.parent_phone || null,
       submission_id: r.submission_id || null,
       respondent_id: r.respondent_id || null,
-      is_vegetarian: typeof r.is_vegetarian === 'boolean' ? r.is_vegetarian : null,
       allergies: r.allergies || null,
       participating_solo: typeof r.participating_solo === 'boolean' ? r.participating_solo : null,
       looking_for_teammates: typeof r.looking_for_teammates === 'boolean' ? r.looking_for_teammates : null
     }
+    if (typeof r.is_vegetarian === 'boolean') payload.is_vegetarian = r.is_vegetarian
     updates.push(payload)
   }
 

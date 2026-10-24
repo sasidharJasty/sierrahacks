@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "cleanup:demo": "node scripts/cleanup_demo_data.js",
+    "import:luma": "node scripts/import_registrations.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },

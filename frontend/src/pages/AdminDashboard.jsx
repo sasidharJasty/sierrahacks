@@ -16,18 +16,18 @@ const JUDGING_CRITERIA = [
 const STAT_DEFINITIONS = [
   {
     key: 'website',
-    label: 'Website workshop',
-    gradient: 'from-blue-500 to-indigo-500'
+    label: 'n8n automation',
+    gradient: 'bg-blue-600'
   },
   {
     key: 'python',
-    label: 'Python workshop',
-    gradient: 'from-green-500 to-emerald-500'
+    label: 'Python 3 workshop',
+    gradient: 'bg-blue-600'
   },
   {
     key: 'ai',
-    label: 'AI / ML workshop',
-    gradient: 'from-purple-500 to-pink-500'
+    label: 'AI workshop',
+    gradient: 'bg-blue-600'
   }
 ]
 
@@ -327,7 +327,7 @@ const AdminDashboard = () => {
   if (!user) return null
 
   return (
-    <div className="min-h-screen bg-[#D9E7FD] pt-24 pb-10 text-blue-800 dark:bg-gray-900 dark:text-blue-200">
+    <div className="min-h-screen bg-slate-50 pt-24 pb-10 text-slate-800 dark:bg-slate-950 dark:text-slate-100">
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-2xl font-semibold">Admin — Workshop Dashboard</h2>
@@ -343,6 +343,18 @@ const AdminDashboard = () => {
             className="inline-flex items-center gap-2 rounded-md border border-blue-300 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:border-blue-600 dark:text-blue-100 dark:hover:bg-blue-800"
           >
             Judging center
+          </Link>
+          <Link
+            to="/admin/queue"
+            className="inline-flex items-center gap-2 rounded-md border border-blue-300 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:border-blue-600 dark:text-blue-100 dark:hover:bg-blue-800"
+          >
+            Live queue
+          </Link>
+          <Link
+            to="/admin/teams"
+            className="inline-flex items-center gap-2 rounded-md border border-blue-300 px-3 py-1.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100 dark:border-blue-600 dark:text-blue-100 dark:hover:bg-blue-800"
+          >
+            Teams
           </Link>
           <button
             type="button"
@@ -381,7 +393,7 @@ const AdminDashboard = () => {
           )}
 
           <div className="grid gap-4 md:grid-cols-4">
-            <Card className="flex flex-col justify-between gap-2 rounded-2xl p-4 shadow-sm md:col-span-1 md:p-5 md:shadow-md bg-gradient-to-br from-white via-white to-blue-50/70 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950/50">
+            <Card className="flex flex-col justify-between gap-2 p-4 md:col-span-1 md:p-5">
               <div className="flex items-center gap-3 text-sm uppercase tracking-wide text-blue-600 dark:text-blue-200">
                 <FiUsers className="h-5 w-5" /> Total attendees
               </div>
@@ -395,7 +407,7 @@ const AdminDashboard = () => {
               return (
                 <Card
                   key={key}
-                  className="flex flex-col justify-between gap-2 rounded-2xl p-4 shadow-sm transition md:col-span-1 md:p-5 md:shadow-md hover:-translate-y-0.5 hover:shadow-lg bg-gradient-to-br from-white via-white to-blue-50/60 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950/40"
+                  className="flex flex-col justify-between gap-2 p-4 transition md:col-span-1 md:p-5"
                 >
                   <div className="flex items-center gap-3 text-sm uppercase tracking-wide text-blue-600 dark:text-blue-200">
                     <FiActivity className="h-5 w-5" /> {label}
@@ -410,7 +422,7 @@ const AdminDashboard = () => {
                   <div className="text-[0.7rem] uppercase tracking-wide text-blue-500 dark:text-blue-400">{percentage}% of attendees</div>
                   <div className="h-1.5 rounded-full bg-blue-100/60 dark:bg-gray-800">
                     <div
-                      className={`h-1.5 rounded-full bg-gradient-to-r ${gradient}`}
+                      className={`h-1.5 rounded-full ${gradient}`}
                       style={{ width: `${Math.min(percentage, 100)}%` }}
                     />
                   </div>
@@ -418,7 +430,7 @@ const AdminDashboard = () => {
               )
             })}
 
-            <Card className="flex flex-col justify-between gap-4 rounded-2xl border border-blue-200/60 bg-gradient-to-br from-white via-white to-blue-100/40 p-5 shadow-md dark:border-blue-800/40 dark:from-gray-900 dark:via-gray-900 dark:to-blue-950/50 md:col-span-4 md:p-6">
+            <Card className="flex flex-col justify-between gap-4 p-5 md:col-span-4 md:p-6">
               <div className="flex items-center gap-3 text-sm uppercase tracking-wide text-blue-600 dark:text-blue-200">
                 <FiStar className="h-5 w-5" /> Judging evaluations
               </div>
