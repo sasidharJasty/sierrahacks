@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { decodeQrImage, parseQrPayload, scannerErrorMessage } from './qrPayload.js'
+import { createProfileQrValue, decodeQrImage, parseQrPayload, scannerErrorMessage } from './qrPayload.js'
 
 const PROFILE_ID = 'd2a58a07-2362-41bf-bf13-8288aa821db5'
 
@@ -9,6 +9,13 @@ test('parses a Sierra Hacks profile QR payload', () => {
     parseQrPayload(JSON.stringify({ type: 'sierrahacks-profile', id: PROFILE_ID })),
     { kind: 'profile', id: PROFILE_ID }
   )
+})
+
+test('dashboard QR value round-trips through the scanner parser', () => {
+  const qrValue = createProfileQrValue(PROFILE_ID)
+  assert.equal(qrValue, PROFILE_ID)
+  assert.deepEqual(parseQrPayload(qrValue), { kind: 'profile', id: PROFILE_ID })
+  assert.equal(createProfileQrValue('not-a-profile-id'), '')
 })
 
 test('accepts supported profile id aliases and plain UUIDs', () => {

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import QrScanner from 'qr-scanner'
+import { enableContinuousFocus, fullFrameScanRegion } from '../lib/qrCamera'
 
 export default function QrCameraScanner({
   active,
@@ -34,8 +35,9 @@ export default function QrCameraScanner({
       },
       {
         preferredCamera: cameraId || 'environment',
-        maxScansPerSecond: 12,
-        highlightScanRegion: true,
+        maxScansPerSecond: 10,
+        calculateScanRegion: fullFrameScanRegion,
+        highlightScanRegion: false,
         highlightCodeOutline: true,
         returnDetailedScanResult: true
       }
@@ -45,6 +47,7 @@ export default function QrCameraScanner({
     void scanner.start()
       .then(async () => {
         if (!mounted) return
+        await enableContinuousFocus(videoRef.current).catch(() => {})
         callbacksRef.current.onReady?.()
         const cameras = await QrScanner.listCameras().catch(() => [])
         if (mounted) callbacksRef.current.onCamerasChange?.(cameras)

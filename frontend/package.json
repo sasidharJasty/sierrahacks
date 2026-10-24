@@ -9,7 +9,7 @@
     "cleanup:demo": "node scripts/cleanup_demo_data.js",
     "import:luma": "node scripts/import_registrations.js",
     "lint": "eslint .",
-    "test:qr": "node --test src/lib/qrPayload.test.js",
+    "test:qr": "node --test src/lib/qrPayload.test.js src/components/QrCameraScanner.test.js",
     "preview": "vite preview"
   },
   "dependencies": {

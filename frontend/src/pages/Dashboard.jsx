@@ -3,7 +3,6 @@ import supabase from '../lib/supabaseClient'
 import { useAuth } from '../context/authContextBase'
 import QRCode from 'react-qr-code'
 import { useNavigate } from 'react-router-dom'
-import { useTheme } from '../../context/themeContextBase'
 import { FiUser, FiHome, FiMail, FiPhone, FiCalendar, FiDownload, FiCopy, FiCheckCircle } from 'react-icons/fi'
 import { FaDrumstickBite, FaLeaf } from 'react-icons/fa'
 import DietSwitch from '../../components/DietSwitch'
@@ -12,6 +11,7 @@ import FormField from '../../components/FormField'
 import TeammatesInput from '../../components/TeammatesInput'
 import Participants from './Participants'
 import TeamWorkspace from '../components/TeamWorkspace'
+import { createProfileQrValue } from '../lib/qrPayload'
 
 const FALLBACK_PROFILE_COLUMNS = [
   'id',
@@ -59,7 +59,6 @@ const Dashboard = () => {
   const [saving, setSaving] = useState(false)
   const [message, setMessage] = useState(null)
   const qrRef = useRef()
-  const { isDarkMode } = useTheme()
   const profileColumnsRef = useRef(null)
   const profileColumnTemplateRef = useRef(null)
   const autoSaveReadyRef = useRef(false)
@@ -246,9 +245,9 @@ const Dashboard = () => {
     navigate('/portal')
   }
 
-  // QR value: include a compact JSON of important profile fields and user id
-  // The QR has only a stable reference; scanners retrieve current data from Supabase.
-  const qrValue = JSON.stringify({ type: 'sierrahacks-profile', id: user?.id })
+  // Keep the code intentionally short so phone cameras can read it reliably.
+  // The scanner uses this stable id to retrieve current profile data from Supabase.
+  const qrValue = createProfileQrValue(user?.id)
 
   if (loading) return <div className="p-8">Loading...</div>
 
@@ -381,8 +380,8 @@ const Dashboard = () => {
 
         <Card className="p-6 flex flex-col items-center text-blue-800 dark:text-blue-200">
           <div className="mb-3 text-sm text-blue-700 dark:text-blue-200">Your QR</div>
-          <div ref={qrRef} className="p-4 rounded-lg border bg-white dark:bg-gray-800">
-            <QRCode value={qrValue} size={220} fgColor="#000000" bgColor="#ffffff" />
+          <div ref={qrRef} className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+            <QRCode value={qrValue} size={208} level="M" fgColor="#000000" bgColor="#ffffff" />
           </div>
 
           <div className="mt-4 text-center text-sm text-blue-700 dark:text-blue-200">
