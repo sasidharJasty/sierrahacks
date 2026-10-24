@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Scanner, useDevices } from '@yudiel/react-qr-scanner'
 import { Link, useNavigate } from 'react-router-dom'
 import { FiSearch, FiCheckCircle } from 'react-icons/fi'
@@ -6,7 +6,7 @@ import supabase from '../lib/supabaseClient'
 import { useAuth } from '../context/authContextBase'
 import DietSwitch from '../../components/DietSwitch'
 import Card from '../../components/Card'
-import { parseQrPayload, scannerErrorMessage } from '../lib/qrPayload'
+import { decodeQrImage, parseQrPayload, scannerErrorMessage } from '../lib/qrPayload'
 // theme controlled by ThemeProvider (adds/removes 'dark' on documentElement)
 
 const STATUS_IDLE = 'Ready'
@@ -30,6 +30,7 @@ const WORKSHOP_OPTIONS = [
 ]
 
 const AdminScan = () => {
+  const photoInputRef = useRef(null)
   const devices = useDevices()
 
   const [profile, setProfile] = useState(null)
@@ -50,6 +51,7 @@ const AdminScan = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [searching, setSearching] = useState(false)
+  const [decodingPhoto, setDecodingPhoto] = useState(false)
 
   useEffect(() => {
     if (!devices.length) return
@@ -227,6 +229,25 @@ const AdminScan = () => {
     void handleDecoded(rawValue)
   }, [handleDecoded, scannerActive, stopScanner])
 
+  const handleQrPhoto = useCallback(async (event) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+    stopScanner(false)
+    setCameraError(null)
+    setDecodingPhoto(true)
+    setStatus('Reading QR from photo…')
+    try {
+      const rawValue = await decodeQrImage(file)
+      await handleDecoded(rawValue)
+    } catch (error) {
+      setCameraError(error?.message || 'Unable to read that photo.')
+      setStatus(STATUS_ERROR)
+    } finally {
+      setDecodingPhoto(false)
+      event.target.value = ''
+    }
+  }, [handleDecoded, stopScanner])
+
   const handleScannerError = useCallback((error) => {
     if (!scannerActive) return
     console.error('Scanner error', error)
@@ -368,6 +389,22 @@ const AdminScan = () => {
                   className="px-3 py-1 rounded bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-blue-100"
                 >
                   Reset
+                </button>
+                <input
+                  ref={photoInputRef}
+                  type="file"
+                  accept="image/*"
+                  capture="environment"
+                  onChange={handleQrPhoto}
+                  className="sr-only"
+                />
+                <button
+                  type="button"
+                  onClick={() => photoInputRef.current?.click()}
+                  disabled={decodingPhoto}
+                  className="rounded bg-slate-700 px-3 py-1 text-sm text-white disabled:opacity-60"
+                >
+                  {decodingPhoto ? 'Reading photo…' : 'Take photo or choose image'}
                 </button>
                 <input
                   value={adminEmail}

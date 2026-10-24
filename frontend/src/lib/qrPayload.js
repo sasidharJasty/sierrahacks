@@ -1,3 +1,13 @@
+import { BarcodeDetector, prepareZXingModule } from 'barcode-detector/ponyfill'
+
+const decoderReady = typeof window === 'undefined'
+  ? Promise.resolve()
+  : Promise.resolve(prepareZXingModule({
+      overrides: {
+        locateFile: (path, prefix) => path.endsWith('.wasm') ? '/zxing_reader.wasm' : `${prefix}${path}`
+      }
+    }))
+
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const LUMA_CHECKIN_PATTERN = /^https:\/\/luma\.com\/check-in\//i
 
@@ -29,4 +39,14 @@ export function scannerErrorMessage(error) {
   if (name === 'NotReadableError' || name === 'TrackStartError') return 'The camera is already in use by another app or browser tab.'
   if (!window.isSecureContext) return 'Camera scanning requires HTTPS or localhost.'
   return error?.message || 'Unable to start the camera.'
+}
+
+export async function decodeQrImage(file, detector = null) {
+  if (!file) throw new Error('Choose a photo containing a QR code.')
+  await decoderReady
+  const activeDetector = detector || new BarcodeDetector({ formats: ['qr_code'] })
+  const detected = await activeDetector.detect(file)
+  const rawValue = detected?.[0]?.rawValue?.trim()
+  if (!rawValue) throw new Error('No QR code was found in that photo. Try a closer, sharper picture.')
+  return rawValue
 }
