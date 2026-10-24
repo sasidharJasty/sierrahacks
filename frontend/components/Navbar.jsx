@@ -81,16 +81,18 @@ const Navbar = () => {
     { name: "FAQ", id: "faq", path: "/", delay: 0.2 },
     { name: "Criteria", id: "criteria", path: "/", delay: 0.25 },
     { name: "Team", id: "team", path: "/", delay: 0.3 },
-    //{ name: "Portal", id: "portal", path: "/portal", delay: 0.35 },
+    { name: "Portal", id: "portal", path: "/portal", delay: 0.35 },
+    { name: "Dashboard", id: "dashboard", path: "/dashboard", delay: 0.4 },
     // separate page for sponsor inquiries
-    { name: "Sponsor", id: "sponsor-page", path: "/sponsor", delay: 0.4 }
+    { name: "Sponsor", id: "sponsor-page", path: "/sponsor", delay: 0.45 }
   ];
   const navItems = isAppRoute
     ? [
-        { name: 'Portal', id: 'portal', path: '/dashboard', delay: 0.05 },
-        { name: 'QR Connect', id: 'scan', path: '/scan', delay: 0.1 },
-        { name: 'Organizer', id: 'admin-dashboard', path: '/admin/dashboard', delay: 0.15 },
-        { name: 'Judging Order', id: 'queue', path: '/queue', delay: 0.2 }
+        { name: 'Portal', id: 'portal', path: '/portal', delay: 0.05 },
+        { name: 'Dashboard', id: 'dashboard', path: '/dashboard', delay: 0.1 },
+        { name: 'QR Connect', id: 'scan', path: '/scan', delay: 0.15 },
+        { name: 'Organizer', id: 'admin-dashboard', path: '/admin/dashboard', delay: 0.2 },
+        { name: 'Judging Order', id: 'queue', path: '/queue', delay: 0.25 }
       ]
     : siteNavItems;
   
@@ -236,64 +238,6 @@ const Navbar = () => {
             </Link>
           ))}
           
-          {/* Donate Button */}
-          {!isAppRoute && <a
-            href="https://hcb.hackclub.com/donations/start/codecatalyst"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center px-4 py-2 bg-[#0E43B6] text-white rounded-md hover:shadow-lg hover:shadow-purple-500/25 transition-all relative overflow-hidden group border border-blue-400/20"
-            data-cursor-text="support()"
-            data-cursor-color="#a855f7"
-          >
-            {/* Text container with proper z-index */}
-            <div className="relative z-10 flex items-center justify-center">
-              <svg className="w-4 h-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-              </svg>
-              <span className="font-mono">support.us</span>
-            </div>
-            
-            {/* Hover animation background */}
-            <motion.div 
-              className="absolute inset-0 bg-[#0E43B6] z-0"
-              initial={{ x: "-100%" }}
-              whileHover={{ x: 0 }}
-              transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
-            />
-            
-            {/* Animated border glow effect */}
-            <motion.span 
-              className="absolute inset-0 rounded-md -z-10"
-              initial={{ boxShadow: "0 0 0 rgba(168, 85, 247, 0)" }}
-              whileHover={{ boxShadow: "0 0 8px rgba(168, 85, 247, 0.6)" }}
-              transition={{ duration: 0.3 }}
-            />
-          </a>}
-          
-          {/* Desktop Navigation Register Button - FIXED */}
-          {!isAppRoute && <a
-            href="https://luma.com/7y8mmyo1?lm_source=sierrahacks-website"
-            className="inline-flex items-center justify-center px-5 py-2 bg-[#0E43B6] text-white rounded-md hover:shadow-lg hover:shadow-blue-500/25 transition-all relative overflow-hidden group"
-            data-cursor-text="register()"
-            target="_blank"
-            data-cursor-color="#3b82f6"
-          >
-            {/* Text container with proper z-index */}
-            <div className="relative z-10 flex items-center justify-center">
-              Register
-              <svg className="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </div>
-            
-            {/* Hover animation background */}
-            <motion.div 
-              className="absolute inset-0 bg-[#0E43B6] z-0"
-              initial={{ x: "-100%" }}
-              whileHover={{ x: 0 }}
-              transition={{ type: "tween", ease: "easeInOut", duration: 0.3 }}
-            />
-          </a>}
         </div>
         
         {/* Mobile Menu Button */}
@@ -372,51 +316,6 @@ const Navbar = () => {
                   </motion.div>
                 </Link>
               ))}
-              {/* Add Donate Button to mobile menu */}
-              <a
-                href="https://hcb.hackclub.com/donations/start/codecatalyst"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="m-6 mb-2 py-3 px-6 bg-[#0E43B6] text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-purple-500/25 transition-all border border-purple-400/20"
-                data-cursor-text="support()"
-                data-cursor-color="#a855f7"
-                onClick={() => setIsOpen(false)}
-              >
-                <motion.div
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.15, duration: 0.2 }}
-                  className="flex items-center justify-center"
-                >
-                  <svg className="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 11l5-5m0 0l5 5m-5-5v12" />
-                  </svg>
-                  <span className="font-mono">support.us</span>
-                </motion.div>
-              </a>
-
-              {/* Register button follows after the Donate button */}
-              <Link
-                to={location.pathname === '/' ? '#register' : '/'}
-                onClick={(e) => {
-                  if (location.pathname === '/') {
-                    e.preventDefault();
-                    scrollToSection("register");
-                  }
-                  setIsOpen(false);
-                }}
-                className="m-6 mt-2 py-3 px-6 bg-[#0E43B6] text-white font-medium rounded-md text-center hover:shadow-lg hover:shadow-blue-500/25 transition-all"
-                data-cursor-text="register()"
-                data-cursor-color="#3b82f6"
-              >
-                <motion.div
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.2 }}
-                >
-                  Register Now
-                </motion.div>
-              </Link>
             </div>
           </motion.div>
         )}
