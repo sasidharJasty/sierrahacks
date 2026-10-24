@@ -1,7 +1,5 @@
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
 import test from 'node:test'
-import { BarcodeDetector, prepareZXingModule } from 'barcode-detector/ponyfill'
 import { decodeQrImage, parseQrPayload, scannerErrorMessage } from './qrPayload.js'
 
 const PROFILE_ID = 'd2a58a07-2362-41bf-bf13-8288aa821db5'
@@ -33,38 +31,24 @@ test('rejects empty, malformed, and unrelated QR values', () => {
 
 test('returns the decoded QR value from a captured photo', async () => {
   const file = new Blob(['fake-image'], { type: 'image/png' })
-  const detector = { detect: async (received) => {
+  const scanner = { scanImage: async (received, options) => {
     assert.equal(received, file)
-    return [{ rawValue: `  ${PROFILE_ID}  ` }]
+    assert.equal(options.returnDetailedScanResult, true)
+    return { data: `  ${PROFILE_ID}  ` }
   } }
-  assert.equal(await decodeQrImage(file, detector), PROFILE_ID)
+  assert.equal(await decodeQrImage(file, scanner), PROFILE_ID)
 })
 
 test('reports when a captured photo has no QR code', async () => {
   const file = new Blob(['fake-image'], { type: 'image/png' })
   await assert.rejects(
-    decodeQrImage(file, { detect: async () => [] }),
+    decodeQrImage(file, { scanImage: async () => { throw new Error('No QR code found') } }),
     /No QR code was found/
   )
 })
 
-test('decodes a real QR PNG with the bundled ZXing engine', async () => {
-  globalThis.DOMRectReadOnly = class DOMRectReadOnly {
-    constructor(x = 0, y = 0, width = 0, height = 0) {
-      Object.assign(this, { x, y, width, height, top: y, right: x + width, bottom: y + height, left: x })
-    }
-    static fromRect(rect = {}) { return new this(rect.x, rect.y, rect.width, rect.height) }
-  }
-  const wasm = new Uint8Array(readFileSync(new URL('../../node_modules/zxing-wasm/dist/reader/zxing_reader.wasm', import.meta.url)))
-  const png = readFileSync(new URL('../../node_modules/barcode-detector/dist/es/barcode-detector.png', import.meta.url))
-  prepareZXingModule({ overrides: { wasmBinary: wasm } })
-  const detector = new BarcodeDetector({ formats: ['qr_code'] })
-  assert.equal(await decodeQrImage(new Blob([png], { type: 'image/png' }), detector), 'barcode-detector')
-  delete globalThis.DOMRectReadOnly
-})
-
 test('requires a photo before decoding', async () => {
-  await assert.rejects(decodeQrImage(null, { detect: async () => [] }), /Choose a photo/)
+  await assert.rejects(decodeQrImage(null, { scanImage: async () => '' }), /Choose a photo/)
 })
 
 test('maps common camera failures to useful instructions', () => {

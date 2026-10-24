@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Scanner, useDevices } from '@yudiel/react-qr-scanner'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FiSearch, FiCheckCircle } from 'react-icons/fi'
 import supabase from '../lib/supabaseClient'
 import { useAuth } from '../context/authContextBase'
 import DietSwitch from '../../components/DietSwitch'
 import Card from '../../components/Card'
+import QrCameraScanner from '../components/QrCameraScanner'
 import { decodeQrImage, parseQrPayload, scannerErrorMessage } from '../lib/qrPayload'
 // theme controlled by ThemeProvider (adds/removes 'dark' on documentElement)
 
@@ -31,8 +31,7 @@ const WORKSHOP_OPTIONS = [
 
 const AdminScan = () => {
   const photoInputRef = useRef(null)
-  const devices = useDevices()
-
+  const [devices, setDevices] = useState([])
   const [profile, setProfile] = useState(null)
   const [saving, setSaving] = useState(false)
   const [status, setStatus] = useState(STATUS_IDLE)
@@ -44,7 +43,7 @@ const AdminScan = () => {
   const [editingDiet, setEditingDiet] = useState(false)
   const [dietEdits, setDietEdits] = useState({ is_vegetarian: false, allergies: '' })
   const [savingDiet, setSavingDiet] = useState(false)
-  const [selectedCameraId, setSelectedCameraId] = useState('')
+  const [selectedCameraId, setSelectedCameraId] = useState('environment')
   const [scannerActive, setScannerActive] = useState(false)
   const [cameraError, setCameraError] = useState(null)
   const [requestingCamera, setRequestingCamera] = useState(false)
@@ -52,18 +51,6 @@ const AdminScan = () => {
   const [searchResults, setSearchResults] = useState([])
   const [searching, setSearching] = useState(false)
   const [decodingPhoto, setDecodingPhoto] = useState(false)
-
-  useEffect(() => {
-    if (!devices.length) return
-    if (selectedCameraId && devices.some((device) => device.deviceId === selectedCameraId)) return
-
-    const preferred = devices.find((device) => /back|rear|environment/i.test(device.label)) || devices[0]
-    setSelectedCameraId(preferred?.deviceId || '')
-  }, [devices, selectedCameraId])
-
-  const constraints = useMemo(() => {
-    return selectedCameraId ? { deviceId: selectedCameraId } : { facingMode: 'environment' }
-  }, [selectedCameraId])
 
   const stopScanner = useCallback((resetStatus = true) => {
     setScannerActive(false)
@@ -106,7 +93,7 @@ const AdminScan = () => {
     }
   }, [isAdmin, stopScanner])
 
-  const startScanner = useCallback(async () => {
+  const startScanner = useCallback(() => {
     if (scannerActive) return
     if (!window.isSecureContext) {
       setCameraError('Camera scanning requires HTTPS or localhost.')
@@ -121,11 +108,7 @@ const AdminScan = () => {
     setCameraError(null)
     setRequestingCamera(true)
     setStatus(STATUS_STARTING)
-    // Scanner owns the single camera stream. Pre-opening getUserMedia here used
-    // to create and immediately stop a competing stream on mobile browsers.
     setScannerActive(true)
-    setRequestingCamera(false)
-    setStatus(STATUS_SCANNING)
   }, [scannerActive])
 
   const handleCameraChange = useCallback((event) => {
@@ -214,12 +197,8 @@ const AdminScan = () => {
     else setStatus(decoded.message)
   }, [loadProfile, loadLumaGuest])
 
-  const handleScanResults = useCallback((detectedCodes) => {
+  const handleScanResults = useCallback((rawValue) => {
     if (!scannerActive) return
-    if (!detectedCodes?.length) return
-
-    const first = detectedCodes[0]
-    const rawValue = first?.rawValue ?? ''
     if (!rawValue) return
 
     stopScanner(false)
@@ -344,19 +323,17 @@ const AdminScan = () => {
           <Card className="md:col-span-2 p-4 text-blue-800 dark:text-blue-200">
             <form onSubmit={searchProfiles} className="mb-4"><label className="text-sm font-medium">Find an attendee</label><div className="mt-1 flex flex-col gap-2 sm:flex-row"><input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search by name, email, or school" className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-900" /><button className="rounded-lg bg-blue-600 px-4 py-2 text-white disabled:bg-blue-400" disabled={searching}>{searching ? 'Searching…' : 'Search'}</button></div>{searchResults.length > 0 && <div className="mt-2 overflow-hidden rounded-lg border border-slate-200 bg-white">{searchResults.map((result) => <button type="button" key={result.id} onClick={() => { setSearchResults([]); setSearchQuery(''); void loadProfile(result.id) }} className="flex w-full items-center justify-between border-b border-slate-100 px-3 py-2 text-left text-sm last:border-0 hover:bg-slate-50"><span className="font-medium">{result.name || `${result.first_name || ''} ${result.last_name || ''}`.trim() || 'Unnamed attendee'}</span><span className="text-slate-500">{result.school || result.email || '—'}</span></button>)}</div>}</form>
             <div className="flex min-h-[240px] overflow-hidden rounded-lg border border-slate-800 bg-slate-950 sm:min-h-[360px]">
-              {scannerActive ? <Scanner
-                key={selectedCameraId || 'default-camera'}
-                paused={!scannerActive}
-                constraints={{ ...constraints, width: { ideal: 1280 }, height: { ideal: 720 } }}
-                formats={["qr_code"]}
-                scanDelay={350}
+              {scannerActive ? <QrCameraScanner
+                active={scannerActive}
+                cameraId={selectedCameraId}
                 onScan={handleScanResults}
                 onError={handleScannerError}
-                sound
-                components={{ finder: true, torch: false, zoom: false, audio: false, onOff: false }}
-                styles={{
-                  container: { width: '100%', height: '100%' },
-                  video: { width: '100%', height: '100%', objectFit: 'cover' }
+                onReady={() => {
+                  setRequestingCamera(false)
+                  setStatus(STATUS_SCANNING)
+                }}
+                onCamerasChange={(cameras) => {
+                  setDevices(cameras)
                 }}
               /> : <div className="flex w-full items-center justify-center p-6 text-center text-sm text-slate-300">Start the scanner to use the camera, or search for an attendee above.</div>}
             </div>
@@ -370,8 +347,9 @@ const AdminScan = () => {
                     onChange={handleCameraChange}
                     className="px-2 py-1 border rounded text-sm bg-white dark:bg-gray-800 dark:text-blue-100"
                   >
+                    <option value="environment">Back camera (automatic)</option>
                     {devices.map((device, index) => (
-                      <option key={device.deviceId || `camera-${index}`} value={device.deviceId || ''}>
+                      <option key={device.id || `camera-${index}`} value={device.id || ''}>
                         {device.label || `Camera ${index + 1}`}
                       </option>
                     ))}

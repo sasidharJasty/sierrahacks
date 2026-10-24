@@ -1,12 +1,4 @@
-import { BarcodeDetector, prepareZXingModule } from 'barcode-detector/ponyfill'
-
-const decoderReady = typeof window === 'undefined'
-  ? Promise.resolve()
-  : Promise.resolve(prepareZXingModule({
-      overrides: {
-        locateFile: (path, prefix) => path.endsWith('.wasm') ? '/zxing_reader.wasm' : `${prefix}${path}`
-      }
-    }))
+import QrScanner from 'qr-scanner'
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
 const LUMA_CHECKIN_PATTERN = /^https:\/\/luma\.com\/check-in\//i
@@ -34,19 +26,31 @@ export function parseQrPayload(payload) {
 
 export function scannerErrorMessage(error) {
   const name = error?.name || ''
+  const message = typeof error === 'string' ? error : error?.message
   if (name === 'NotAllowedError' || name === 'PermissionDeniedError') return 'Camera access was denied. Allow camera access in your browser settings and try again.'
   if (name === 'NotFoundError' || name === 'DevicesNotFoundError') return 'No camera was found on this device.'
   if (name === 'NotReadableError' || name === 'TrackStartError') return 'The camera is already in use by another app or browser tab.'
-  if (!window.isSecureContext) return 'Camera scanning requires HTTPS or localhost.'
-  return error?.message || 'Unable to start the camera.'
+  if (name === 'OverconstrainedError') return 'The selected camera is unavailable. Choose another camera and try again.'
+  if (name === 'AbortError') return 'The camera could not finish starting. Close other camera apps and try again.'
+  if (typeof window !== 'undefined' && !window.isSecureContext) return 'Camera scanning requires HTTPS or localhost.'
+  return message || 'Unable to start the camera.'
 }
 
-export async function decodeQrImage(file, detector = null) {
+export async function decodeQrImage(file, scanner = QrScanner) {
   if (!file) throw new Error('Choose a photo containing a QR code.')
-  await decoderReady
-  const activeDetector = detector || new BarcodeDetector({ formats: ['qr_code'] })
-  const detected = await activeDetector.detect(file)
-  const rawValue = detected?.[0]?.rawValue?.trim()
-  if (!rawValue) throw new Error('No QR code was found in that photo. Try a closer, sharper picture.')
-  return rawValue
+  try {
+    const result = await scanner.scanImage(file, {
+      returnDetailedScanResult: true,
+      alsoTryWithoutScanRegion: true
+    })
+    const value = (typeof result === 'string' ? result : result?.data)?.trim()
+    if (!value) throw new Error('No QR code found')
+    return value
+  } catch (error) {
+    const message = typeof error === 'string' ? error : error?.message
+    if (/no qr code/i.test(message || '')) {
+      throw new Error('No QR code was found in that photo. Try a closer, sharper picture.')
+    }
+    throw error
+  }
 }
