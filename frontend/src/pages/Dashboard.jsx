@@ -382,7 +382,7 @@ const Dashboard = () => {
         <Card className="p-6 flex flex-col items-center text-blue-800 dark:text-blue-200">
           <div className="mb-3 text-sm text-blue-700 dark:text-blue-200">Your QR</div>
           <div ref={qrRef} className="p-4 rounded-lg border bg-white dark:bg-gray-800">
-            <QRCode value={qrValue} size={220} fgColor={isDarkMode ? '#ffffff' : '#000000'} bgColor={isDarkMode ? '#0f172a' : '#ffffff'} />
+            <QRCode value={qrValue} size={220} fgColor="#000000" bgColor="#ffffff" />
           </div>
 
           <div className="mt-4 text-center text-sm text-blue-700 dark:text-blue-200">

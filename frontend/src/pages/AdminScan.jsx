@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { Scanner, useDevices } from '@yudiel/react-qr-scanner'
 import { Link, useNavigate } from 'react-router-dom'
 import { FiSearch, FiCheckCircle } from 'react-icons/fi'
@@ -6,6 +6,7 @@ import supabase from '../lib/supabaseClient'
 import { useAuth } from '../context/authContextBase'
 import DietSwitch from '../../components/DietSwitch'
 import Card from '../../components/Card'
+import { parseQrPayload, scannerErrorMessage } from '../lib/qrPayload'
 // theme controlled by ThemeProvider (adds/removes 'dark' on documentElement)
 
 const STATUS_IDLE = 'Ready'
@@ -29,7 +30,6 @@ const WORKSHOP_OPTIONS = [
 ]
 
 const AdminScan = () => {
-  const resumeTimeoutRef = useRef(null)
   const devices = useDevices()
 
   const [profile, setProfile] = useState(null)
@@ -106,51 +106,30 @@ const AdminScan = () => {
 
   const startScanner = useCallback(async () => {
     if (scannerActive) return
-    if (!navigator?.mediaDevices?.getUserMedia) {
-      setCameraError('Camera API unavailable in this browser.')
+    if (!window.isSecureContext) {
+      setCameraError('Camera scanning requires HTTPS or localhost.')
       setStatus(STATUS_ERROR)
       return
     }
-
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setCameraError('Camera access is unavailable in this browser.')
+      setStatus(STATUS_ERROR)
+      return
+    }
     setCameraError(null)
     setRequestingCamera(true)
     setStatus(STATUS_STARTING)
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: constraints })
-      stream.getTracks().forEach((track) => track.stop())
-      setScannerActive(true)
-      setStatus(STATUS_SCANNING)
-    } catch (err) {
-      console.error('Camera access failed', err)
-      setCameraError(err?.message || 'Unable to access camera.')
-      setStatus(STATUS_ERROR)
-    } finally {
-      setRequestingCamera(false)
-    }
-  }, [constraints, scannerActive])
+    // Scanner owns the single camera stream. Pre-opening getUserMedia here used
+    // to create and immediately stop a competing stream on mobile browsers.
+    setScannerActive(true)
+    setRequestingCamera(false)
+    setStatus(STATUS_SCANNING)
+  }, [scannerActive])
 
   const handleCameraChange = useCallback((event) => {
-    const id = event.target.value
-    setSelectedCameraId(id)
-
-    if (scannerActive) {
-      setStatus('Switching camera...')
-      stopScanner(false)
-      if (resumeTimeoutRef.current) {
-        clearTimeout(resumeTimeoutRef.current)
-      }
-      resumeTimeoutRef.current = setTimeout(() => {
-        void startScanner()
-      }, 300)
-    }
-  }, [scannerActive, startScanner, stopScanner])
-
-  useEffect(() => () => {
-    if (resumeTimeoutRef.current) {
-      clearTimeout(resumeTimeoutRef.current)
-    }
-  }, [])
+    setSelectedCameraId(event.target.value)
+    if (scannerActive) setStatus(STATUS_SCANNING)
+  }, [scannerActive])
 
   const loadProfile = useCallback(async (id) => {
     setStatus(STATUS_FETCHING)
@@ -227,33 +206,10 @@ const AdminScan = () => {
   }, [])
 
   const handleDecoded = useCallback(async (payload) => {
-    const textPayload = (typeof payload === 'string' ? payload : String(payload ?? '')).trim()
-
-    if (!textPayload) {
-      setStatus('Invalid QR payload')
-      return
-    }
-
-    let parsed
-    try {
-      parsed = JSON.parse(textPayload)
-    } catch {
-      parsed = { id: textPayload }
-    }
-
-    const rawId = parsed?.id ?? parsed?.user_id ?? parsed?.profile_id ?? ''
-    if (!rawId && /^https:\/\/luma\.com\/check-in\//i.test(textPayload)) {
-      await loadLumaGuest(textPayload)
-      return
-    }
-    const normalisedId = typeof rawId === 'string' ? rawId.trim() : String(rawId || '').trim()
-
-    if (!normalisedId) {
-      setStatus('Invalid QR payload')
-      return
-    }
-
-    await loadProfile(normalisedId)
+    const decoded = parseQrPayload(payload)
+    if (decoded.kind === 'luma') await loadLumaGuest(decoded.value)
+    else if (decoded.kind === 'profile') await loadProfile(decoded.id)
+    else setStatus(decoded.message)
   }, [loadProfile, loadLumaGuest])
 
   const handleScanResults = useCallback((detectedCodes) => {
@@ -265,6 +221,7 @@ const AdminScan = () => {
     if (!rawValue) return
 
     stopScanner(false)
+    setRequestingCamera(false)
     setStatus(STATUS_SCANNED)
     setCameraError(null)
     void handleDecoded(rawValue)
@@ -274,7 +231,7 @@ const AdminScan = () => {
     if (!scannerActive) return
     console.error('Scanner error', error)
     stopScanner()
-    setCameraError(error?.message || 'Unable to access camera.')
+    setCameraError(scannerErrorMessage(error))
     setStatus(STATUS_ERROR)
   }, [scannerActive, stopScanner])
 
@@ -369,11 +326,12 @@ const AdminScan = () => {
               {scannerActive ? <Scanner
                 key={selectedCameraId || 'default-camera'}
                 paused={!scannerActive}
-                constraints={constraints}
+                constraints={{ ...constraints, width: { ideal: 1280 }, height: { ideal: 720 } }}
                 formats={["qr_code"]}
                 scanDelay={350}
                 onScan={handleScanResults}
                 onError={handleScannerError}
+                sound
                 components={{ finder: true, torch: false, zoom: false, audio: false, onOff: false }}
                 styles={{
                   container: { width: '100%', height: '100%' },
