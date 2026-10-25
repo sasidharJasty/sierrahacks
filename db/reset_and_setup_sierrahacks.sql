@@ -323,8 +323,8 @@ CREATE TABLE IF NOT EXISTS public.judging_rooms (
   is_active boolean NOT NULL DEFAULT true
 );
 INSERT INTO public.judging_rooms (room_number, name, is_active) VALUES
-  (1, 'Room 1', true), (2, 'Room 2', true), (3, 'Room 3', true)
-ON CONFLICT (room_number) DO NOTHING;
+  (1, 'Room 8', true), (2, 'Room 7', true), (3, 'Room 6', true)
+ON CONFLICT (room_number) DO UPDATE SET name = EXCLUDED.name, is_active = true;
 
 CREATE OR REPLACE FUNCTION public.is_team_lead(p_team_id uuid)
 RETURNS boolean LANGUAGE sql STABLE SECURITY DEFINER SET search_path = public

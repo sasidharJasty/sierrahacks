@@ -16,8 +16,8 @@ CREATE TABLE IF NOT EXISTS public.judging_rooms (
   is_active boolean NOT NULL DEFAULT true
 );
 INSERT INTO public.judging_rooms (room_number, name, is_active) VALUES
-  (1, 'Room 1', true), (2, 'Room 2', true), (3, 'Room 3', true)
-ON CONFLICT (room_number) DO NOTHING;
+  (1, 'Room 8', true), (2, 'Room 7', true), (3, 'Room 6', true)
+ON CONFLICT (room_number) DO UPDATE SET name = EXCLUDED.name, is_active = true;
 DROP VIEW IF EXISTS public.judging_order;
 CREATE VIEW public.judging_order AS
 SELECT q.id, q.team_id, t.name AS team_name, t.tracks, q.room_number, q.status, q.position, q.started_at, q.completed_at
